@@ -1,0 +1,33 @@
+/*================================================================================
+	Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
+	Version: 2.0
+	Author: PIXINVENT
+	Author URL: http://www.themeforest.net/user/pixinvent
+================================================================================
+
+NOTE:
+------
+PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
+WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+/*Header renk ayarı*/
+.horizontal-menu .header-navbar {
+	background: #283046;
+	z-index: 999 !important;
+	line-height: 1;
+	min-height: auto; }
+
+
+
+/*Menu de ve header da bulunan yazıların renk ayarı - a tag'lerin class başına special ismi verildi*/
+.header-navbar .navbar-container ul.navbar-nav li a.special {
+	color: white;
+	padding: 0 0.5rem;
+	position: relative; }
+
+/*Ana sayfa, hakkımızda vb. tuşların gölgelendirme kodları*/
+.horizontal-menu .header-navbar.navbar-horizontal ul#main-menu-navigation > li:hover > a {
+	background: #7367f0;
+	color: white;
+	border-radius: 4px; }
+
