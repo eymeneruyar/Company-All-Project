@@ -2,11 +2,12 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Customer</title>
+    <title>Add Customer</title>
 
     <!------------------------------------------------------ CSS - Start ------------------------------------------------------>
 
     <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/vendors.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/forms/select/select2.min.css">
     <link rel="stylesheet" type="text/css" href="/app-assets/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="/app-assets/css/bootstrap-extended.css">
     <link rel="stylesheet" type="text/css" href="/app-assets/css/colors.css">
@@ -15,6 +16,8 @@
     <link rel="stylesheet" type="text/css" href="/app-assets/css/themes/bordered-layout.css">
     <link rel="stylesheet" type="text/css" href="/app-assets/css/themes/semi-dark-layout.css">
     <link rel="stylesheet" type="text/css" href="/app-assets/css/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css/plugins/forms/form-validation.css">
+
     <link rel="stylesheet" href="/app-assets/fontawesome-free-5.15.4-web/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
 
@@ -283,133 +286,126 @@
     <!-- BEGIN: Content-->
     <div class="app-content content ">
 
+        <!-- Basic multiple Column Form section start -->
+        <section id="multiple-column-form">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Customer Form</h4>
+                        </div>
+                        <div class="card-body">
+                            <form class="needs-validation invalid was-validated" novalidate>
+                                <div class="row">
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="firstname">First Name</label>
+                                            <input type="text" id="firstname" class="form-control"
+                                                placeholder="First Name" name="firstname" required />
+                                            <div class="valid-feedback">Looks good!</div>
+                                            <div class="invalid-feedback">Please enter your firstname.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="lastname">Last Name</label>
+                                            <input type="text" id="lastname" class="form-control"
+                                                placeholder="Last Name" name="lastname" required />
+                                            <div class="valid-feedback">Looks good!</div>
+                                            <div class="invalid-feedback">Please enter your lastname.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="phone1">Phone 1</label>
+                                            <input type="tel" id="phone1" class="form-control" placeholder="Phone 1"
+                                                name="phone1" required />
+                                            <div class="valid-feedback">Looks good!</div>
+                                            <div class="invalid-feedback">Please enter your first phone.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="phone2">Phone 2</label>
+                                            <input type="tel" id="phone2" class="form-control" placeholder="Phone 2"
+                                                name="phone2" required />
+                                            <div class="valid-feedback">Looks good!</div>
+                                            <div class="invalid-feedback">Please enter your second phone.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="mail">E-Mail</label>
+                                            <input type="email" id="mail" class="form-control" placeholder="E-Mail"
+                                                name="mail" required />
+                                            <div class="valid-feedback">Looks good!</div>
+                                            <div class="invalid-feedback">Please enter your e-mail.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="taxno">Tax No.</label>
+                                            <input type="number" id="taxno" class="form-control" name="taxno"
+                                                placeholder="Tax No." required />
+                                            <div class="valid-feedback">Looks good!</div>
+                                            <div class="invalid-feedback">Please enter your tax number.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="country">Country</label>
+                                            <select class="select2 form-control form-control-lg" id="country" required>
+                                                <option value="">Select Country</option>
+                                                <option value="AK">Alaska</option>
+                                                <option value="HI">Hawaii</option>
+                                                <option value="CA">California</option>
+                                            </select>
+                                            <div class="valid-feedback">Looks good!</div>
+                                            <div class="invalid-feedback">Please select your country.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="city">City</label>
+                                            <select class="select2 form-control form-control-lg" id="city" required>
+                                                <option value="">Select City</option>
+                                                <option value="AK">Alaska</option>
+                                                <option value="HI">Hawaii</option>
+                                                <option value="CA">California</option>
+                                            </select>
+                                            <div class="valid-feedback">Looks good!</div>
+                                            <div class="invalid-feedback">Please select your city.</div>
 
-        <!-- Basic Tables start -->
-        <div class="row" id="basic-table">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-md-9">
-                                <div class="buttons">
-                                    <label>
-                                        Show
-                                        <select class="custom-select form-control">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select>
-                                    </label>
-                                    <button class="dt-button btn btn-primary ml-2" tabindex="0" type="button">
-                                        <span><i class="fas fa-plus"></i> Add New</span>
-                                    </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="address1">Address 1</label>
+                                            <textarea type="text" id="address1" class="form-control" name="address1" required></textarea>
+                                            <div class="valid-feedback">Looks good!</div>
+                                            <div class="invalid-feedback">Please enter you full address</div>
+                                        </div>
+                                    </div>     
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="address2">Address 2 (Optional)</label>
+                                            <textarea type="text" id="address2" class="form-control" name="address2" required></textarea>
+                                        </div>
+                                    </div>                                                                       
+
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary mr-1">Submit</button>
+                                        <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="buttons">
-                                    <input type="text" class="form-control" id="basicInput"
-                                        placeholder="Search Customer">
-                                </div>
-                            </div>
-
-
+                            </form>
                         </div>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Firstname</th>
-                                    <th>Lastname</th>
-                                    <th>Mail</th>
-                                    <th>Phone</th>
-                                    <th>Address</th>
-                                    <th>Actions</th>
-
-                                </tr>
-                            </thead>
-                            <tbody style="font-size: 14px;">
-                                <tr>
-                                    <td>
-                                        1111111111
-                                    </td>
-                                    <td>Oğuzkaan</td>
-                                    <td>Sarı</td>
-                                    <td>oguzkaansari@outlook.com</td>
-                                    <td>5530589819</td>
-                                    <td>
-                                        <button type="button" class="btn btn-sm">
-                                            <i class="far fa-file-alt" style="font-size: 20px;"></i>
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-sm dropdown-toggle hide-arrow"
-                                                data-toggle="dropdown">
-                                                <i data-feather="more-vertical"></i>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <i class="mr-50 fas fa-pen"></i>
-                                                    <span>Edit</span>
-                                                </a>
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <i class="mr-50 fas fa-ban"></i>
-                                                    <span>Ban</span>
-                                                </a>
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <i class="mr-50 far fa-trash-alt"></i>
-                                                    <span>Delete</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        1111111111
-                                    </td>
-                                    <td>Oğuzkaan</td>
-                                    <td>Sarı</td>
-                                    <td>oguzkaansari@outlook.com</td>
-                                    <td>5530589819</td>
-                                    <td>
-                                        <button type="button" class="btn btn-sm">
-                                            <i class="far fa-file-alt" style="font-size: 20px;"></i>
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-sm dropdown-toggle hide-arrow"
-                                                data-toggle="dropdown">
-                                                <i data-feather="more-vertical"></i>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <i class="mr-50 fas fa-pen"></i>
-                                                    <span>Edit</span>
-                                                </a>
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <i class="mr-50 fas fa-ban"></i>
-                                                    <span>Ban</span>
-                                                </a>
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <i class="mr-50 far fa-trash-alt"></i>
-                                                    <span>Delete</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
-                <ul class="pagination firstLast1-links justify-content-end "></ul>
             </div>
-        </div>
+        </section>
+        <!-- Basic Floating Label Form section end -->
+
     </div>
     <!-- END: Content-->
 
@@ -426,6 +422,26 @@
     <script src="/app-assets/js/scripts/pagination/components-pagination.js"></script>
     <!------------------------------------------------------ Pagination Js - End ---------------------------------------------------------->
 
+    <!------------------------------------------------------ Select Js - Start ---------------------------------------------------------->
+
+    <script src="/app-assets/vendors/js/forms/select/select2.full.min.js"></script>
+    <script src="/app-assets/js/scripts/forms/form-select2.js"></script>
+
+    <!------------------------------------------------------ Select Js - End ---------------------------------------------------------->
+
+    <!------------------------------------------------------ Valdiation Js - Start -------------------------------------------------------->
+
+    <script src="/app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
+    <script src="/app-assets/js/scripts/forms/form-validation.js"></script>
+
+    <!------------------------------------------------------ Valdiation Js - End -------------------------------------------------------->
+
+    <!------------------------------------------------------ Form Repeater Js - Start -------------------------------------------------------->
+
+    <script src="/app-assets/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
+    <script src="/app-assets/js/scripts/forms/form-repeater.js"></script>
+
+    <!------------------------------------------------------ Form Repeater Js - End -------------------------------------------------------->
 
 
     <!------------------------------------------------------ JS - End ------------------------------------------------------>
