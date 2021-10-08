@@ -15,6 +15,12 @@
     <link rel="stylesheet" type="text/css" href="/app-assets/css/themes/bordered-layout.css">
     <link rel="stylesheet" type="text/css" href="/app-assets/css/themes/semi-dark-layout.css">
     <link rel="stylesheet" type="text/css" href="/app-assets/css/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css/plugins/forms/pickers/form-flat-pickr.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css/plugins/forms/pickers/form-pickadate.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css/plugins/forms/form-validation.css">
+
+
     <link rel="stylesheet" href="/app-assets/fontawesome-free-5.15.4-web/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
 
@@ -301,15 +307,15 @@
                                             <option value="100">100</option>
                                         </select>
                                     </label>
-                                    <button class="dt-button btn btn-primary ml-2" tabindex="0" type="button" onclick="window.location.href='customer_form.html'">
+                                    <button class="dt-button btn btn-primary ml-2" tabindex="0" type="button"
+                                        data-toggle="modal" data-backdrop="false" data-target="#ad_form_modal">
                                         <span><i class="fas fa-plus"></i> Add New</span>
                                     </button>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="buttons">
-                                    <input type="text" class="form-control" id="basicInput"
-                                        placeholder="Search Customer">
+                                    <input type="text" class="form-control" id="basicInput" placeholder="Search Ad.">
                                 </div>
                             </div>
 
@@ -342,7 +348,7 @@
                                     <td>5623</td>
                                     <td>896</td>
                                     <td>2021-09-08 18:45:00</td>
-                                    <td>2021-09-26 18:45:00</td>                                    
+                                    <td>2021-09-26 18:45:00</td>
                                     <td>
                                         <button type="button" class="btn btn-sm">
                                             <i class="far fa-eye" style="font-size: 20px;"></i>
@@ -362,7 +368,7 @@
                                                 <a class="dropdown-item" href="javascript:void(0);">
                                                     <i class="mr-50 fas fa-pen"></i>
                                                     <span>Edit</span>
-                                                </a>                                               
+                                                </a>
                                                 <a class="dropdown-item" href="javascript:void(0);">
                                                     <i class="mr-50 far fa-trash-alt"></i>
                                                     <span>Delete</span>
@@ -377,7 +383,7 @@
                                     <td>5623</td>
                                     <td>896</td>
                                     <td>2021-09-08 18:45:00</td>
-                                    <td>2021-09-26 18:45:00</td>                                    
+                                    <td>2021-09-26 18:45:00</td>
                                     <td>
                                         <button type="button" class="btn btn-sm">
                                             <i class="far fa-eye" style="font-size: 20px;"></i>
@@ -397,7 +403,7 @@
                                                 <a class="dropdown-item" href="javascript:void(0);">
                                                     <i class="mr-50 fas fa-pen"></i>
                                                     <span>Edit</span>
-                                                </a>                                               
+                                                </a>
                                                 <a class="dropdown-item" href="javascript:void(0);">
                                                     <i class="mr-50 far fa-trash-alt"></i>
                                                     <span>Delete</span>
@@ -416,6 +422,118 @@
     </div>
     <!-- END: Content-->
 
+    <!-- Modal -->
+    <div class="modal fade text-left" id="ad_form_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16"
+        aria-hidden="true" data-backdrop="false">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel4">New Advertisement</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section id="multiple-column-form">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <form class="needs-validation invalid" novalidate>
+                                        <div class="row">
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="adname">Name</label>
+                                                    <input type="text" id="adname" class="form-control"
+                                                        placeholder="Name" name="adname" required />
+                                                    <div class="valid-feedback">Looks good!</div>
+                                                    <div class="invalid-feedback">Please enter ads name.</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="adstaging">Staging</label>
+                                                    <input type="number" id="adstaging" class="form-control"
+                                                        placeholder="Staging" name="adstaging" required />
+                                                    <div class="valid-feedback">Looks good!</div>
+                                                    <div class="invalid-feedback">Please enter staging.</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="startdate">Start Date</label>
+                                                <input type="text" id="startdate"
+                                                    class="form-control flatpickr-date-time"
+                                                    placeholder="YYYY-MM-DD HH:MM" required/>
+                                                <div class="valid-feedback">Looks good!</div>
+                                                <div class="invalid-feedback">Please enter a start date.</div>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="finishdate">Finish Date</label>
+                                                <input type="text" id="finishdate"
+                                                    class="form-control flatpickr-date-time"
+                                                    placeholder="YYYY-MM-DD HH:MM" required/>
+                                                <div class="valid-feedback">Looks good!</div>
+                                                <div class="invalid-feedback">Please enter a finish date.</div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="adwidth">Width</label>
+                                                    <input type="number" id="adwidth" class="form-control"
+                                                        placeholder="Width" name="adwidth" required />
+                                                    <div class="valid-feedback">Looks good!</div>
+                                                    <div class="invalid-feedback">Please enter ads width.</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="adheight">Height</label>
+                                                    <input type="number" id="adheight" class="form-control"
+                                                        placeholder="Height" name="adheight" required />
+                                                    <div class="valid-feedback">Looks good!</div>
+                                                    <div class="invalid-feedback">Please enter ads height.</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="addimage">Image</label>
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" id="addimage" required/>
+                                                    <label class="custom-file-label" for="addimage">Choose file</label>
+                                                    <div class="valid-feedback">Looks good!</div>
+                                                    <div class="invalid-feedback">Please choose an image.</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="adlink">Link</label>
+                                                    <input type="text" id="adlink" class="form-control"
+                                                        placeholder="Link" name="adlink" required />
+                                                    <div class="valid-feedback">Looks good!</div>
+                                                    <div class="invalid-feedback">Please enter ads link.</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8"></div>
+                                            <div class="col-md-4">
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-10">
+                                                        <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                                    </div>     
+                                                </div>                                                                                           
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                </section>
+                <!-- Basic Floating Label Form section end -->
+            </div>
+
+        </div>
+    </div>
+    </div>
 
     <!------------------------------------------------------ JS - Start ------------------------------------------------------>
     <script src="/app-assets/vendors/js/vendors.min.js"></script>
@@ -428,6 +546,26 @@
     <script src="/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js"></script>
     <script src="/app-assets/js/scripts/pagination/components-pagination.js"></script>
     <!------------------------------------------------------ Pagination Js - End ---------------------------------------------------------->
+
+    <!------------------------------------------------------ Date - Time Picker Js - Start ---------------------------------------------------------->
+
+    <script src="/app-assets/vendors/js/pickers/pickadate/picker.js"></script>
+    <script src="/app-assets/vendors/js/pickers/pickadate/picker.date.js"></script>
+    <script src="/app-assets/vendors/js/pickers/pickadate/picker.time.js"></script>
+    <script src="/app-assets/vendors/js/pickers/pickadate/legacy.js"></script>
+    <script src="/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
+    <script src="/app-assets/js/scripts/forms/pickers/form-pickers.js"></script>
+
+
+    <!------------------------------------------------------ Date - Time Picker Js - Start ---------------------------------------------------------->
+
+
+    <!------------------------------------------------------ Valdiation Js - Start -------------------------------------------------------->
+
+    <script src="/app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
+    <script src="/app-assets/js/scripts/forms/form-validation.js"></script>
+
+    <!------------------------------------------------------ Valdiation Js - End -------------------------------------------------------->
 
 
 
