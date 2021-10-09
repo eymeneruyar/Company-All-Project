@@ -427,16 +427,17 @@
                                                 </div>
                                                 <div class="col-12 col-sm-6">
                                                     <div class="form-group">
-                                                        <label for="accountSelect">Country</label>
-                                                        <select class="form-control" id="accountSelect">
-                                                            <option>USA</option>
-                                                            <option>India</option>
-                                                            <option>Canada</option>
+                                                        <label for="country">Country</label>
+                                                        <select class="select2 form-control form-control-lg" id="country" required>
+                                                            <option value="">Select Country</option>
+                                                            <option value="AK">Alaska</option>
+                                                            <option value="HI">Hawaii</option>
+                                                            <option value="CA">California</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-md-6 form-group">
-                                                    <label for="pd-default">Default</label>
+                                                    <label for="pd-default">Birth Date</label>
                                                     <input type="text" id="pd-default" class="form-control pickadate" placeholder="Birth Date" />
                                                 </div>
                                                 <div class="col-12 col-sm-6">
