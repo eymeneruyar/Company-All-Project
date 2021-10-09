@@ -1,0 +1,508 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Orders</title>
+
+    <!------------------------------------------------------ CSS - Start ------------------------------------------------------>
+
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/vendors.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css/bootstrap-extended.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css/colors.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css/components.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css/themes/dark-layout.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css/themes/bordered-layout.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css/themes/semi-dark-layout.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css/plugins/forms/pickers/form-flat-pickr.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css/plugins/forms/pickers/form-pickadate.css">
+    <link rel="stylesheet" type="text/css" href="/app-assets/css/plugins/forms/form-validation.css">
+
+
+    <link rel="stylesheet" href="/app-assets/fontawesome-free-5.15.4-web/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+
+    <!------------------------------------------------------ CSS - End ------------------------------------------------------>
+
+</head>
+
+
+<body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click"
+    data-menu="vertical-menu-modern" data-col="">
+
+    <!-- BEGIN: Header-->
+    <nav class="header-navbar navbar navbar-expand-lg align-items-center floating-nav navbar-light navbar-shadow">
+        <div class="navbar-container d-flex content">
+            <div class="bookmark-wrapper d-flex align-items-center">
+                <ul class="nav navbar-nav d-xl-none">
+                    <li class="nav-item"><a class="nav-link menu-toggle" href="javascript:void(0);"><i class="ficon"
+                                data-feather="menu"></i></a></li>
+                </ul>
+            </div>
+            <ul class="nav navbar-nav align-items-center ml-auto">
+                <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-style"><i class="ficon"
+                            data-feather="moon"></i></a></li>
+                <li class="nav-item dropdown dropdown-notification mr-25"><a class="nav-link" href="javascript:void(0);"
+                        data-toggle="dropdown"><i class="ficon" data-feather="bell"></i><span
+                            class="badge badge-pill badge-danger badge-up">5</span></a>
+                    <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
+                        <li class="dropdown-menu-header">
+                            <div class="dropdown-header d-flex">
+                                <h4 class="notification-title mb-0 mr-auto">Notifications</h4>
+                                <div class="badge badge-pill badge-light-primary">6 New</div>
+                            </div>
+                        </li>
+                        <li class="scrollable-container media-list"><a class="d-flex" href="javascript:void(0)">
+                                <div class="media d-flex align-items-start">
+                                    <div class="media-left">
+                                        <div class="avatar"><img
+                                                src="../../../app-assets/images/portrait/small/avatar-s-15.jpg"
+                                                alt="avatar" width="32" height="32"></div>
+                                    </div>
+                                    <div class="media-body">
+                                        <p class="media-heading"><span class="font-weight-bolder">Congratulation Sam
+                                                🎉</span>winner!</p><small class="notification-text"> Won the monthly
+                                            best seller badge.</small>
+                                    </div>
+                                </div>
+                            </a><a class="d-flex" href="javascript:void(0)">
+                                <div class="media d-flex align-items-start">
+                                    <div class="media-left">
+                                        <div class="avatar"><img
+                                                src="../../../app-assets/images/portrait/small/avatar-s-3.jpg"
+                                                alt="avatar" width="32" height="32"></div>
+                                    </div>
+                                    <div class="media-body">
+                                        <p class="media-heading"><span class="font-weight-bolder">New
+                                                message</span>&nbsp;received</p><small class="notification-text"> You
+                                            have 10 unread messages</small>
+                                    </div>
+                                </div>
+                            </a><a class="d-flex" href="javascript:void(0)">
+                                <div class="media d-flex align-items-start">
+                                    <div class="media-left">
+                                        <div class="avatar bg-light-danger">
+                                            <div class="avatar-content">MD</div>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <p class="media-heading"><span class="font-weight-bolder">Revised Order
+                                                👋</span>&nbsp;checkout</p><small class="notification-text"> MD Inc.
+                                            order updated</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="media d-flex align-items-center">
+                                <h6 class="font-weight-bolder mr-auto mb-0">System Notifications</h6>
+                                <div class="custom-control custom-control-primary custom-switch">
+                                    <input class="custom-control-input" id="systemNotification" type="checkbox"
+                                        checked="">
+                                    <label class="custom-control-label" for="systemNotification"></label>
+                                </div>
+                            </div><a class="d-flex" href="javascript:void(0)">
+                                <div class="media d-flex align-items-start">
+                                    <div class="media-left">
+                                        <div class="avatar bg-light-danger">
+                                            <div class="avatar-content"><i class="avatar-icon" data-feather="x"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <p class="media-heading"><span class="font-weight-bolder">Server
+                                                down</span>&nbsp;registered</p><small class="notification-text"> USA
+                                            Server is down due to hight CPU usage</small>
+                                    </div>
+                                </div>
+                            </a><a class="d-flex" href="javascript:void(0)">
+                                <div class="media d-flex align-items-start">
+                                    <div class="media-left">
+                                        <div class="avatar bg-light-success">
+                                            <div class="avatar-content"><i class="avatar-icon" data-feather="check"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <p class="media-heading"><span class="font-weight-bolder">Sales
+                                                report</span>&nbsp;generated</p><small class="notification-text"> Last
+                                            month sales report generated</small>
+                                    </div>
+                                </div>
+                            </a><a class="d-flex" href="javascript:void(0)">
+                                <div class="media d-flex align-items-start">
+                                    <div class="media-left">
+                                        <div class="avatar bg-light-warning">
+                                            <div class="avatar-content"><i class="avatar-icon"
+                                                    data-feather="alert-triangle"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <p class="media-heading"><span class="font-weight-bolder">High
+                                                memory</span>&nbsp;usage</p><small class="notification-text"> BLR Server
+                                            using high memory</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="dropdown-menu-footer"><a class="btn btn-primary btn-block"
+                                href="javascript:void(0)">Read all notifications</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown dropdown-user"><a class="nav-link dropdown-toggle dropdown-user-link"
+                        id="dropdown-user" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <div class="user-nav d-sm-flex d-none"><span class="user-name font-weight-bolder">John
+                                Doe</span><span class="user-status">Admin</span></div><span class="avatar"><img
+                                class="round" src="../../../app-assets/images/portrait/small/avatar-s-11.jpg"
+                                alt="avatar" height="40" width="40"><span class="avatar-status-online"></span></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user">
+                        <a class="dropdown-item" href=""><i class="mr-50" data-feather="settings"></i> Settings</a>
+                        <a class="dropdown-item" href=""><i class="mr-50" data-feather="power"></i> Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- END: Header-->
+
+
+    <!-- BEGIN: Main Menu-->
+    <div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
+        <div class="navbar-header">
+            <ul class="nav navbar-nav flex-row">
+                <li class="nav-item mr-auto"><a class="navbar-brand"
+                        href="../../../html/ltr/vertical-menu-template-semi-dark/index.html"><span class="brand-logo">
+                            <svg viewbox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink" height="24">
+                                <defs>
+                                    <lineargradient id="linearGradient-1" x1="100%" y1="10.5120544%" x2="50%"
+                                        y2="89.4879456%">
+                                        <stop stop-color="#000000" offset="0%"></stop>
+                                        <stop stop-color="#FFFFFF" offset="100%"></stop>
+                                    </lineargradient>
+                                    <lineargradient id="linearGradient-2" x1="64.0437835%" y1="46.3276743%"
+                                        x2="37.373316%" y2="100%">
+                                        <stop stop-color="#EEEEEE" stop-opacity="0" offset="0%"></stop>
+                                        <stop stop-color="#FFFFFF" offset="100%"></stop>
+                                    </lineargradient>
+                                </defs>
+                                <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <g id="Artboard" transform="translate(-400.000000, -178.000000)">
+                                        <g id="Group" transform="translate(400.000000, 178.000000)">
+                                            <path class="text-primary" id="Path"
+                                                d="M-5.68434189e-14,2.84217094e-14 L39.1816085,2.84217094e-14 L69.3453773,32.2519224 L101.428699,2.84217094e-14 L138.784583,2.84217094e-14 L138.784199,29.8015838 C137.958931,37.3510206 135.784352,42.5567762 132.260463,45.4188507 C128.736573,48.2809251 112.33867,64.5239941 83.0667527,94.1480575 L56.2750821,94.1480575 L6.71554594,44.4188507 C2.46876683,39.9813776 0.345377275,35.1089553 0.345377275,29.8015838 C0.345377275,24.4942122 0.230251516,14.560351 -5.68434189e-14,2.84217094e-14 Z"
+                                                style="fill:currentColor"></path>
+                                            <path id="Path1"
+                                                d="M69.3453773,32.2519224 L101.428699,1.42108547e-14 L138.784583,1.42108547e-14 L138.784199,29.8015838 C137.958931,37.3510206 135.784352,42.5567762 132.260463,45.4188507 C128.736573,48.2809251 112.33867,64.5239941 83.0667527,94.1480575 L56.2750821,94.1480575 L32.8435758,70.5039241 L69.3453773,32.2519224 Z"
+                                                fill="url(#linearGradient-1)" opacity="0.2"></path>
+                                            <polygon id="Path-2" fill="#000000" opacity="0.049999997"
+                                                points="69.3922914 32.4202615 32.8435758 70.5039241 54.0490008 16.1851325">
+                                            </polygon>
+                                            <polygon id="Path-21" fill="#000000" opacity="0.099999994"
+                                                points="69.3922914 32.4202615 32.8435758 70.5039241 58.3683556 20.7402338">
+                                            </polygon>
+                                            <polygon id="Path-3" fill="url(#linearGradient-2)" opacity="0.099999994"
+                                                points="101.428699 0 83.0667527 94.1480575 130.378721 47.0740288">
+                                            </polygon>
+                                        </g>
+                                    </g>
+                                </g>
+                            </svg></span>
+                        <h2 class="brand-text">Company All</h2>
+                    </a></li>
+                <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i
+                            class="d-block d-xl-none text-primary toggle-icon font-medium-4" data-feather="x"></i><i
+                            class="d-none d-xl-block collapse-toggle-icon font-medium-4  text-primary"
+                            data-feather="disc" data-ticon="disc"></i></a></li>
+            </ul>
+        </div>
+        <div class="shadow-bottom"></div>
+        <div class="main-menu-content">
+            <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+
+
+                <li class=" nav-item"><a class="d-flex align-items-center" href=""><i data-feather="monitor"></i><span
+                            class="menu-title text-truncate">Dashboard</span></a></li>
+                <li class=" nav-item"><a class="d-flex align-items-center" href=""><i data-feather="cast"></i><span
+                            class="menu-title text-truncate">Advertisements</span></a></li>
+                <li class=" nav-item"><a class="d-flex align-items-center" href=""><i data-feather="clipboard"></i><span
+                            class="menu-title text-truncate">Contents</span></a></li>
+
+                <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="users"></i><span
+                            class="menu-title text-truncate">Customers</span></a>
+                    <ul class="menu-content">
+                        <li><a class="d-flex align-items-center" href=""><i data-feather="user-plus"></i><span
+                                    class="menu-item text-truncate">Add Customer</span></a>
+                        </li>
+                        <li><a class="d-flex align-items-center" href=""><i data-feather="map-pin"></i><span
+                                    class="menu-item text-truncate">Add Address</span></a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i
+                            data-feather="shopping-bag"></i><span class="menu-title text-truncate">Products</span></a>
+                    <ul class="menu-content">
+                        <li><a class="d-flex align-items-center" href=""><i data-feather="box"></i><span
+                                    class="menu-item text-truncate">Add Product</span></a></li>
+                        <li><a class="d-flex align-items-center" href=""><i data-feather="layers"></i><span
+                                    class="menu-item text-truncate">Add Category</span></a></li>
+                        <li><a class="d-flex align-items-center" href=""><i data-feather="list"></i><span
+                                    class="menu-item text-truncate">List</span></a></li>
+                    </ul>
+                </li>
+
+                <li class=" nav-item"><a class="d-flex align-items-center" href=""><i data-feather="image"></i><span
+                            class="menu-title text-truncate">Galleries</span></a></li>
+                <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i
+                            data-feather="file-text"></i><span class="menu-title text-truncate">News</span></a>
+                    <ul class="menu-content">
+                        <li><a class="d-flex align-items-center" href=""><i data-feather="file-plus"></i><span
+                                    class="menu-item text-truncate">Add News</span></a></li>
+                        <li><a class="d-flex align-items-center" href=""><i data-feather="layers"></i><span
+                                    class="menu-item text-truncate">Add Category</span></a></li>
+                        <li><a class="d-flex align-items-center" href=""><i data-feather="list"></i><span
+                                    class="menu-item text-truncate">List</span></a></li>
+                    </ul>
+                </li>
+                <li class=" nav-item"><a class="d-flex align-items-center" href=""><i data-feather="bell"></i><span
+                            class="menu-title text-truncate">Announcements</span></a></li>
+                <li class=" nav-item"><a class="d-flex align-items-center" href=""><i data-feather="thumbs-up"></i><span
+                            class="menu-title text-truncate">Likes</span></a></li>
+                <li class=" nav-item"><a class="d-flex align-items-center" href=""><i data-feather="list"></i><span
+                            class="menu-title text-truncate">Surveys</span></a></li>
+                <li class=" nav-item"><a class="d-flex align-items-center" href=""><i
+                            data-feather="shopping-cart"></i><span class="menu-title text-truncate">Orders</span></a>
+                </li>
+                <li class=" nav-item"><a class="d-flex align-items-center" href=""><i data-feather="settings"></i><span
+                            class="menu-title text-truncate">Settings</span></a></li>
+                <li class=" nav-item"><a class="d-flex align-items-center" href=""><i data-feather="log-out"></i><span
+                            class="menu-title text-truncate">Logout</span></a></li>
+
+            </ul>
+        </div>
+    </div>
+    <!-- END: Main Menu-->
+
+    <!-- BEGIN: Content-->
+    <div class="app-content content ">
+
+
+        <!-- Basic Tables start -->
+        <div class="row" id="basic-table">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <label>
+                                        Show
+                                        <select class="custom-select form-control">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select>
+                                    </label>                                    
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="buttons">
+                                    <input type="text" class="form-control" id="basicInput" placeholder="Search Order">
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Customer No</th>
+                                    <th>Product No</th>
+                                    <th>Product Detail</th>
+                                    <th>Date</th>
+                                    <th>Address</th>
+                                    <th>Delete</th>
+
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 14px;">
+                                <tr>
+                                    <td>1111111111</td>
+                                    <td>1111111111</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm" data-toggle="modal"
+                                            data-target="#product_detail_modal">
+                                            <i class="far fa-file-alt" style="font-size: 20px;"></i>
+                                        </button>
+                                    </td>
+                                    <td>2021-09-08 18:45:00</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm" data-toggle="modal"
+                                            data-target="#order_address_modal">
+                                            <i class="far fa-file-alt" style="font-size: 20px;"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm">
+                                            <i class="mr-50 far fa-trash-alt" style="font-size: 20px;"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>1111111111</td>
+                                    <td>1111111111</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm" data-toggle="modal"
+                                            data-target="#product_detail_modal">
+                                            <i class="far fa-file-alt" style="font-size: 20px;"></i>
+                                        </button>
+                                    </td>
+                                    <td>2021-09-08 18:45:00</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm" data-toggle="modal"
+                                            data-target="#order_address_modal">
+                                            <i class="far fa-file-alt" style="font-size: 20px;"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm">
+                                            <i class="mr-50 far fa-trash-alt" style="font-size: 20px;"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <ul class="pagination firstLast1-links justify-content-end "></ul>
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->
+
+    <!-- Product Detail Modal Start-->
+    <div class="modal fade text-left" id="product_detail_modal" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel16" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel4">Product</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section id="multiple-column-form">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <img class="card-img-top" src="/app-assets/images/slider/04.jpg"
+                                        alt="Card image cap" />
+                                    <div class="card-body">
+                                        <h4 class="card-title">iPhone 12</h4>
+                                        <p class="card-text">
+                                            Some quick example text to build on the card title and make up the bulk of
+                                            the card's content.
+                                        </p>
+                                        <button onclick="location.href = 'productDetails.html';"
+                                            class="btn btn-outline-primary">Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Basic Floating Label Form section end -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Product Detail Modal End-->
+
+    <!-- Order Address Modal Start-->
+    <div class="modal fade text-left" id="order_address_modal" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel16" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel4">Address</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section id="multiple-column-form">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p>75.Yıl Mah. Eke cad. Adanur Sit. C blok Daire 14 Yıldırım/Bursa</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Basic Floating Label Form section end -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Order Address Modal End-->
+
+    <!------------------------------------------------------ JS - Start ------------------------------------------------------>
+    <script src="/app-assets/vendors/js/vendors.min.js"></script>
+    <script src="/app-assets/js/core/app-menu.js"></script>
+    <script src="/app-assets/js/core/app.js"></script>
+    <script src="/app-assets/fontawesome-free-5.15.4-web/js/all.min.js"></script>
+
+    <!------------------------------------------------------ Pagination Js - Start -------------------------------------------------------->
+    <script src="/app-assets/vendors/js/pagination/jquery.bootpag.min.js"></script>
+    <script src="/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js"></script>
+    <script src="/app-assets/js/scripts/pagination/components-pagination.js"></script>
+    <!------------------------------------------------------ Pagination Js - End ---------------------------------------------------------->
+
+    <!------------------------------------------------------ Date - Time Picker Js - Start ---------------------------------------------------------->
+
+    <script src="/app-assets/vendors/js/pickers/pickadate/picker.js"></script>
+    <script src="/app-assets/vendors/js/pickers/pickadate/picker.date.js"></script>
+    <script src="/app-assets/vendors/js/pickers/pickadate/picker.time.js"></script>
+    <script src="/app-assets/vendors/js/pickers/pickadate/legacy.js"></script>
+    <script src="/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
+    <script src="/app-assets/js/scripts/forms/pickers/form-pickers.js"></script>
+
+
+    <!------------------------------------------------------ Date - Time Picker Js - Start ---------------------------------------------------------->
+
+
+    <!------------------------------------------------------ Valdiation Js - Start -------------------------------------------------------->
+
+    <script src="/app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
+    <script src="/app-assets/js/scripts/forms/form-validation.js"></script>
+
+    <!------------------------------------------------------ Valdiation Js - End -------------------------------------------------------->
+
+
+
+    <!------------------------------------------------------ JS - End ------------------------------------------------------>
+    <script>
+        $(window).on('load', function () {
+            if (feather) {
+                feather.replace({
+                    width: 14,
+                    height: 14
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
