@@ -1,7 +1,7 @@
 // JQUERY
 $(function() {
 	
-	var images = ['https://www.wallpaperup.com/uploads/wallpapers/2015/01/17/588455/5bf29c266336455dbfca5115f80933b5-1400.jpg', 'https://www.wallpaperup.com/uploads/wallpapers/2015/01/17/588455/5bf29c266336455dbfca5115f80933b5-1400.jpg'];
+	var images = ['https://wallpapercave.com/wp/wp5320845.jpg', 'https://wallpapercave.com/wp/wp5320845.jpg'];
 
    $('#container').append('<style>#container, .acceptContainer:before, #logoContainer:before {background: url(' + images[Math.floor(Math.random() * images.length)] + ') center fixed }');
 	

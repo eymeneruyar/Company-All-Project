@@ -18,21 +18,13 @@ body {
 
 #inviteContainer {
   height: 800px;
-  width: 600px;
+  width: 1500px;
   display: flex;
   overflow: hidden;
   position: relative;
   border-radius: 5px;
 }
-#inviteContainer .acceptContainer {
-  padding: 45px 30px;
-  box-sizing: border-box;
-  width: 400px;
-  margin-left: -400px;
-  overflow: hidden;
-  height: 0;
-  opacity: 0;
-}
+
 #inviteContainer .acceptContainer.loadIn {
   opacity: 1;
   margin-left: 0;
@@ -50,78 +42,13 @@ body {
   left: -50px;
 }
 
-form {
-  
-  position: absolute;
-  text-align: center;
-  height: 100%;
-  width: 50%;
-}
-form h1 {
-  margin: 0 0 15px 0;
-  font-family: "Work Sans" !important;
-  font-weight: 700;
-  font-size: 20px;
-  color: #fff;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  opacity: 0;
-  left: -30px;
-  position: relative;
-  transition: 0.5s ease;
-}
-form h1.loadIn {
-  left: 0;
-  opacity: 1;
-}
-
-
-.formContainer .formDiv {
-  margin-bottom: 30px;
-  left: -25px;
-  opacity: 0;
-  transition: 0.5s ease;
-  position: relative;
-}
-.formContainer .formDiv.loadIn {
-  opacity: 1;
-  left: 0;
-}
-.formContainer .formDiv:last-child {
-  padding-top: 10px;
-  margin-bottom: 0;
-}
-.formContainer p {
-  margin: 0;
-  font-weight: 700;
-  color: #aaa;
-  font-size: 10px;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-}
-.formContainer input[type=password], .formContainer input[type=email], .formContainer input[type=text], .formContainer input[type=tel] {
-  background: transparent;
-  border: none;
-  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.15);
-  padding: 15px 0;
-  box-sizing: border-box;
-  color: #fff;
-  width: 100%;
-}
-.formContainer input[type=password]:focus, .formContainer input[type=email]:focus, .formContainer input[type=text]:focus, .formContainer input[type=tel]:focus {
-  box-shadow: inset 0 -2px 0 #fff;
-}
 
 .logoContainer {
   padding: 45px 35px;
   box-sizing: border-box;
-  position: relative;
+  position: sticky;
   z-index: 2;
-  position: relative;
+  position: fixed;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -188,12 +115,14 @@ form h1.loadIn {
 
 .acceptBtn {
   width: 100%;
+  height: 20px;
   box-sizing: border-box;
   background: #7367f0;
   border: none;
   color: #fff;
-  padding: 20px 0;
+  padding: 20px;
   border-radius: 3px;
+  text-align: margin-bottom;
   cursor: pointer;
   transition: 0.2s ease;
   -webkit-user-select: none;
@@ -247,3 +176,5 @@ form h1.loadIn {
   -webkit-animation : 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) 0s normal forwards 1 fadein;
           animation : 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) 0s normal forwards 1 fadein;
 }
+
+
