@@ -1,0 +1,136 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="inc/layout"
+      class="loading semi-dark-layout" lang="en" data-layout="semi-dark-layout" data-textdirection="ltr">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Gallery</title>
+
+<!------------------------------------------------------ Editor Js - Start ------------------------------------------------------>
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/katex.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/monokai-sublime.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/quill.snow.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/quill.bubble.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/form-quill-editor.css}">
+<!------------------------------------------------------ Editor Js - End -------------------------------------------------------->
+
+
+
+</head>
+
+<!-- BEGIN: Body-->
+<body>
+
+<th:block layout:fragment="content">
+    <!-- BEGIN: Content-->
+    <div class="app-content content ">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <!-- Basic Inputs start -->
+        <section id="basic-input">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Gallery Actions</h4>
+                        </div>
+                        <div class="card-body">
+                            <form action="">
+                                <div class="row">
+                                    <div class="col-xl-4 col-md-6 col-12 mb-1">
+                                        <div class="form-group col-12">
+                                            <button type="button" style="width: 50%;" data-toggle="modal" data-target="#inlineForm" class="btn btn-primary">Add Gallery</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Basic Inputs end -->
+        
+        <!-- Modal -->
+       <div class="modal fade text-left" id="inlineForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel33">Add New Gallery</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="#">
+                    <div class="modal-body">
+                        <label>Name: </label>
+                        <div class="form-group">
+                            <input type="text" placeholder="Gallery Name" class="form-control" />
+                        </div>
+
+                        <label>Detail: </label>
+                        <div class="form-group">
+                            <input type="text" placeholder="Gallery Detail" class="form-control" />
+                        </div>
+                        <label>Status: </label>
+                        <div class="form-group">
+                            <select class="form-control mb-1" id="selectStatus">
+                                <option selected>Click to select status</option>
+                                <option value="1">Active</option>
+                                <option value="2">Passive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Card title</h4>
+                    <h6 class="card-subtitle text-muted">Support card subtitle</h6>
+                </div>
+                <img class="img-fluid" src="../../../app-assets/images/slider/03.jpg" alt="Card image cap" />
+                <div class="card-body">
+                    <p class="card-text">Bear claw sesame snaps gummies chocolate.</p>
+                    <a href="javascript:void(0);" class="card-link">Edit</a>
+                    <a href="javascript:void(0);" class="card-link">Delete</a>
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+    <!-- END: Content-->
+
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+
+</th:block>
+
+<th:block layout:fragment="contentJs">
+    <!------------------------------------------------------ Editor Js - Start ------------------------------------------------------>
+        <script th:src="@{/app-assets/vendors/js/editors/quill/katex.min.js}"></script>
+        <script th:src="@{/app-assets/vendors/js/editors/quill/highlight.min.js}"></script>
+        <script th:src="@{/app-assets/vendors/js/editors/quill/quill.min.js}"></script>
+        <script th:src="@{/app-assets/js/scripts/forms/form-quill-editor.js}"></script>
+    <!------------------------------------------------------ Editor Js - End -------------------------------------------------------->
+
+    <!------------------------------------------------------ Pagination Js - Start -------------------------------------------------------->
+        <script th:src="@{/app-assets/vendors/js/pagination/jquery.bootpag.min.js}"></script>
+        <script th:src="@{/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js}"></script>
+        <script th:src="@{/app-assets/js/scripts/pagination/components-pagination.js}"></script>
+    <!------------------------------------------------------ Pagination Js - End ---------------------------------------------------------->
+</th:block>
+
+</body>
+<!-- END: Body-->
+</html>

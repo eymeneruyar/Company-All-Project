@@ -1,0 +1,561 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="inc/layout"
+      class="loading semi-dark-layout" lang="en" data-layout="semi-dark-layout" data-textdirection="ltr">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>News Add</title>
+
+    <!------------------------------------------------------ Select2 CSS - Start -------------------------------------------------------->
+
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/forms/select/select2.min.css}">
+
+    <!------------------------------------------------------ Select2 CSS - End   -------------------------------------------------------->
+
+    <!------------------------------------------------------ Quill Editor CSS - Start -------------------------------------------------------->
+
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/katex.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/monokai-sublime.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/quill.snow.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/quill.bubble.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/form-quill-editor.css}">
+
+    <!------------------------------------------------------ Quill Editor CSS - End -------------------------------------------------------->
+
+</head>
+
+<!-- BEGIN: Body-->
+<body>
+
+<th:block layout:fragment="content">
+    <!-- BEGIN: Content-->
+    <div class="app-content content ">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="row">
+            <!-- Centered Aligned Tabs starts -->
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                    </div>
+                    <div class="card-body">
+                        <ul class="nav nav-tabs justify-content-center" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab-center" data-toggle="tab" href="#news"
+                                    aria-controls="home-center" role="tab" aria-selected="true">News</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="service-tab-center" data-toggle="tab" href="#category"
+                                    aria-controls="service-center" role="tab" aria-selected="false">Category</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="news" aria-labelledby="home-tab-center" role="tabpanel">
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-9">
+                                                <div class="buttons">
+                                                    <label>
+                                                        Show
+                                                        <select class="custom-select form-control">
+                                                            <option value="10">10</option>
+                                                            <option value="25">25</option>
+                                                            <option value="50">50</option>
+                                                            <option value="100">100</option>
+                                                        </select>
+                                                    </label>
+                                                    <button class="dt-button btn btn-primary ml-2" tabindex="0"
+                                                        type="button" data-toggle="modal"
+                                                        data-target="#productAdd_modal">
+                                                        <span><i class="fas fa-plus"></i> Add News</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="buttons">
+                                                    <input type="text" class="form-control" id="basicInput"
+                                                        placeholder="Search Product">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Title</th>
+                                                    <th>Category</th>
+                                                    <th>Status</th>
+                                                    <th>Brief Summary</th>
+                                                    <th>Actions</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody style="font-size: 14px;">
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>Event Transfer</td>
+                                                    <td>Sport</td>
+                                                    <td>Active</td>
+                                                    <td>Ronaldo has been transferred</td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <button type="button"
+                                                                class="btn btn-sm dropdown-toggle hide-arrow"
+                                                                >
+                                                                <i data-feather="more-vertical"></i>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                                    <i class="mr-50 fas fa-pen"></i>
+                                                                    <span>Edit</span>
+                                                                </a>
+                                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                                    <i class="mr-50 fas fa-ban"></i>
+                                                                    <span>Ban</span>
+                                                                </a>
+                                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                                    <i class="mr-50 far fa-trash-alt"></i>
+                                                                    <span>Delete</span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>Event Transfer</td>
+                                                    <td>Sport</td>
+                                                    <td>Active</td>
+                                                    <td>Ronaldo has been transferred</td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <button type="button"
+                                                                class="btn btn-sm dropdown-toggle hide-arrow"
+                                                                data-toggle="dropdown">
+                                                                <i data-feather="more-vertical"></i>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                                    <i class="mr-50 fas fa-pen"></i>
+                                                                    <span>Edit</span>
+                                                                </a>
+                                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                                    <i class="mr-50 fas fa-ban"></i>
+                                                                    <span>Ban</span>
+                                                                </a>
+                                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                                    <i class="mr-50 far fa-trash-alt"></i>
+                                                                    <span>Delete</span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <ul class="pagination firstLast1-links justify-content-end "></ul>
+
+                            </div>
+                            <div class="tab-pane " id="category" aria-labelledby="service-tab-center" role="tabpanel">
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-9">
+                                                <div class="buttons">
+                                                    <label>
+                                                        Show
+                                                        <select class="custom-select form-control">
+                                                            <option value="10">10</option>
+                                                            <option value="25">25</option>
+                                                            <option value="50">50</option>
+                                                            <option value="100">100</option>
+                                                        </select>
+                                                    </label>
+                                                    <button class="dt-button btn btn-primary ml-2" tabindex="0"
+                                                        type="button" data-toggle="modal"
+                                                        data-target="#categoryAdd_modal">
+                                                        <span><i class="fas fa-plus"></i> Add Category</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="buttons">
+                                                    <input type="text" class="form-control" id="basicInput"
+                                                        placeholder="Search Category">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Title</th>
+                                                    <th>Category</th>
+                                                    <th>Status</th>
+                                                    <th>Brief Summary</th>
+                                                    <th>Actions</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody style="font-size: 14px;">
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>Event Transfer</td>
+                                                    <td>Sport</td>
+                                                    <td>Active</td>
+                                                    <td>Ronaldo has been transferred</td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <button type="button"
+                                                                class="btn btn-sm dropdown-toggle hide-arrow"
+                                                                data-toggle="dropdown">
+                                                                <i data-feather="more-vertical"></i>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                                    <i class="mr-50 fas fa-pen"></i>
+                                                                    <span>Edit</span>
+                                                                </a>
+                                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                                    <i class="mr-50 fas fa-ban"></i>
+                                                                    <span>Ban</span>
+                                                                </a>
+                                                                <a class="dropdown-item" href="javascript:void(0);">
+                                                                    <i class="mr-50 far fa-trash-alt"></i>
+                                                                    <span>Delete</span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <ul class="pagination firstLast1-links justify-content-end "></ul>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Centered Aligned Tabs ends -->
+        </div>
+    </div>
+    <!-- END: Content-->
+
+    <!-- Modal Product -->
+    <div class="modal fade text-left" id="productAdd_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16"
+        aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel4">Add News</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section id="multiple-column-form">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form class="needs-validation invalid" novalidate>
+                                            <div class="row">
+                                                <div class="col-md-12 col-12">
+                                                    <div class="form-group">
+                                                        <label for="title">Title</label>
+                                                        <input type="text" id="title" class="form-control"
+                                                            placeholder="News Title" required>
+                                                        <div class="valid-feedback">Looks good!</div>
+                                                        <div class="invalid-feedback">Please enter title.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                    <div class="form-group">
+                                                        <label for="summary">Summary</label>
+                                                        <input type="text" id="summary" class="form-control"
+                                                            placeholder="Brief Summary" name="lastname" required />
+                                                        <div class="valid-feedback">Looks good!</div>
+                                                        <div class="invalid-feedback">Please enter summary.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                    <div class="form-group">
+                                                        <label for="description">Description</label>
+                                                        <!-- Snow Editor start -->
+
+                                                        <div class="mb-3">
+                                                            <div id="snow-wrapper">
+                                                                <div id="snow-container">
+                                                                    <div class="quill-toolbar">
+                                                                        <span class="ql-formats">
+                                                                            <select class="ql-header">
+                                                                                <option value="1">Heading</option>
+                                                                                <option value="2">Subheading</option>
+                                                                                <option selected>Normal</option>
+                                                                            </select>
+                                                                            <select class="ql-font">
+                                                                                <option selected>Sailec Light</option>
+                                                                                <option value="sofia">Sofia Pro</option>
+                                                                                <option value="slabo">Slabo 27px
+                                                                                </option>
+                                                                                <option value="roboto">Roboto Slab
+                                                                                </option>
+                                                                                <option value="inconsolata">Inconsolata
+                                                                                </option>
+                                                                                <option value="ubuntu">Ubuntu Mono
+                                                                                </option>
+                                                                            </select>
+                                                                        </span>
+                                                                        <span class="ql-formats">
+                                                                            <button class="ql-bold"></button>
+                                                                            <button class="ql-italic"></button>
+                                                                            <button class="ql-underline"></button>
+                                                                        </span>
+                                                                        <span class="ql-formats">
+                                                                            <button class="ql-list"
+                                                                                value="ordered"></button>
+                                                                            <button class="ql-list"
+                                                                                value="bullet"></button>
+                                                                        </span>
+                                                                        <span class="ql-formats">
+                                                                            <button class="ql-link"></button>
+                                                                            <button class="ql-image"></button>
+                                                                            <button class="ql-video"></button>
+                                                                        </span>
+                                                                        <span class="ql-formats">
+                                                                            <button class="ql-formula"></button>
+                                                                            <button class="ql-code-block"></button>
+                                                                        </span>
+                                                                        <span class="ql-formats">
+                                                                            <button class="ql-clean"></button>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="editor" style="height: 100px;">
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <!-- Snow Editor end -->
+                                                        <div class="valid-feedback">Looks good!</div>
+                                                        <div class="invalid-feedback">Please enter description.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+
+                                                    <div class="form-group">
+                                                        <label for="customFile">With Browse button</label>
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input"
+                                                                id="customFile" />
+                                                            <label class="custom-file-label" for="customFile">Choose
+                                                                file</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="valid-feedback">Looks good!</div>
+                                                    <div class="invalid-feedback">Please enter product price.</div>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                    <div class="form-group">
+                                                        <label for="status">Status</label>
+                                                        <select class="form-control" id="basicSelect">
+                                                            <option>Active</option>
+                                                            <option>Passive</option>
+                                                        </select>
+                                                        <div class="valid-feedback">Looks good!</div>
+                                                        <div class="invalid-feedback">Please enter product details.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                    <div class="form-group">
+                                                        <label for="category">Category</label>
+                                                        <select class="select2 form-control" multiple>
+                                                            <optgroup label="Alaskan/Hawaiian Time Zone">
+                                                                <option value="AK">Alaska</option>
+                                                                <option value="HI">Hawaii</option>
+                                                            </optgroup>
+                                                            <optgroup label="Pacific Time Zone">
+                                                                <option value="CA">California</option>
+                                                                <option value="NV">Nevada</option>
+                                                                <option value="OR">Oregon</option>
+                                                                <option value="WA">Washington</option>
+                                                            </optgroup>
+                                                            <optgroup label="Mountain Time Zone">
+                                                                <option value="AZ">Arizona</option>
+                                                                <option value="CO">Colorado</option>
+                                                                <option value="ID">Idaho</option>
+                                                            </optgroup>
+                                                            <optgroup label="Central Time Zone">
+                                                                <option value="AL">Alabama</option>
+                                                                <option value="AR">Arkansas</option>
+                                                                <option value="IL">Illinois</option>
+                                                                <option value="IA">Iowa</option>
+                                                                <option value="KS">Kansas</option>
+                                                            </optgroup>
+                                                            <optgroup label="Eastern Time Zone">
+                                                                <option value="CT">Connecticut</option>
+                                                                <option value="DE">Delaware</option>
+                                                                <option value="FL">Florida</option>
+                                                                <option value="GA">Georgia</option>
+                                                            </optgroup>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-8"></div>
+                                                <div class="col-md-4">
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-2"></div>
+                                                        <div class="col-md-10">
+                                                            <button type="reset"
+                                                                class="btn btn-outline-secondary">Reset</button>
+                                                            <button type="submit"
+                                                                class="btn btn-primary">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Basic Floating Label Form section end -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Category -->
+    <div class="modal fade text-left" id="categoryAdd_modal" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel16" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel4">New Category</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section id="multiple-column-form">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form class="needs-validation invalid" novalidate>
+                                            <div class="row">
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="categoryName">Category Name</label>
+                                                        <input type="text" id="categoryName" class="form-control" placeholder="Category Name" />
+                                                        <div class="valid-feedback">Looks good!</div>
+                                                        <div class="invalid-feedback">Please enter your category name.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="subCategoryName">Sub-Category Name</label>
+                                                        <input type="text" id="subCategoryName" class="form-control" placeholder="Sub-Category Name" />
+                                                        <div class="valid-feedback">Looks good!</div>
+                                                        <div class="invalid-feedback">Please enter sub-category name.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label for="categoryDetails">Category Details (Optional)</label>
+                                                        <textarea type="text" id="categoryDetails" class="form-control" ></textarea>
+                                                        <div class="valid-feedback">Looks good!</div>
+                                                        <div class="invalid-feedback">Please enter category details.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="categoryStatus">Category Status</label>
+                                                        <select class="form-control" id="categoryStatus">
+                                                            <option value=" ">Please make a choice</option>
+                                                            <option value="active">Active</option>
+                                                            <option value="passive">Passive</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-8"></div>
+                                                <div class="col-md-4">
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-2"></div>
+                                                        <div class="col-md-10">
+                                                            <button type="reset"
+                                                                class="btn btn-outline-secondary">Reset</button>
+                                                            <button type="submit"
+                                                                class="btn btn-primary">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Basic Floating Label Form section end -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+
+</th:block>
+
+
+<th:block layout:fragment="contentJs">
+
+    <!------------------------------------------------------ Select2 Js - Start -------------------------------------------------------->
+        <script th:src="@{/app-assets/vendors/js/forms/select/select2.full.min.js}"></script>
+        <script th:src="@{/app-assets/js/scripts/forms/form-select2.js}"></script>
+    <!------------------------------------------------------ Select2 Js - End   -------------------------------------------------------->
+
+    <!------------------------------------------------------ Editor Js - Start ------------------------------------------------------>
+        <script th:src="@{/app-assets/vendors/js/editors/quill/katex.min.js}"></script>
+        <script th:src="@{/app-assets/vendors/js/editors/quill/highlight.min.js}"></script>
+        <script th:src="@{/app-assets/vendors/js/editors/quill/quill.min.js}"></script>
+        <script th:src="@{/app-assets/js/scripts/forms/form-quill-editor.js}"></script>
+    <!------------------------------------------------------ Editor Js - End -------------------------------------------------------->
+
+    <!------------------------------------------------------ Pagination Js - Start -------------------------------------------------------->
+        <script th:src="@{/app-assets/vendors/js/pagination/jquery.bootpag.min.js}"></script>
+        <script th:src="@{/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js}"></script>
+        <script th:src="@{/app-assets/js/scripts/pagination/components-pagination.js}"></script>
+    <!------------------------------------------------------ Pagination Js - End ---------------------------------------------------------->
+
+</th:block>
+
+</body>
+<!-- END: Body-->
+</html>

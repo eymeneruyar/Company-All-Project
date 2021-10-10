@@ -1,0 +1,233 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="inc/layout"
+      class="loading semi-dark-layout" lang="en" data-layout="semi-dark-layout" data-textdirection="ltr">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Orders</title>
+
+    <!------------------------------------------------------ CSS - Start ------------------------------------------------------>
+    @
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/pickers/form-flat-pickr.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/pickers/form-pickadate.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/form-validation.css}">
+
+    <!------------------------------------------------------ CSS - End ------------------------------------------------------>
+
+</head>
+
+
+<body>
+
+<th:block layout:fragment="content">
+    <!-- BEGIN: Content-->
+    <div class="app-content content ">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <!-- Basic Tables start -->
+        <div class="row" id="basic-table">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <label class="ml-1">
+                                        Show
+                                        <select class="custom-select form-control">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select>
+                                    </label>                                    
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="buttons">
+                                    <input type="text" class="form-control" id="basicInput" placeholder="Search">
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Customer No</th>
+                                    <th>Product No</th>
+                                    <th>Product Detail</th>
+                                    <th>Date</th>
+                                    <th>Address</th>
+                                    <th>Delete</th>
+
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 14px;">
+                                <tr>
+                                    <td>1111111111</td>
+                                    <td>1111111111</td>
+                                    <td>1111111111</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm" data-toggle="modal"
+                                            data-target="#product_detail_modal">
+                                            <i class="far fa-file-alt" style="font-size: 20px;"></i>
+                                        </button>
+                                    </td>
+                                    <td>2021-09-08 18:45:00</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm" data-toggle="modal"
+                                            data-target="#order_address_modal">
+                                            <i class="far fa-file-alt" style="font-size: 20px;"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-outline-danger">
+                                            <i class="far fa-trash-alt" style="font-size: 20px; width: 13px;"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>1111111111</td>
+                                    <td>1111111111</td>
+                                    <td>1111111111</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm" data-toggle="modal"
+                                            data-target="#product_detail_modal">
+                                            <i class="far fa-file-alt" style="font-size: 20px;"></i>
+                                        </button>
+                                    </td>
+                                    <td>2021-09-08 18:45:00</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm" data-toggle="modal"
+                                            data-target="#order_address_modal">
+                                            <i class="far fa-file-alt" style="font-size: 20px;"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-outline-danger">
+                                            <i class="far fa-trash-alt" style="font-size: 20px; width: 13px;"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <ul class="pagination firstLast1-links justify-content-end "></ul>
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->
+
+    <!-- Product Detail Modal Start-->
+    <div class="modal fade text-left" id="product_detail_modal" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel16" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel4">Product</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section id="multiple-column-form">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <img class="card-img-top" src="/app-assets/images/slider/04.jpg"
+                                        alt="Card image cap" />
+                                    <div class="card-body">
+                                        <h4 class="card-title">iPhone 12</h4>
+                                        <p class="card-text">
+                                            Some quick example text to build on the card title and make up the bulk of
+                                            the card's content.
+                                        </p>
+                                        <button onclick="location.href = 'productDetails.html';"
+                                            class="btn btn-outline-primary">Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Basic Floating Label Form section end -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Product Detail Modal End-->
+
+    <!-- Order Address Modal Start-->
+    <div class="modal fade text-left" id="order_address_modal" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel16" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel4">Address</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section id="multiple-column-form">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p>75.Yıl Mah. Eke cad. Adanur Sit. C blok Daire 14 Yıldırım/Bursa</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Basic Floating Label Form section end -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Order Address Modal End-->
+</th:block>
+
+
+<th:block layout:fragment="contentJs">
+
+    <!------------------------------------------------------ Pagination Js - Start -------------------------------------------------------->
+    <script th:src="@{/app-assets/vendors/js/pagination/jquery.bootpag.min.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js}"></script>
+    <script th:src="@{/app-assets/js/scripts/pagination/components-pagination.js}"></script>
+    <!------------------------------------------------------ Pagination Js - End ---------------------------------------------------------->
+
+    <!------------------------------------------------------ Date - Time Picker Js - Start ---------------------------------------------------------->
+
+    <script th:src="@{/app-assets/vendors/js/pickers/pickadate/picker.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/pickers/pickadate/picker.date.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/pickers/pickadate/picker.time.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/pickers/pickadate/legacy.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js}"></script>
+    <script th:src="@{/app-assets/js/scripts/forms/pickers/form-pickers.js}"></script>
+
+    <!------------------------------------------------------ Date - Time Picker Js - Start ---------------------------------------------------------->
+
+    <!------------------------------------------------------ Valdiation Js - Start -------------------------------------------------------->
+
+    <script th:src="@{/app-assets/vendors/js/forms/validation/jquery.validate.min.js}"></script>
+    <script th:src="@{/app-assets/js/scripts/forms/form-validation.js}"></script>
+
+    <!------------------------------------------------------ Valdiation Js - End -------------------------------------------------------->
+
+</th:block>
+
+
+</body>
+</html>
