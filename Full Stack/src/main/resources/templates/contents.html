@@ -9,13 +9,15 @@
     <title>Contents</title>
 
 
-    <!------------------------------------------------------ Editor Js - Start ------------------------------------------------------>
-        <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/katex.min.css}">
-        <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/monokai-sublime.min.css}">
-        <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/quill.snow.css}">
-        <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/quill.bubble.css}">
-        <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/form-quill-editor.css}">
-    <!------------------------------------------------------ Editor Js - End -------------------------------------------------------->
+    <!------------------------------------------------------ Editor CSS - Start ------------------------------------------------------>
+        <link rel='stylesheet' href='https://cdn.quilljs.com/1.0.0/quill.snow.css'>
+    <!------------------------------------------------------ Editor CSS - End -------------------------------------------------------->
+
+    <!------------------------------------------------------ Sweet Alerts CSS - Start ------------------------------------------------------>
+        <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/animate/animate.min.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/extensions/sweetalert2.min.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/extensions/ext-component-sweet-alerts.css}">
+    <!------------------------------------------------------ Sweet Alerts CSS - End -------------------------------------------------------->
 
 </head>
 
@@ -36,7 +38,8 @@
                             <h4 class="card-title">Add Content</h4>
                         </div>
                         <div class="card-body">
-                            <form action="">
+                            <form id="contents_form">
+
                                 <div class="row">
                                     <div class="col-xl-4 col-md-6 col-12 mb-1">
                                         <div class="form-group">
@@ -53,69 +56,22 @@
                                     <div class="col-xl-4 col-md-6 col-12 mb-1">
                                         <label for="status">Status</label>
                                         <select class="form-control" id="status">
-                                            <option value=" ">Please make a choice</option>
-                                            <option value="open">Open</option>
-                                            <option value="close">Close</option>
+                                            <option value="active" selected>Active</option>
+                                            <option value="passive">Passive</option>
                                         </select>
                                     </div>
                                     
                                     <div class="col-sm-12">
-                                        <label for="editor">Details</label>
-                                        <div id="snow-wrapper">
-                                            <div id="snow-container">
-                                                <div class="quill-toolbar">
-                                                    <span class="ql-formats">
-                                                        <select class="ql-header">
-                                                            <option value="1">Heading</option>
-                                                            <option value="2">Subheading</option>
-                                                            <option selected>Normal</option>
-                                                        </select>
-                                                        <select class="ql-font">
-                                                            <option selected>Sailec Light</option>
-                                                            <option value="sofia">Sofia Pro</option>
-                                                            <option value="slabo">Slabo 27px</option>
-                                                            <option value="roboto">Roboto Slab</option>
-                                                            <option value="inconsolata">Inconsolata</option>
-                                                            <option value="ubuntu">Ubuntu Mono</option>
-                                                        </select>
-                                                    </span>
-                                                    <span class="ql-formats">
-                                                        <button class="ql-bold"></button>
-                                                        <button class="ql-italic"></button>
-                                                        <button class="ql-underline"></button>
-                                                    </span>
-                                                    <span class="ql-formats">
-                                                        <button class="ql-list" value="ordered"></button>
-                                                        <button class="ql-list" value="bullet"></button>
-                                                    </span>
-                                                    <span class="ql-formats">
-                                                        <button class="ql-link"></button>
-                                                        <button class="ql-image"></button>
-                                                        <button class="ql-video"></button>
-                                                    </span>
-                                                    <span class="ql-formats">
-                                                        <button class="ql-formula"></button>
-                                                        <button class="ql-code-block"></button>
-                                                    </span>
-                                                    <span class="ql-formats">
-                                                        <button class="ql-clean"></button>
-                                                    </span>
-                                                </div>
-                                                <div class="editor" id="editor">
-                                                    <p class="card-text"><br /></p>
-                                                    <p class="card-text"><br /></p>
-                                                    <p class="card-text"><br /></p>
-                                                    <p class="card-text"><br /></p>
-                                                    <p class="card-text"><br /></p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <label for="quillEditor">Details</label>
+                                        <div id="quillEditor" style="height: 100px;"></div>
                                     </div>
+
                                     <div class="col-12 mt-2">
-                                        <button type="reset" class="btn btn-primary mr-1">Submit</button>
+                                        <button type="button" class="btn btn-primary mr-1" id="type-success">Submit</button>
                                         <button type="reset" class="btn btn-outline-secondary">Reset</button>
                                     </div>
                                 </div>
+
                             </form>
                         </div>
                     </div>
@@ -134,11 +90,11 @@
                                 <div class="buttons">
                                     <label>
                                         Show
-                                        <select class="custom-select form-control">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
+                                        <select class="custom-select form-control" id="showTableRow" onchange="fncShow()">
+                                            <option value=10>10</option>
+                                            <option value=25>25</option>
+                                            <option value=50>50</option>
+                                            <option value=100>100</option>
                                         </select>
                                     </label>
                                 </div>
@@ -241,18 +197,24 @@
 
 
 <th:block layout:fragment="contentJs">
+
     <!------------------------------------------------------ Editor Js - Start ------------------------------------------------------>
-        <script th:src="@{/app-assets/vendors/js/editors/quill/katex.min.js}"></script>
-        <script th:src="@{/app-assets/vendors/js/editors/quill/highlight.min.js}"></script>
-        <script th:src="@{/app-assets/vendors/js/editors/quill/quill.min.js}"></script>
-        <script th:src="@{/app-assets/js/scripts/forms/form-quill-editor.js}"></script>
+        <script src='https://cdn.quilljs.com/1.0.0/quill.js'></script>
     <!------------------------------------------------------ Editor Js - End -------------------------------------------------------->
+
+    <!------------------------------------------------------ Sweet Alerts Js - Start ------------------------------------------------------>
+        <script th:src="@{/app-assets/vendors/js/extensions/sweetalert2.all.min.js}"></script>
+        <script th:src="@{/app-assets/vendors/js/extensions/polyfill.min.js}"></script>
+    <!------------------------------------------------------ Sweet Alerts - End -------------------------------------------------------->
 
     <!------------------------------------------------------ Pagination Js - Start -------------------------------------------------------->
         <script th:src="@{/app-assets/vendors/js/pagination/jquery.bootpag.min.js}"></script>
         <script th:src="@{/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js}"></script>
-        <script th:src="@{/app-assets/js/scripts/pagination/components-pagination.js}"></script>
+        <!-- <script th:src="@{/app-assets/js/scripts/pagination/components-pagination.js}"></script> -->
     <!------------------------------------------------------ Pagination Js - End ---------------------------------------------------------->
+
+        <script th:src="@{/mainJs/contents.js}"></script>
+
 </th:block>
 
 </body>
