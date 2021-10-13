@@ -1,7 +1,7 @@
-function getAllCustomers() {
+function getAllCustomers(status) {
 
     $.ajax({
-        url: '/customer/all',
+        url: '/customer/all/status=' + status,
         type: 'GET',
         dataType: 'Json',
         success: function (data) {
@@ -14,13 +14,31 @@ function getAllCustomers() {
 
 }
 
-function getAllCustomersByPage(page, size) {
+function searchCustomerByKey(key, page, size) {
+    console.log(selectedCustomerStatus)
 
     $.ajax({
-        url: '/customer/all/page=' + page + 'size=' + size,
+        url: '/customer/search' + '/key=' + key + '/status=' + selectedCustomerStatus + '/page=' + page + 'size=' + size,
         type: 'GET',
         dataType: 'Json',
         success: function (data) {
+            console.log(data.result)
+            createCustomerTable(data.result);
+            dynamicPagination(data.totalPage, size);
+        },
+        error: function (err) {
+            console.log(err)
+        }
+    })
+}
+
+function getAllCustomersByPage(page, size) {
+    $.ajax({
+        url: '/customer/all' + '/status=' + selectedCustomerStatus + '/page=' + page + 'size=' + size,
+        type: 'GET',
+        dataType: 'Json',
+        success: function (data) {
+            console.log(data.result)
             createCustomerTable(data.result);
             dynamicPagination(data.totalPage, size);
         },
@@ -42,7 +60,6 @@ function createCustomerTable(customers) {
             <td>` + customer.surname + `</td>
             <td>` + customer.mail + `</td>
             <td>` + customer.phone1 + `</td>
-            <td>` + customer.phone2 + `</td>
             <td>` + customer.taxno + `</td>
             <td>` + customer.country + `</td>
             <td>` + customer.city + `</td>
@@ -199,7 +216,27 @@ $('#customer_form').submit( ( event ) => {
 $('#customer_pagesize').change(function(){
     $('#customer_pagination').twbsPagination('destroy');
     getAllCustomersByPage(0, parseInt($(this).val()));
-    console.log("Show number Change " + parseInt($(this).val()));
 });
+
+$('#customer_status').change(function(){
+    selectedCustomerStatus = $(this).val();
+    $("#tbodyCustomer > tr").remove();
+    getAllCustomersByPage(0, $('#customer_pagesize').val());
+});
+
+$('#customer_search').keyup( function (event) {
+    event.preventDefault();
+    const key = $(this).val();
+    console.log(key)
+    if(key !== ""){
+        $("#tbodyCustomer > tr").remove();
+        searchCustomerByKey(key, 0, $('#customer_pagesize').val());
+    }else{
+        getAllCustomersByPage(0, $('#customer_pagesize').val());
+    }
+
+});
+let selectedCustomerStatus = "Active";
 getAllCustomersByPage(0, 10);
-//getAllCustomers();
+
+//getAllCustomers("Active");
