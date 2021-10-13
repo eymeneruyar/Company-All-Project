@@ -17,6 +17,7 @@ editor.on('text-change', function() {
 
 let select_id = 0;
 var success = $('#type-success');
+var confirmText = $('#confirm-text');
 
 //-------------------------------------- Contents Add - Start --------------------------------------//
 if (success.length) {
@@ -105,91 +106,227 @@ if (success.length) {
 
 //-------------------------------------- Contents List - Start ----------------------------------------//
 
-(function (window, document, $) {
-    'use strict';
+let globalArr = []
 
-    if ($(window).width() < 768) {
-        dynamicPagination(2);
-    } else {
-        dynamicPagination(5);
-    }
+var showNumber = $('#showTableRow').val()
 
-    function dynamicPagination(visiblePages) {
+dynamicPagination(5,showNumber);
 
-        let totalPage = 0
+function dynamicPagination(visiblePages,showData) {
 
-        var showNumber = $('#showTableRow').val()
+    var totalPage = 0
 
-        $('#showTableRow').change(function(){
-            console.log("Show number New " + $(this).val())
-            showNumber = $(this).val()
-        })
-        console.log("Show number " + showNumber)
+    console.log("Show number  " + showData)
 
-        $.ajax({
-            url:"./contents/totalPageValue/" + showNumber,
-            type: "get",
-            contentType : 'application/json; charset=utf-8',
-            success: function (data){
+    $.ajax({
+        url:"./contents/totalPageValue/" + showData,
+        type: "get",
+        contentType : 'application/json; charset=utf-8',
+        success: function (data){
 
-                totalPage = data
-                console.log("Total page -> " + totalPage)
+            totalPage = data
+            console.log("Total page -> " + totalPage)
 
-                $('.firstLast1-links').twbsPagination({
-                    totalPages: totalPage,
-                    visiblePages: visiblePages,
-                    prev: 'Prev',
-                    first: 'First',
-                    last: 'Last',
-                    startPage: 1,
-                    onPageClick: function (event, page) {
+            $('.firstLast1-links').twbsPagination({
+                totalPages: totalPage,
+                visiblePages: visiblePages,
+                prev: 'Prev',
+                first: 'First',
+                last: 'Last',
+                startPage: 1,
+                onPageClick: function (event, page) {
 
-                        function listOfContents(){
-                            $.ajax({
-                                url:"./contents/list/" + showNumber + "/" + (page-1),
-                                type: "get",
-                                dataType: "json",
-                                contentType : 'application/json; charset=utf-8',
-                                success: function (data){
-                                    //createRowData(data)
-                                    console.log("Pagination Data -> " + JSON.stringify(data.result))
-                                },
-                                error: function (err){
-                                    console.log(err)
-                                }
-                            })
-                        }
-                        listOfContents()
-                        //$('#firstLast1-content').text('You are on Page ' + page);
-                        $('.pagination').find('li').addClass('page-item');
-                        $('.pagination').find('a').addClass('page-link');
-                    }
-                });
-                //createRow(data)
-            },
-            error: function (err){
-                console.log(err)
-            }
-        })
+                        $.ajax({
+                            url:"./contents/list/" + showData + "/" + (page-1),
+                            type: "get",
+                            dataType: "json",
+                            contentType : 'application/json; charset=utf-8',
+                            success: function (data){
+                                createRowData(data)
+                            },
+                            error: function (err){
+                                console.log(err)
+                            }
+                        })
+
+                    //$('#firstLast1-content').text('You are on Page ' + page);
+                    $('.pagination').find('li').addClass('page-item');
+                    $('.pagination').find('a').addClass('page-link');
+                }
+            });
+            //createRow(data)
+        },
+        error: function (err){
+            console.log(err)
+        }
+    })
 
 
-    }
-})(window, document, jQuery);
+}
+$('#showTableRow').change(function(){
+    showNumber = $(this).val()
+    dynamicPagination(5,showNumber);
+    console.log("Show number Change " + $(this).val())
+})
 
 //-------------------------------------- Contents List - End ------------------------------------------//
 
 //-------------------------------------- Contents Create Row - Start ------------------------------------------//
-let globalArr = []
 function createRowData(data){
     let html = ``
-    for (let i = 0; i < data.length; i++) {
-        globalArr = data
-        const itm = data[i]
-        html += ``
+    for (let i = 0; i < data.result.length; i++) {
+        globalArr = data.result
+        const itm = data.result[i]
+        html += `<tr>
+                      <td>${itm.no}</td>
+                      <td>${itm.title}</td>
+                      <td>${itm.description}</td>
+                      <td>${itm.status}</td>
+                      <td>${itm.date}</td>
+                      <td>
+                          <div class="dropdown">
+                              <button type="button" class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+                                  <i data-feather="more-vertical"></i>
+                              </button>
+                              <div class="dropdown-menu">
+                                  <a class="dropdown-item" href="javascript:void(0);">
+                                      <i class="mr-50 fas fa-pen"></i>
+                                      <span>Edit</span>
+                                  </a>
+                                  <a class="dropdown-item" href="javascript:void(0);">
+                                      <i class="mr-50 fas fa-ban"></i>
+                                      <span>Ban</span>
+                                  </a>
+                                  <a class="dropdown-item" type="button" id="confirm-text" href="javascript:contentDelete(${itm.contentsId})">
+                                      <i class="mr-50 far fa-trash-alt"></i>
+                                      <span>Delete</span>
+                                  </a>
+                              </div>
+                          </div>
+                      </td>
+               </tr>`
     }
-    $("#").html(html)
+    $("#contentTable").html(html)
 }
 //-------------------------------------- Contents Create Row - End --------------------------------------------//
+
+//-------------------------------------- Contents Delete - Start --------------------------------------------//
+function contentDelete(id){
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        customClass: {
+            confirmButton: 'btn btn-primary',
+            cancelButton: 'btn btn-outline-danger ml-1'
+        },
+        buttonsStyling: false
+    }).then(function (result) {
+        if (result.value) {
+            $.ajax({
+                url: './contents/delete/' + id,
+                type: 'DELETE',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if( id != null){
+                        Swal.fire({
+                            icon: 'success',
+                            title: "Deleted!",
+                            text: data.message,
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: "Error",
+                            text: data.message,
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                    }
+                },
+                error: function (err) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: "Error",
+                        text: "An error occurred during the delete operation",
+                        customClass: {
+                            confirmButton: 'btn btn-success'
+                        }
+                    });
+                    console.log(err)
+                }
+            })
+        }
+    });
+}
+//-------------------------------------- Contents Delete - End ----------------------------------------------//
+
+//-------------------------------------- Contents Search - Start --------------------------------------------//
+$('#searchContent').keyup( function (event) {
+
+    event.preventDefault();
+
+    var totalPage = 0
+    let searchData = $("#searchContent").val()
+
+    $.ajax({
+        url:"./contents/totalPageValue/" + showNumber,
+        type: "get",
+        contentType : 'application/json; charset=utf-8',
+        success: function (data){
+
+            totalPage = data
+            console.log("Total page search section -> " + totalPage)
+
+            $('.firstLast1-links').twbsPagination({
+                totalPages: totalPage,
+                visiblePages: 3,
+                prev: 'Prev',
+                first: 'First',
+                last: 'Last',
+                startPage: 1,
+                onPageClick: function (event, page) {
+
+                    $.ajax({
+                        url: './contents/search/' + searchData + "/" + page + "/" + showNumber,
+                        type: 'get',
+                        dataType: "json",
+                        contentType : 'application/json; charset=utf-8',
+                        success: function (data) {
+
+                            createRowData(data)
+                            console.log("Search data " + JSON.stringify(data))
+
+                        },
+                        error: function (err) {
+                            console.log(err)
+                            alert("İşlem sırısında bir hata oluştu!");
+                        }
+                    })
+
+                    //$('#firstLast1-content').text('You are on Page ' + page);
+                    $('.pagination').find('li').addClass('page-item');
+                    $('.pagination').find('a').addClass('page-link');
+                }
+            });
+            //createRow(data)
+        },
+        error: function (err){
+            console.log(err)
+        }
+    })
+
+
+
+})
+//-------------------------------------- Contents Search - End ----------------------------------------------//
 
 function fncShow(){
     var tableRowNumber = $('#showTableRow').val()
