@@ -37,6 +37,7 @@ if (success.length) {
             description: contentDescription,
             status: contentStatus,
             details: editorText
+            //details: contentDetails
         }
         console.log("obj -> " + JSON.stringify(obj))
 
@@ -62,6 +63,7 @@ if (success.length) {
                          },
                          buttonsStyling: false
                      });
+                     resetForm()
                  }else if(data.status == true && data.result == null){
                      Swal.fire({
                          title: "Warning!",
@@ -72,6 +74,7 @@ if (success.length) {
                          },
                          buttonsStyling: false
                      });
+                     resetForm()
                  }else{
                      Swal.fire({
                          title: 'Error!',
@@ -107,76 +110,60 @@ if (success.length) {
 //-------------------------------------- Contents List - Start ----------------------------------------//
 
 let globalArr = []
+function dynamicPagination(totalPage, size) {
+    $('#content_pagination').twbsPagination({
+        totalPages: totalPage,
+        visiblePages: 5,
+        prev: 'Prev',
+        first: 'First',
+        last: 'Last',
+        startPage: 1,
+        onPageClick: function (event, page) {
+            console.log("Page click");
+            getAllContentsByPage(page, size);
+            //$('#firstLast1-content').text('You are on Page ' + page);
+            $('.pagination').find('li').addClass('page-item');
+            $('.pagination').find('a').addClass('page-link');
+        }
+    });
 
-var showNumber = $('#showTableRow').val()
+}
 
-dynamicPagination(5,showNumber);
-
-function dynamicPagination(visiblePages,showData) {
-
-    var totalPage = 0
-
-    console.log("Show number  " + showData)
-
+function getAllContentsByPage(page,showNumber){
     $.ajax({
-        url:"./contents/totalPageValue/" + showData,
+        url:"./contents/list/" + showNumber + "/" + (page-1),
         type: "get",
+        dataType: "json",
         contentType : 'application/json; charset=utf-8',
         success: function (data){
-
-            totalPage = data
-            console.log("Total page -> " + totalPage)
-
-            $('.firstLast1-links').twbsPagination({
-                totalPages: totalPage,
-                visiblePages: visiblePages,
-                prev: 'Prev',
-                first: 'First',
-                last: 'Last',
-                startPage: 1,
-                onPageClick: function (event, page) {
-
-                        $.ajax({
-                            url:"./contents/list/" + showData + "/" + (page-1),
-                            type: "get",
-                            dataType: "json",
-                            contentType : 'application/json; charset=utf-8',
-                            success: function (data){
-                                createRowData(data)
-                            },
-                            error: function (err){
-                                console.log(err)
-                            }
-                        })
-
-                    //$('#firstLast1-content').text('You are on Page ' + page);
-                    $('.pagination').find('li').addClass('page-item');
-                    $('.pagination').find('a').addClass('page-link');
-                }
-            });
-            //createRow(data)
+            createRowData(data)
+            dynamicPagination(data.totalPage,showNumber)
+            console.log("Buraya girdi")
         },
         error: function (err){
             console.log(err)
         }
     })
-
-
 }
+
 $('#showTableRow').change(function(){
-    showNumber = $(this).val()
-    dynamicPagination(5,showNumber);
-    console.log("Show number Change " + $(this).val())
-})
+    $('#content_pagination').twbsPagination('destroy');
+    getAllContentsByPage(1, parseInt($(this).val()));
+    console.log("Show number Change " + parseInt($(this).val()));
+});
+getAllContentsByPage(1, 10);
+
 
 //-------------------------------------- Contents List - End ------------------------------------------//
 
 //-------------------------------------- Contents Create Row - Start ------------------------------------------//
 function createRowData(data){
     let html = ``
+    console.log(data)
     for (let i = 0; i < data.result.length; i++) {
         globalArr = data.result
         const itm = data.result[i]
+        //console.log(itm.title + " " +  itm.details)
         html += `<tr>
                       <td>${itm.no}</td>
                       <td>${itm.title}</td>
@@ -186,10 +173,10 @@ function createRowData(data){
                       <td>
                           <div class="dropdown">
                               <button type="button" class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
-                                  <i data-feather="more-vertical"></i>
+                                  <i class="fas fa-ellipsis-v"></i>
                               </button>
                               <div class="dropdown-menu">
-                                  <a class="dropdown-item" href="javascript:void(0);">
+                                  <a class="dropdown-item" href="javascript:contentUpdate(${i});">
                                       <i class="mr-50 fas fa-pen"></i>
                                       <span>Edit</span>
                                   </a>
@@ -240,6 +227,7 @@ function contentDelete(id){
                                 confirmButton: 'btn btn-success'
                             }
                         });
+                        resetForm()
                     }else{
                         Swal.fire({
                             icon: 'error',
@@ -267,6 +255,18 @@ function contentDelete(id){
     });
 }
 //-------------------------------------- Contents Delete - End ----------------------------------------------//
+
+//-------------------------------------- Contents Update - Start ----------------------------------------------//
+function contentUpdate(i){
+    const itm = globalArr[i]
+    select_id  = itm.contentsId
+    $('#title').val(itm.title)
+    $('#description').val(itm.description)
+    $('#status').val(itm.status)
+    //console.log(select_id)
+    editor.setText(itm.details + "\n")
+}
+//-------------------------------------- Contents Update - End ------------------------------------------------//
 
 //-------------------------------------- Contents Search - Start --------------------------------------------//
 $('#searchContent').keyup( function (event) {
@@ -323,20 +323,16 @@ $('#searchContent').keyup( function (event) {
         }
     })
 
-
-
 })
 //-------------------------------------- Contents Search - End ----------------------------------------------//
 
-function fncShow(){
-    var tableRowNumber = $('#showTableRow').val()
-    console.log("Show number " + tableRowNumber)
-    return tableRowNumber
-    var x = $('#showTableRow').val()
-    console.log("Show number X " + x)
+function resetForm(){
+    select_id = 0
+    $('#title').val("")
+    $('#description').val("")
+    $('#status').val("")
+    editor.setText("")
+    getAllContentsByPage(1, 10);
 }
-
-
-
 
 

@@ -50,37 +50,66 @@ public class ContentsController {
     public Map<Check,Object> add(@RequestBody @Valid Contents c, BindingResult bindingResult){
         Map<Check,Object> map = new LinkedHashMap<>();
         if(!bindingResult.hasErrors()){
-            try {
-                //Date and Number insert operation
-                c.setNo(Util.getRandomNumberString());
+            if(c.getId() != null){
                 c.setDate(Util.getDateFormatter());
-                Contents contents = contentsRepository.saveAndFlush(c);
-                map.put(Check.status,true);
-                map.put(Check.message,"Adding of Content Operations Successful!");
-                map.put(Check.result,contents);
-                //Elasticsearch save
-                ElasticContents elasticContents = new ElasticContents();
-                elasticContents.setContentsId(contents.getId());
-                elasticContents.setTitle(contents.getTitle());
-                elasticContents.setDescription(contents.getDescription());
-                elasticContents.setStatus(contents.getStatus());
-                elasticContents.setNo(contents.getNo());
-                elasticContents.setDate(contents.getDate());
-                elasticContentsRepository.save(elasticContents);
-            } catch (Exception e) {
-                map.put(Check.status,false);
-                if(e.toString().contains("constraint")){
-                    String error = "This title has already been registered!";
-                    Util.logger(error, Contents.class);
-                    map.put(Check.message,error);
+                String no = contentsRepository.findById(c.getId()).get().getNo();
+                c.setNo(no);
+                System.out.println(c);
+                Optional<Contents> optionalContents = contentsRepository.findById(c.getId());
+                if(optionalContents.isPresent()){
+                    try {
+                        //ElasticSearch and SQL DB Update -Start
+                        ElasticContents elasticContents = elasticContentsRepository.findById(c.getId()).get();
+                        elasticContentsRepository.deleteById(elasticContents.getId());
+                        Contents contents = contentsRepository.saveAndFlush(c);
+                        ElasticContents elasticContentsNew = new ElasticContents();
+                        elasticContentsNew.setContentsId(contents.getId());
+                        elasticContentsNew.setTitle(contents.getTitle());
+                        elasticContentsNew.setDescription(contents.getDescription());
+                        elasticContentsNew.setStatus(contents.getStatus());
+                        elasticContentsNew.setNo(contents.getNo());
+                        elasticContentsNew.setDetails(contents.getDetails());
+                        elasticContentsNew.setDate(contents.getDate());
+                        elasticContentsRepository.save(elasticContentsNew);
+                        //ElasticSearch and SQL DB Update - End
+                        map.put(Check.status,true);
+                        map.put(Check.message,"Updated operations success!");
+                        map.put(Check.result,contents);
+                    } catch (Exception e) {
+                        System.err.println("Elasticsearch update" + e);
+                    }
+                }
+            }else{
+                try {
+                    c.setDate(Util.getDateFormatter());
+                    c.setNo(Util.getRandomNumberString());
+                    Contents contents = contentsRepository.saveAndFlush(c);
+                    map.put(Check.status,true);
+                    map.put(Check.message,"Adding of Content Operations Successful!");
+                    map.put(Check.result,contents);
+                    //Elasticsearch save
+                    ElasticContents elasticContents = new ElasticContents();
+                    elasticContents.setContentsId(contents.getId());
+                    elasticContents.setTitle(contents.getTitle());
+                    elasticContents.setDescription(contents.getDescription());
+                    elasticContents.setStatus(contents.getStatus());
+                    elasticContents.setNo(contents.getNo());
+                    elasticContents.setDetails(contents.getDetails());
+                    elasticContents.setDate(contents.getDate());
+                    elasticContentsRepository.save(elasticContents);
+                } catch (Exception e) {
+                    map.put(Check.status,false);
+                    if(e.toString().contains("constraint")){
+                        String error = "This title has already been registered!";
+                        Util.logger(error, Contents.class);
+                        map.put(Check.message,error);
+                    }
                 }
             }
         }else {
             map.put(Check.status,false);
             map.put(Check.errors, Util.errors(bindingResult));
         }
-
-        System.out.println(c);
 
         return map;
 
@@ -91,7 +120,7 @@ public class ContentsController {
     @GetMapping("/list/{stShowNumber}/{stPageNo}")
     public Map<Check,Object> list(@PathVariable String stShowNumber,@PathVariable String stPageNo){
         Map<Check,Object> map = new LinkedHashMap<>();
-        System.out.println(stShowNumber + " " + stPageNo);
+        //System.out.println(stShowNumber + " " + stPageNo);
         try {
             int pageNo = Integer.parseInt(stPageNo); // .th number of page
             int showNumber = Integer.parseInt(stShowNumber); // Get the show number value
@@ -188,6 +217,41 @@ public class ContentsController {
         return map;
     }
 
-
+    //Contents insert all data to elasticsearch database
+    @GetMapping("/elasticInsertData")
+    public Map<Check,Object> elasticInsertData(){
+        Map<Check,Object> map = new LinkedHashMap<>();
+        List<Contents> contentsList = contentsRepository.findAll();
+        try {
+            if(contentsList.size() > 0){
+                contentsList.forEach(item -> {
+                    //ElasticSearch Save
+                    ElasticContents elasticContents = new ElasticContents();
+                    elasticContents.setContentsId(item.getId());
+                    elasticContents.setStatus(item.getStatus());
+                    elasticContents.setTitle(item.getTitle());
+                    elasticContents.setDescription(item.getDescription());
+                    elasticContents.setDetails(item.getDetails());
+                    elasticContents.setDate(item.getDate());
+                    elasticContents.setNo(item.getNo());
+                    elasticContentsRepository.save(elasticContents);
+                });
+                map.put(Check.status,true);
+                map.put(Check.message,"Elasticsearch veri ekleme işlemi başarılı!");
+                //map.put(Check.result,elasticContentsRepository.findAll());
+            }else {
+                String error = "Sisteme kayıtlı içerik bulunmamaktadır!";
+                map.put(Check.status,false);
+                map.put(Check.message,error);
+                Util.logger(error,Contents.class);
+            }
+        } catch (Exception e) {
+            String error = "Elasticsearch veri tabanına ekleme yapılırken bir hata oluştu!" + e;
+            map.put(Check.status,false);
+            map.put(Check.message,error);
+            Util.logger(error,Contents.class);
+        }
+        return map;
+    }
 
 }
