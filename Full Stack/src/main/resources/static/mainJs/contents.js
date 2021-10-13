@@ -269,61 +269,46 @@ function contentUpdate(i){
 //-------------------------------------- Contents Update - End ------------------------------------------------//
 
 //-------------------------------------- Contents Search - Start --------------------------------------------//
+
 $('#searchContent').keyup( function (event) {
 
-    event.preventDefault();
-
-    var totalPage = 0
     let searchData = $("#searchContent").val()
 
-    $.ajax({
-        url:"./contents/totalPageValue/" + showNumber,
-        type: "get",
-        contentType : 'application/json; charset=utf-8',
-        success: function (data){
+    function search(page,showPageSize,searchData){
+        event.preventDefault();
+        console.log(searchData)
 
-            totalPage = data
-            console.log("Total page search section -> " + totalPage)
-
-            $('.firstLast1-links').twbsPagination({
-                totalPages: totalPage,
-                visiblePages: 3,
-                prev: 'Prev',
-                first: 'First',
-                last: 'Last',
-                startPage: 1,
-                onPageClick: function (event, page) {
-
-                    $.ajax({
-                        url: './contents/search/' + searchData + "/" + page + "/" + showNumber,
-                        type: 'get',
-                        dataType: "json",
-                        contentType : 'application/json; charset=utf-8',
-                        success: function (data) {
-
-                            createRowData(data)
-                            console.log("Search data " + JSON.stringify(data))
-
-                        },
-                        error: function (err) {
-                            console.log(err)
-                            alert("İşlem sırısında bir hata oluştu!");
-                        }
-                    })
-
-                    //$('#firstLast1-content').text('You are on Page ' + page);
-                    $('.pagination').find('li').addClass('page-item');
-                    $('.pagination').find('a').addClass('page-link');
+        $.ajax({
+            url: './contents/search/' + searchData + "/" + page + "/" + showPageSize,
+            type: 'get',
+            dataType: "json",
+            contentType : 'application/json; charset=utf-8',
+            success: function (data) {
+                console.log("Data result " + JSON.stringify(data))
+                if(data.result != null){
+                    createRowData(data)
+                    dynamicPagination(data.totalPage,showPageSize)
+                }else{
+                    getAllContentsByPage(1, 10);
                 }
-            });
-            //createRow(data)
-        },
-        error: function (err){
-            console.log(err)
-        }
-    })
-
+            },
+            error: function (err) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "An error occurred during the operation!",
+                    icon: "error",
+                    customClass: {
+                        confirmButton: 'btn btn-primary'
+                    },
+                    buttonsStyling: false
+                });
+                console.log(err)
+            }
+        })
+    }
+    search(1,10,searchData)
 })
+
 //-------------------------------------- Contents Search - End ----------------------------------------------//
 
 function resetForm(){

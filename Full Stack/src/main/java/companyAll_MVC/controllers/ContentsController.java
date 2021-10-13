@@ -201,6 +201,7 @@ public class ContentsController {
             int totalData =  elasticContentsList.size(); //for total data in table
             if(totalData > 0 ){
                 map.put(Check.status,true);
+                map.put(Check.totalPage,Util.getTotalPage(totalData,showNumber));
                 map.put(Check.message,"Search operation success!");
                 map.put(Check.result,elasticContentsList);
             }else{
