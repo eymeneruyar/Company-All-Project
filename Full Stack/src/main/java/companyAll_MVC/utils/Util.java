@@ -50,7 +50,7 @@ public class Util {
 
     //Date Formatter
     public static String getDateFormatter(){
-        String pattern = "MM-dd-yyyy HH:mm:ss";
+        String pattern = "dd-MM-yyyy HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(new Date());
         return date;

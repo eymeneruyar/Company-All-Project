@@ -120,7 +120,13 @@ function dynamicPagination(totalPage, size) {
         startPage: 1,
         onPageClick: function (event, page) {
             console.log("Page click");
-            getAllContentsByPage(page, size);
+            if($('#searchContent').val() === ""){
+                getAllContentsByPage(page, size);
+            }else{
+                search(page,size,$('#searchContent').val())
+
+            }
+
             //$('#firstLast1-content').text('You are on Page ' + page);
             $('.pagination').find('li').addClass('page-item');
             $('.pagination').find('a').addClass('page-link');
@@ -145,15 +151,6 @@ function getAllContentsByPage(page,showNumber){
         }
     })
 }
-
-$('#showTableRow').change(function(){
-    $('#content_pagination').twbsPagination('destroy');
-    getAllContentsByPage(1, parseInt($(this).val()));
-    console.log("Show number Change " + parseInt($(this).val()));
-});
-getAllContentsByPage(1, 10);
-
-
 //-------------------------------------- Contents List - End ------------------------------------------//
 
 //-------------------------------------- Contents Create Row - Start ------------------------------------------//
@@ -176,11 +173,15 @@ function createRowData(data){
                                   <i class="fas fa-ellipsis-v"></i>
                               </button>
                               <div class="dropdown-menu">
-                                  <a class="dropdown-item" href="javascript:contentUpdate(${i});">
+                                  <a class="dropdown-item" type="button" href="javascript:contentUpdate(${i});">
                                       <i class="mr-50 fas fa-pen"></i>
                                       <span>Edit</span>
                                   </a>
-                                  <a class="dropdown-item" href="javascript:void(0);">
+                                  <a class="dropdown-item" type="button" href="javascript:contentDetail(${i});" >
+                                      <i class="mr-50 fas fa-info-circle"></i>
+                                      <span>Detail</span>
+                                  </a>
+                                  <a class="dropdown-item" type="button" href="javascript:void(0);">
                                       <i class="mr-50 fas fa-ban"></i>
                                       <span>Ban</span>
                                   </a>
@@ -268,48 +269,73 @@ function contentUpdate(i){
 }
 //-------------------------------------- Contents Update - End ------------------------------------------------//
 
+//-------------------------------------- Contents Detail - Start --------------------------------------------//
+function contentDetail(i){
+    const itm = globalArr[i]
+    console.log(itm)
+    $('#info').modal('toggle');
+    $("#content_no").text(itm.no)
+    $("#content_description").text(itm.description)
+    $("#content_status").text(itm.status)
+    $("#content_date").text(itm.date)
+    $("#content_detail").text(itm.details)
+    $("#content_title").text(itm.title + " - " + itm.contentsId)
+}
+//-------------------------------------- Contents Detail - End ----------------------------------------------//
+
 //-------------------------------------- Contents Search - Start --------------------------------------------//
 
+function search(page,showPageSize,searchData){
+
+    console.log(searchData)
+
+    $.ajax({
+        url: './contents/search/' + searchData + "/" + (page-1) + "/" + showPageSize,
+        type: 'get',
+        dataType: "json",
+        contentType : 'application/json; charset=utf-8',
+        success: function (data) {
+            //console.log("Data result " + JSON.stringify(data))
+            createRowData(data)
+            dynamicPagination(data.totalPage,showPageSize)
+        },
+        error: function (err) {
+            Swal.fire({
+                title: "Error!",
+                text: "An error occurred during the operation!",
+                icon: "error",
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            });
+            console.log(err)
+        }
+    })
+}
+
 $('#searchContent').keyup( function (event) {
-
-    let searchData = $("#searchContent").val()
-
-    function search(page,showPageSize,searchData){
-        event.preventDefault();
-        console.log(searchData)
-
-        $.ajax({
-            url: './contents/search/' + searchData + "/" + page + "/" + showPageSize,
-            type: 'get',
-            dataType: "json",
-            contentType : 'application/json; charset=utf-8',
-            success: function (data) {
-                console.log("Data result " + JSON.stringify(data))
-                if(data.result != null){
-                    createRowData(data)
-                    dynamicPagination(data.totalPage,showPageSize)
-                }else{
-                    getAllContentsByPage(1, 10);
-                }
-            },
-            error: function (err) {
-                Swal.fire({
-                    title: "Error!",
-                    text: "An error occurred during the operation!",
-                    icon: "error",
-                    customClass: {
-                        confirmButton: 'btn btn-primary'
-                    },
-                    buttonsStyling: false
-                });
-                console.log(err)
-            }
-        })
+    event.preventDefault();
+    const searchData = $(this).val()
+    console.log("Key " + searchData)
+    if(searchData !== ""){
+        $("#contentTable > tr" ).remove()
+        //$('#content_pagination').twbsPagination('destroy');
+        search(1,$("#showTableRow").val(),searchData)
+    }else{
+        $('#content_pagination').twbsPagination('destroy');
+        getAllContentsByPage(1, $("#showTableRow").val());
     }
-    search(1,10,searchData)
 })
 
 //-------------------------------------- Contents Search - End ----------------------------------------------//
+
+$('#showTableRow').change(function(){
+    $('#content_pagination').twbsPagination('destroy');
+    getAllContentsByPage(1, parseInt($(this).val()));
+    //console.log("Show number Change " + parseInt($(this).val()));
+});
+getAllContentsByPage(1, 10);
 
 function resetForm(){
     select_id = 0
