@@ -76,15 +76,28 @@ if (success.length) {
                      });
                      resetForm()
                  }else{
-                     Swal.fire({
-                         title: 'Error!',
-                         text: data.message,
-                         icon: "error",
-                         customClass: {
-                             confirmButton: 'btn btn-primary'
-                         },
-                         buttonsStyling: false
-                     });
+                     if (!jQuery.isEmptyObject(data.errors)) {
+                         console.log(data.errors)
+                         Swal.fire({
+                             title: 'Error!',
+                             text: data.errors[0].fieldMessage,
+                             icon: "error",
+                             customClass: {
+                                 confirmButton: 'btn btn-primary'
+                             },
+                             buttonsStyling: false
+                         });
+                     }else{
+                         Swal.fire({
+                             title: 'Error!',
+                             text: data.message,
+                             icon: "error",
+                             customClass: {
+                                 confirmButton: 'btn btn-primary'
+                             },
+                             buttonsStyling: false
+                         });
+                     }
                  }
                  console.log(data)
                  //formReset()
