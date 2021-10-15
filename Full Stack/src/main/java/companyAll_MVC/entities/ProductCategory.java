@@ -1,40 +1,43 @@
 package companyAll_MVC.entities;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
-@Entity
 @Data
+@Entity
 public class ProductCategory extends AuditEntity<String>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Integer id;
 
     @Column(unique = true)
-    @NotNull(message = "Invalid category no! (null)")
-    @NotEmpty(message = "Invalid category no! (empty)")
-    @Pattern(regexp="(^$|[0-9]{10})")
+    @Pattern(regexp="(^$|[0-9]{10})", message = "Invalid product category no!")
     private String no;
 
-    @Size(max = 50, message = "Product category name's size can be 50 at max!")
-    @NotNull(message = "Invalid product category name! (null)")
-    @NotEmpty(message = "Invalid product category name! (empty)")
+    @Column(unique = true)
+    @NotNull(message = "Product category name is not null!")
+    @NotEmpty(message = "Product category name is not empty!")
+    @Length(min = 2,max = 255,message = "The product category name can have a minimum of 2, a maximum of 255 characters!")
     private String name;
 
-    @Size(max = 500, message = "Product category detail's size can be 500 at max!")
-    @NotNull(message = "Invalid product category detail! (null)")
-    @NotEmpty(message = "Invalid product category detail! (empty)")
-    private String detail;
+    @Column(columnDefinition = "text")
+    @NotNull(message = "Product category details is not null!")
+    @NotEmpty(message = "Product category details is not empty!")
+    @Length(min = 2,message = "The product category details can have a minimum of 2 characters!")
+    private String details;
 
-    @NotNull(message = "Invalid product category status! (null)")
-    @NotEmpty(message = "Invalid product category status! (empty)")
-    @Pattern(regexp = "Active|Passive", message = "Product category status must be either 'Active' or 'Passive'")
+
+    @NotNull(message = "The product category status is not null!")
+    @NotEmpty(message = "The product category status is not empty!")
     private String status;
+
+    private String date;
 
 }

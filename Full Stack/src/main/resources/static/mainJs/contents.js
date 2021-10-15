@@ -132,7 +132,6 @@ function dynamicPagination(totalPage, size) {
         last: 'Last',
         startPage: 1,
         onPageClick: function (event, page) {
-            console.log("Page click");
             if($('#searchContent').val() === ""){
                 getAllContentsByPage(page, size);
             }else{
@@ -157,7 +156,6 @@ function getAllContentsByPage(page,showNumber){
         success: function (data){
             createRowData(data)
             dynamicPagination(data.totalPage,showNumber)
-            console.log("Buraya girdi")
         },
         error: function (err){
             console.log(err)

@@ -54,7 +54,7 @@ public class ContentsController {
                 c.setDate(Util.getDateFormatter());
                 String no = contentsRepository.findById(c.getId()).get().getNo();
                 c.setNo(no);
-                System.out.println(c);
+                //System.out.println(c);
                 Optional<Contents> optionalContents = contentsRepository.findById(c.getId());
                 if(optionalContents.isPresent()){
                     try {
@@ -129,7 +129,7 @@ public class ContentsController {
             List<ElasticContents> elasticContentsList = elasticContentsRepository.findByOrderByIdAsc(pageable);
             map.put(Check.status,true);
             map.put(Check.totalPage,Util.getTotalPage(totalData,showNumber));
-            map.put(Check.message, "Content listing on page " + (pageNo) + " is successful");
+            map.put(Check.message, "Content listing on page " + (pageNo + 1) + " is successful");
             map.put(Check.result,elasticContentsList);
         } catch (Exception e) {
             map.put(Check.status,false);
@@ -138,7 +138,7 @@ public class ContentsController {
             Util.logger(error, Contents.class);
             map.put(Check.message,error);
         }
-        System.out.println(map);
+        //System.out.println(map);
         return map;
     }
 
@@ -172,7 +172,7 @@ public class ContentsController {
                 map.put(Check.message,"Data has been deleted!");
                 map.put(Check.result,optionalContents.get());
             }else{
-                String error = "Content not found";
+                String error = "Content is not found";
                 map.put(Check.status,false);
                 map.put(Check.message,error);
                 Util.logger(error,Contents.class);

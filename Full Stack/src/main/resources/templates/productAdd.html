@@ -46,7 +46,7 @@
                                                 <div class="buttons">
                                                     <label>
                                                         Show
-                                                        <select class="custom-select form-control">
+                                                        <select class="custom-select form-control" id="showProductTableRow">
                                                             <option value="10">10</option>
                                                             <option value="25">25</option>
                                                             <option value="50">50</option>
@@ -61,7 +61,7 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="buttons">
-                                                    <input type="text" class="form-control" id="basicInput" placeholder="Search Product">
+                                                    <input type="text" class="form-control" id="searchProduct" placeholder="Search Product">
                                                 </div>
                                             </div>
                                         </div>
@@ -72,92 +72,23 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Name</th>
-                                                    <th>Title</th>
                                                     <th>Description</th>
                                                     <th>Categories</th>
                                                     <th>Price</th>
+                                                    <th>Date</th>
+                                                    <th>Status</th>
                                                     <th>Actions</th>
                 
                                                 </tr>
                                             </thead>
-                                            <tbody style="font-size: 14px;">
-                                                <tr>
-                                                    <td>
-                                                        1111111111
-                                                    </td>
-                                                    <td>Oğuzkaan</td>
-                                                    <td>Sarı</td>
-                                                    <td>oguzkaansari@outlook.com</td>
-                                                    <td>5530589819</td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-sm">
-                                                            <i class="far fa-file-alt" style="font-size: 20px;"></i>
-                                                        </button>
-                                                    </td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <button type="button" class="btn btn-sm dropdown-toggle hide-arrow"
-                                                                data-toggle="dropdown">
-                                                                <i data-feather="more-vertical"></i>
-                                                            </button>
-                                                            <div class="dropdown-menu">
-                                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                                    <i class="mr-50 fas fa-pen"></i>
-                                                                    <span>Edit</span>
-                                                                </a>
-                                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                                    <i class="mr-50 fas fa-ban"></i>
-                                                                    <span>Ban</span>
-                                                                </a>
-                                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                                    <i class="mr-50 far fa-trash-alt"></i>
-                                                                    <span>Delete</span>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        1111111111
-                                                    </td>
-                                                    <td>Oğuzkaan</td>
-                                                    <td>Sarı</td>
-                                                    <td>oguzkaansari@outlook.com</td>
-                                                    <td>5530589819</td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-sm">
-                                                            <i class="far fa-file-alt" style="font-size: 20px;"></i>
-                                                        </button>
-                                                    </td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <button type="button" class="btn btn-sm dropdown-toggle hide-arrow"
-                                                                data-toggle="dropdown">
-                                                                <i data-feather="more-vertical"></i>
-                                                            </button>
-                                                            <div class="dropdown-menu">
-                                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                                    <i class="mr-50 fas fa-pen"></i>
-                                                                    <span>Edit</span>
-                                                                </a>
-                                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                                    <i class="mr-50 fas fa-ban"></i>
-                                                                    <span>Ban</span>
-                                                                </a>
-                                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                                    <i class="mr-50 far fa-trash-alt"></i>
-                                                                    <span>Delete</span>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                            <tbody style="font-size: 14px;" id="productTable">
+
+
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
-                                <!-- <ul class="pagination firstLast1-links justify-content-end" id="pagination_product"></ul> -->
+                                <ul class="pagination firstLast1-links justify-content-end" id="pagination_product"></ul>
 
                             </div>
                             <div class="tab-pane " id="category" aria-labelledby="service-tab-center" role="tabpanel">
@@ -239,40 +170,13 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <form class="needs-validation invalid" novalidate>
+                                        <form class="needs-validation invalid" novalidate id="productAdd_modalForm">
                                             <div class="row">
                                                 <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label>Categories</label>
-                                                        <select class="select2 form-control" multiple>
-                                                            <optgroup label="Alaskan/Hawaiian Time Zone">
-                                                                <option value="AK">Alaska</option>
-                                                                <option value="HI">Hawaii</option>
-                                                            </optgroup>
-                                                            <optgroup label="Pacific Time Zone">
-                                                                <option value="CA">California</option>
-                                                                <option value="NV">Nevada</option>
-                                                                <option value="OR">Oregon</option>
-                                                                <option value="WA">Washington</option>
-                                                            </optgroup>
-                                                            <optgroup label="Mountain Time Zone">
-                                                                <option value="AZ">Arizona</option>
-                                                                <option value="CO">Colorado</option>
-                                                                <option value="ID">Idaho</option>
-                                                            </optgroup>
-                                                            <optgroup label="Central Time Zone">
-                                                                <option value="AL">Alabama</option>
-                                                                <option value="AR">Arkansas</option>
-                                                                <option value="IL">Illinois</option>
-                                                                <option value="IA">Iowa</option>
-                                                                <option value="KS">Kansas</option>
-                                                            </optgroup>
-                                                            <optgroup label="Eastern Time Zone">
-                                                                <option value="CT">Connecticut</option>
-                                                                <option value="DE">Delaware</option>
-                                                                <option value="FL">Florida</option>
-                                                                <option value="GA">Georgia</option>
-                                                            </optgroup>
+                                                        <select class="select2 form-control" multiple="multiple" id="productCategories">
+
                                                         </select>
                                                         <div class="invalid-feedback">Please choice categories.</div>
                                                     </div>
@@ -280,8 +184,7 @@
                                                 <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label for="name">Name</label>
-                                                        <input type="text" id="name" class="form-control"
-                                                            placeholder="Product Name" name="lastname" required />
+                                                        <input type="text" id="productName" class="form-control" placeholder="Product Name" required />
                                                         <div class="valid-feedback">Looks good!</div>
                                                         <div class="invalid-feedback">Please enter your product name.</div>
                                                     </div>
@@ -289,7 +192,7 @@
                                                 <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label for="description">Description</label>
-                                                        <input type="text" id="description" class="form-control" placeholder="Description" />
+                                                        <input type="text" id="productDescription" class="form-control" placeholder="Description" />
                                                         <div class="valid-feedback">Looks good!</div>
                                                         <div class="invalid-feedback">Please enter product description.</div>
                                                     </div>
@@ -297,7 +200,7 @@
                                                 <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label for="price">Price</label>
-                                                        <input type="number" id="price" class="form-control" placeholder="Price"/>
+                                                        <input type="number" id="productPrice" class="form-control" placeholder="Price"/>
                                                         <div class="valid-feedback">Looks good!</div>
                                                         <div class="invalid-feedback">Please enter product price.</div>
                                                     </div>
@@ -314,16 +217,15 @@
                                                     <div class="form-group">
                                                         <label for="campaignStatus">Campaign Status</label>
                                                         <select class="form-control" id="campaignStatus">
-                                                            <option value=" ">Please make a choice</option>
-                                                            <option value="yes">Yes</option>
-                                                            <option value="no">No</option>
+                                                            <option value="Yes" selected>Yes</option>
+                                                            <option value="No" >No</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label for="campaignName">Campaign Name</label>
-                                                        <input type="number" id="campaignName" class="form-control" placeholder="Campaign Name"/>
+                                                        <input type="text" id="campaignName" class="form-control" placeholder="Campaign Name"/>
                                                         <div class="valid-feedback">Looks good!</div>
                                                         <div class="invalid-feedback">Please enter campaign name.
                                                         </div>
@@ -337,24 +239,13 @@
                                                         <div class="invalid-feedback">Please enter campaign details.</div>
                                                     </div>
                                                 </div>
-                                                <div class="col-12">
-                                                    <div class="form-group">
-                                                        <label for="customFile">Product Image Upload</label>
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" id="customFile" multiple/>
-                                                            <label class="custom-file-label" for="customFile">Choose file</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                                 <div class="col-md-8"></div>
                                                 <div class="col-md-4">
                                                     <div class="row mt-2">
                                                         <div class="col-md-2"></div>
                                                         <div class="col-md-10">
-                                                            <button type="reset"
-                                                                class="btn btn-outline-secondary">Reset</button>
-                                                            <button type="submit"
-                                                                class="btn btn-primary">Submit</button>
+                                                            <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                                                            <button type="submit" class="btn btn-primary">Submit</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -366,6 +257,37 @@
                         </div>
                     </section>
                     <!-- Basic Floating Label Form section end -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Image -->
+    <div class="modal fade text-left" id="defaultSize" tabindex="-1" role="dialog" aria-labelledby="myModalLabel18" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel18">Default Modal</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="customFile">Product Image Upload</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="customFile" multiple/>
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8"></div>
+                        <div class="col-sm-4">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

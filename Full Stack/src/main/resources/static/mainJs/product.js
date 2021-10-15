@@ -322,8 +322,548 @@ function resetFormCategory(){
     getAllProductCategoryByPage(1, 10);
 }
 
+function allProductCategoryList(){
+    $.ajax({
+        url: './product/categoryList',
+        type: 'get',
+        dataType: "json",
+        contentType : 'application/json; charset=utf-8',
+        success: function (data) {
+            category = data.result;
+            //console.log("Product Categories : ", category)
+            productCategoryOption(category)
+        },
+        error: function (err) {
+            Swal.fire({
+                title: "Error!",
+                text: "An error occurred during the operation!",
+                icon: "error",
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            });
+            console.log(err)
+        }
+    })
+}
+allProductCategoryList()
+
+function productCategoryOption(data) {
+    data.forEach(item => {
+        $('#productCategories').append('<option value="' + item.id + '">' + item.name + '</option>');
+    })
+}
 //====================================== Category Section - End ========================================//
 
+//====================================== Product Section - Start ========================================//
+
+//-------------------------------------- Product Add - Start --------------------------------------//
+$("#productAdd_modalForm").submit( (event) => {
+
+    event.preventDefault()
+
+    const categories = $('#productCategories').val()
+    const productName = $('#productName').val()
+    const productDescription = $('#productDescription').val()
+    const productPrice = $('#productPrice').val()
+    const productDetails = $('#productDetails').val()
+    const campaStatus = $('#campaignStatus').val()
+    const campaName = $('#campaignName').val()
+    const campaDetails = $('#campaignDetails').val()
+
+    let categoryList = []
+
+    for(let i= 0 ; i<categories.length; i++){
+        const categoryObj = {
+            id: categories[i]
+        }
+        categoryList.push(categoryObj)
+    }
+
+
+    const obj = {
+        productCategories: categoryList,
+        name: productName,
+        description: productDescription,
+        price: productPrice,
+        details: productDetails,
+        status: "Available",
+        no: codeGenerator(),
+        campaignName: campaName,
+        campaignDetails: campaDetails,
+        campaignStatus: campaStatus
+
+    }
+
+    console.log(obj)
+
+    if ( select_id != 0 ) {
+        // update
+        obj["id"] = select_id;
+    }
+
+    $.ajax({
+        url: './product/add',
+        type: 'POST',
+        data: JSON.stringify(obj),
+        dataType: 'json',
+        contentType : 'application/json; charset=utf-8',
+        success: function (data) {
+            if(data.status == true && data.result != null){
+                Swal.fire({
+                    title: 'Success!',
+                    text: data.message,
+                    icon: "success",
+                    customClass: {
+                        confirmButton: 'btn btn-primary'
+                    },
+                    buttonsStyling: false
+                });
+                setTimeout(function(){
+                    $("#productAdd_modal").modal('hide');
+                }, 2000);
+                resetFormProduct()
+            }else if(data.status == true && data.result == null){
+                Swal.fire({
+                    title: "Warning!",
+                    text: "Returned Data is Empty!",
+                    icon: "warning",
+                    customClass: {
+                        confirmButton: 'btn btn-primary'
+                    },
+                    buttonsStyling: false
+                });
+                resetFormProduct()
+            }else{
+                if (!jQuery.isEmptyObject(data.errors)) {
+                    console.log(data.errors)
+                    Swal.fire({
+                        title: 'Error!',
+                        text: data.errors[0].fieldMessage,
+                        icon: "error",
+                        customClass: {
+                            confirmButton: 'btn btn-primary'
+                        },
+                        buttonsStyling: false
+                    });
+                }else{
+                    Swal.fire({
+                        title: 'Error!',
+                        text: data.message,
+                        icon: "error",
+                        customClass: {
+                            confirmButton: 'btn btn-primary'
+                        },
+                        buttonsStyling: false
+                    });
+                }
+            }
+            console.log(data)
+            resetFormProduct()
+        },
+        error: function (err) {
+            Swal.fire({
+                title: "Error!",
+                text: "An error occurred during the operation!",
+                icon: "error",
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            });
+            console.log(err)
+        }
+    })
+
+})
+//-------------------------------------- Product Add - End ----------------------------------------//
+
+//-------------------------------------- Product List - Start ----------------------------------------//
+let globalProductArr = []
+function dynamicPaginationProduct(totalPage, size) {
+    $('#pagination_product').twbsPagination({
+        totalPages: totalPage,
+        visiblePages: 5,
+        prev: 'Prev',
+        first: 'First',
+        last: 'Last',
+        startPage: 1,
+        onPageClick: function (event, page) {
+            if($('#searchProduct').val() === ""){
+                getAllProductsByPage(page, size);
+            }else{
+                searchProduct(page,size,$('#searchProduct').val())
+            }
+            //$('#firstLast1-content').text('You are on Page ' + page);
+            $('.pagination').find('li').addClass('page-item');
+            $('.pagination').find('a').addClass('page-link');
+        }
+    });
+}
+
+function getAllProductsByPage(page,showNumber){
+    $.ajax({
+        url:"./product/list/" + showNumber + "/" + (page-1),
+        type: "get",
+        dataType: "json",
+        contentType : 'application/json; charset=utf-8',
+        success: function (data){
+            createRowDataProduct(data)
+            dynamicPaginationProduct(data.totalPage,showNumber)
+        },
+        error: function (err){
+            Swal.fire({
+                title: "Error!",
+                text: "An error occurred during the product list operation!",
+                icon: "error",
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            });
+            console.log(err)
+        }
+    })
+}
+
+function createRowDataProduct(data){
+    let html = ``;
+    let statusHtml = ``;
+    let statusDropdownHtml = ``;
+    let statusInt;
+    for (let i = 0; i < data.result.length; i++) {
+        globalProductArr = data.result
+        const itm = data.result[i]
+        let status = itm.status;
+        if(status === "Available"){
+            statusInt = 1;
+            statusHtml = `<i class="fas fa-check-circle"></i>`;
+            statusDropdownHtml = `<i class="mr-50 fas fa-ban"></i>
+                                  <span>Ban</span>`;
+        }
+        if(status === "Unavailable"){
+            statusInt = 0;
+            statusHtml = `<i class="fas fa-ban"></i>`;
+            statusDropdownHtml = `<i class="fas fa-check-circle"></i>
+                                  <span>Unban</span>`;
+        }
+        html += `<tr>
+                     <td>${itm.no}</td>
+                     <td>${itm.name}</td>
+                     <td>${itm.description}</td>
+                     <td>${itm.no}</td>
+                     <td>${itm.price}</td>
+                     <td>${itm.date}</td>
+                     <td>${itm.status}</td>
+                     <td>
+                         <div class="dropdown">
+                             <button type="button" class="btn btn-sm dropdown-toggle hide-arrow"
+                                 data-toggle="dropdown">
+                                 <i class="fas fa-ellipsis-v"></i>
+                             </button>
+                             <div class="dropdown-menu">
+                                 <a class="dropdown-item" href="javascript:productUpdate(${i});">
+                                     <i class="mr-50 fas fa-pen"></i>
+                                     <span>Edit</span>
+                                 </a>
+                                 <a class="dropdown-item" href="javascript:changeProductStatus(${itm.productId}, ${statusInt});">
+                                    `+statusDropdownHtml+`
+                                </a>
+                                 <a class="dropdown-item" href="javascript:productDelete(${itm.productId});">
+                                     <i class="mr-50 far fa-trash-alt"></i>
+                                     <span>Delete</span>
+                                 </a>
+                             </div>
+                         </div>
+                     </td>
+                 </tr>`
+    }
+    $("#productTable").html(html)
+}
+
+$('#showProductTableRow').change(function(){
+    $('#pagination_product').twbsPagination('destroy');
+    getAllProductsByPage(1, parseInt($(this).val()));
+    //console.log("Show number Change " + parseInt($(this).val()));
+});
+getAllProductsByPage(1, 10);
+//-------------------------------------- Product List - End ------------------------------------------//
+
+//-------------------------------------- Product Delete - Start ------------------------------------------//
+function productDelete(id){
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        customClass: {
+            confirmButton: 'btn btn-primary',
+            cancelButton: 'btn btn-outline-danger ml-1'
+        },
+        buttonsStyling: false
+    }).then(function (result) {
+        if (result.value) {
+            $.ajax({
+                url: './product/delete/' + id,
+                type: 'DELETE',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if( id != null){
+                        Swal.fire({
+                            icon: 'success',
+                            title: "Deleted!",
+                            text: data.message,
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                        resetFormProduct()
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: "Error",
+                            text: data.message,
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                    }
+                },
+                error: function (err) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: "Error",
+                        text: "An error occurred during the delete operation",
+                        customClass: {
+                            confirmButton: 'btn btn-success'
+                        }
+                    });
+                    console.log(err)
+                }
+            })
+        }
+    });
+}
+//-------------------------------------- Product Delete - End --------------------------------------------//
+
+//-------------------------------------- Product Update - End --------------------------------------------//
+
+function detailByProductId(id){
+    $.ajax({
+        url:"./product/detail/" + id,
+        type: "get",
+        dataType: "json",
+        contentType : 'application/json; charset=utf-8',
+        success: function (data){
+            console.log(data.result)
+            productDetailData =  data.result
+        },
+        error: function (err){
+            Swal.fire({
+                title: "Error!",
+                text: "An error occurred during the product list operation!",
+                icon: "error",
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            });
+            console.log(err)
+        }
+    })
+}
+
+function productUpdate(i){
+    $('#productAdd_modal').modal('toggle');
+    const itm = globalProductArr[i]
+    select_id = itm.productId
+    $.ajax({
+        url:"./product/detail/" + itm.productId,
+        type: "get",
+        dataType: "json",
+        contentType : 'application/json; charset=utf-8',
+        success: function (data){
+            console.log(data.result)
+            for(let i = 0; i < data.result.productCategories.length; i++){
+                $('#productCategories').val(data.result.productCategories[i].id).trigger('change')
+            }
+            $('#productName').val(data.result.name)
+            $('#productDescription').val(data.result.description)
+            $('#productPrice').val(data.result.price)
+            $('#productDetails').val(data.result.details)
+            if(data.result.campaignStatus === "Yes"){
+                $('#campaignStatus').val(data.result.campaignStatus).trigger('change')
+                $('#campaignName').val(data.result.campaignName)
+                $('#campaignDetails').val(data.result.campaignDetails)
+            }else{
+                $('#campaignStatus').val(data.result.campaignStatus).trigger('change')
+            }
+
+        },
+        error: function (err){
+            Swal.fire({
+                title: "Error!",
+                text: "An error occurred during the product list operation!",
+                icon: "error",
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            });
+            console.log(err)
+        }
+    })
+
+}
+//-------------------------------------- Product Update - End --------------------------------------------//
+
+//-------------------------------------- Product Search - Start --------------------------------------------//
+function searchProduct(page,showPageSize,searchData){
+
+    $.ajax({
+        url: './product/search/' + searchData + "/" + (page-1) + "/" + showPageSize,
+        type: 'get',
+        dataType: "json",
+        contentType : 'application/json; charset=utf-8',
+        success: function (data) {
+            createRowDataProduct(data)
+            dynamicPaginationProduct(data.totalPage,showPageSize)
+        },
+        error: function (err) {
+            Swal.fire({
+                title: "Error!",
+                text: "An error occurred during the operation!",
+                icon: "error",
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            });
+            console.log(err)
+        }
+    })
+}
+
+$('#searchProduct').keyup( function (event) {
+    event.preventDefault();
+    const searchData = $(this).val()
+    if(searchData !== ""){
+        $("#productTable > tr" ).remove()
+        //$('#content_pagination').twbsPagination('destroy');
+        searchProduct(1,$("#showProductTableRow").val(),searchData)
+    }else{
+        $('#pagination_product').twbsPagination('destroy');
+        getAllProductsByPage(1, $("#showProductTableRow").val());
+    }
+})
+//-------------------------------------- Product Search - End ----------------------------------------------//
+
+//-------------------------------------- Product Status - Start ----------------------------------------------//
+function changeProductStatus(id, statusInt) {
+
+    let url;
+    let text;
+    let confirmButtonText;
+    let successTitle;
+    if(statusInt === 1){ //Unavailable
+        url = '/product/changeStatus/' + id + "/passive";
+        text = "This product will be banned and won't be able to do any operations!";
+        confirmButtonText = "Ban";
+        successTitle = "Banned!"
+    }else if(statusInt === 0){ //Available
+        url = '/product/changeStatus/' + id + "/active";
+        text = "This product will be unbanned and will be able to do any operations!";
+        confirmButtonText = "Unban";
+        successTitle = "Unbanned!"
+    }else{
+        return;
+    }
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: text,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: confirmButtonText,
+        customClass: {
+            confirmButton: 'btn btn-primary',
+            cancelButton: 'btn btn-outline-danger ml-1'
+        },
+        buttonsStyling: false
+    }).then(function (result) {
+        console.log(url)
+        if (result.value) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if( data.status === true){
+                        Swal.fire({
+                            icon: 'success',
+                            title: successTitle,
+                            text: data.message,
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                        getAllProductsByPage(1, $('#showProductTableRow').val());
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: "Error",
+                            text: data.message,
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                    }
+                },
+                error: function (err) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: "Error",
+                        text: "An error occurred during the operation",
+                        customClass: {
+                            confirmButton: 'btn btn-success'
+                        }
+                    });
+                    console.log(err)
+                }
+            })
+        }
+    });
+}
+//-------------------------------------- Product Status - End ------------------------------------------------//
+
+//====================================== Product Section - End ==========================================//
+
+$('#campaignStatus').change(function () {
+    //console.log($(this).val())
+    if ($(this).val() !== "Yes"){
+        $('#campaignName').attr("disabled", true);
+        $('#campaignDetails').attr("disabled", true);
+    }else{
+        $('#campaignName').attr("disabled", false);
+        $('#campaignDetails').attr("disabled", false);
+    }
+});
+
+function resetFormProduct(){
+    select_id = 0
+    $('#productCategories').empty()
+    $('#productName').val("")
+    $('#productDescription').val("")
+    $('#productPrice').val("")
+    $('#productDetails').val("")
+    $('#campaignName').val("")
+    $('#campaignDetails').val("")
+    getAllProductsByPage(1, 10);
+    allProductCategoryList()
+}
 
 function codeGenerator() {
     const date = new Date();
