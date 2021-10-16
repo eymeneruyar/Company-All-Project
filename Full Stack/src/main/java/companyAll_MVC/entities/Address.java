@@ -21,7 +21,7 @@ public class Address extends AuditEntity<String>{
 
     @NotNull(message = "Invalid address type! (null)")
     @NotEmpty(message = "Invalid address type! (empty)")
-    @Pattern(regexp = "Active|Passive", message = "Address type must be either 'Active' or 'Passive'")
+    @Pattern(regexp = "Home|Work", message = "Address type must be either 'Home' or 'Work'")
     private String type;
 
     @Size(max = 200, message = "Address detail's size can be 200 at max!")

@@ -10,16 +10,16 @@ import javax.validation.constraints.Pattern;
 
 @Entity
 @Data
-public class Order extends AuditEntity<String>{
+public class Indent extends AuditEntity<String>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(unique = true)
-    @NotNull(message = "Invalid order no! (null)")
-    @NotEmpty(message = "Invalid order no! (empty)")
-    @Pattern(regexp="(^$|[0-9]{10})")
+    @NotNull(message = "Invalid indent no! (null)")
+    @NotEmpty(message = "Invalid indent no! (empty)")
+    @Pattern(regexp="(^$|[0-9]{10})", message = "Invalid indent no!")
     private String no;
 
     @OneToOne
@@ -30,17 +30,17 @@ public class Order extends AuditEntity<String>{
     @Valid
     private Product product;
 
-    @NotNull(message = "Invalid order date! (null)")
-    @NotEmpty(message = "Invalid order date! (empty)")
+    @NotNull(message = "Invalid indent date! (null)")
+    @NotEmpty(message = "Invalid indent date! (empty)")
     private String date;
 
     @OneToOne
     @Valid
     private Address address;
 
-    @NotNull(message = "Invalid customer status! (null)")
-    @NotEmpty(message = "Invalid customer status! (empty)")
-    @Pattern(regexp = "Active|Delivered", message = "Order status must be either 'Active' or 'Delivered'")
+    @NotNull(message = "Invalid indent status! (null)")
+    @NotEmpty(message = "Invalid indent status! (empty)")
+    @Pattern(regexp = "Active|Delivered", message = "Indent status must be either 'Active' or 'Delivered'")
     private String status;
 
 }

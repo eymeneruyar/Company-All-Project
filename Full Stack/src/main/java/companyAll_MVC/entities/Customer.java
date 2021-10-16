@@ -21,7 +21,7 @@ public class Customer extends AuditEntity<String> {
     @Column(unique = true)
     @NotNull(message = "Invalid customer no! (null)")
     @NotEmpty(message = "Invalid customer no! (empty)")
-    @Pattern(regexp="(^$|[0-9]{10})")
+    @Pattern(regexp="(^$|[0-9]{10})", message = "Invalid customer no!")
     private String no;
 
     @Size(max = 50, message = "Customer name's size can be 50 at max!")
@@ -37,10 +37,9 @@ public class Customer extends AuditEntity<String> {
     @Column(unique = true)
     @NotNull(message = "Invalid customer phone number(phone1)! (null)")
     @NotEmpty(message = "Invalid customer phone number(phone1)! (empty)")
-    @Pattern(regexp="(^$|[0-9]{10})")
+    @Pattern(regexp="(^$|[0-9]{10})", message = "Invalid customer phone number!")
     private String phone1;
 
-    @Column(unique = true)
     @Pattern(regexp="(^$|[0-9]{10})")
     private String phone2;
 
@@ -48,24 +47,25 @@ public class Customer extends AuditEntity<String> {
     @Size(max = 50)
     @NotNull(message = "Invalid customer mail! (null)")
     @NotEmpty(message = "Invalid customer mail! (empty)")
-    @Pattern(regexp="(^(.+)@(.+)$)")
+    @Pattern(regexp="(^(.+)@(.+)$)", message = "Invalid customer mail!")
     private String mail;
 
     @Column(unique = true)
     @NotNull(message = "Invalid customer tax no! (null)")
     @NotEmpty(message = "Invalid customer tax no! (empty)")
-    @Pattern(regexp="(^$|[0-9]{11})")
+    @Pattern(regexp="(^$|[0-9]{11})", message = "Invalid customer tax no!")
     private String taxno;
 
-    @OneToOne
-    @Valid
-    private Country country;
+    @NotNull(message = "Invalid customer country! (null)")
+    @NotEmpty(message = "Invalid customer country! (empty)")
+    private String country;
 
-    @OneToOne
-    @Valid
-    private City city;
+    @NotNull(message = "Invalid customer city! (null)")
+    @NotEmpty(message = "Invalid customer city! (empty)")
+    private String city;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Size(min=1, max=20, message = "Customers only can have minimum 1 and maximum 20 addresses!")
     private List<@Valid Address> addresses;
 
     @NotNull(message = "Invalid customer status! (null)")
