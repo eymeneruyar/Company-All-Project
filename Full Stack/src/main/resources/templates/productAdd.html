@@ -11,6 +11,11 @@
 
     <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/forms/select/select2.min.css}">
 
+    <!--------------------------------------------- Swiper CSS - Start --------------------------------------------->
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/extensions/swiper.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/extensions/ext-component-swiper.css}">
+    <!--------------------------------------------- Swiper CSS - End ----------------------------------------------->
+
 </head>
 
 <!-- BEGIN: Body-->
@@ -263,22 +268,22 @@
     </div>
 
     <!-- Modal Image -->
-    <div class="modal fade text-left" id="defaultSize" tabindex="-1" role="dialog" aria-labelledby="myModalLabel18" aria-hidden="true">
+    <div class="modal fade text-left" id="productImage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel18" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel18">Default Modal</h4>
+                    <h4 class="modal-title" id="modalTitle">Default Modal</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form th:action="@{/product/imageUpload}" method="post" enctype="multipart/form-data">
                         <div class="col-12">
                             <div class="form-group">
-                                <label for="customFile">Product Image Upload</label>
+                                <label for="formFile">Product Image Upload</label>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="customFile" multiple/>
+                                    <input type="file" class="custom-file-input" id="formFile" name="imageName" accept="image/*"  multiple="multiple"/>
                                     <label class="custom-file-label" for="customFile">Choose file</label>
                                 </div>
                             </div>
@@ -288,6 +293,72 @@
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Product Detail -->
+    <div class="modal fade text-left" id="productDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel17" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="title">Large Modal</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="swiper-navigations swiper-container col-12 mb-2">
+                            <div class="swiper-wrapper" id="imageSlide">
+
+                            </div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                        </div>
+                        <div class="col-sm-4 col-12 mb-2">
+                            <label style="color: black" class="form-label">Delete Image</label>
+                            <select class="select2 form-control" multiple="multiple" id="imagesChose" style="">
+
+                            </select>
+                        </div>
+                        <div class="col-sm-4 col-12 mt-2">
+                            <button onclick="deleteImage()" type="button" class="btn btn-icon btn-outline-danger"><i class="far fa-trash-alt"></i></button>
+                        </div>
+                        <div class="col-sm-4 col-12 mb-2"></div>
+                        <hr>
+                        <div class="col-md-4 col-12">
+                            <label style="color: black" class="form-label">Price</label>
+                            <div   id="priceDetail" class="form-text"></div>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <label style="color: black" class="form-label">Saved Date</label>
+                            <div   id="dateDetail" class="form-text"></div>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <label style="color: black" class="form-label">Status</label>
+                            <div  id="statusDetail" class="form-text"></div>
+                        </div>
+                        <div class="col-12" mb-2>
+                            <label style="color: black" class="form-label mt-1">Details</label>
+                            <div id="details" class="form-text"></div>
+                        </div>
+                        <div class="col-md-6 col-12 mt-2" id="campaign-1">
+
+                        </div>
+                        <div class="col-md-6 col-12 mt-2" id="campaign-2">
+
+                        </div>
+                        <div class="col-12 mb-2" id="campaign-3">
+
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Accept</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -379,6 +450,11 @@
     <script th:src="@{/app-assets/vendors/js/pagination/jquery.bootpag.min.js}"></script>
     <script th:src="@{/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js}"></script>
 <!------------------------------------------------------ Pagination Js - End ---------------------------------------------------------->
+
+<!---------------------------------------------------------- Swiper JS - Start ---------------------------------------------------------->
+    <script th:src="@{/app-assets/vendors/js/extensions/swiper-bundle.min.js}"></script>
+    <!-- <script th:src="@{/app-assets/js/scripts/extensions/ext-component-swiper.js}"></script> -->
+<!---------------------------------------------------------- Swiper JS - End ------------------------------------------------------------>
 
     <script th:src="@{/mainJs/product.js}"></script>
 

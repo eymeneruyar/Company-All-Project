@@ -16,7 +16,7 @@ public interface ElasticContentsRepository extends ElasticsearchRepository<Elast
     List<ElasticContents> findByOrderByIdAsc(Pageable pageable);
     @Query("{\"bool\":{\"must\":[{\"match_all\":{}}],\"must_not\":[],\"should\":[]}}")
     List<ElasticContents> findAllByOrderByIdAsc();
-    @Query("{\"bool\":{\"must\":[],\"must_not\":[],\"should\":[{\"match\":{\"title\":\"?0\"}},{\"match\":{\"status\":\"?0\"}},{\"match\":{\"no\":\"?0\"}},{\"match\":{\"date\":\"?0\"}},{\"match\":{\"description\":\"?0\"}}]}}}")
+    @Query("{\"bool\":{\"must\":[],\"must_not\":[],\"should\":[{\"prefix\":{\"title\":\"?0\"}},{\"prefix\":{\"status\":\"?0\"}},{\"prefix\":{\"no\":\"?0\"}},{\"prefix\":{\"date\":\"?0\"}},{\"prefix\":{\"description\":\"?0\"}}]}}}")
     Page<ElasticContents> findBySearchData(String data, Pageable pageable);
 
     @Query("{\"bool\":{\"must\":[{\"term\":{\"contentsId\":\"?0\"}}],\"must_not\":[],\"should\":[]}}")

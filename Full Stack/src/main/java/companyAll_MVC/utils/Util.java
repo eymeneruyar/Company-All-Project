@@ -9,6 +9,10 @@ import java.util.*;
 
 public class Util {
 
+    public static final String UPLOAD_DIR_PRODUCTS =  "src/main/resources/static/uploadImages/_products/";
+    public static final String UPLOAD_DIR_NEWS =  "src/main/resources/static/uploadImages/_news/";
+    public static long maxFileUploadSize = 5120;
+
     public static void logger(String data,Class logClass){
         Logger.getLogger(logClass).error(data);
     }

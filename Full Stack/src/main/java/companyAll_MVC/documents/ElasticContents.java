@@ -27,4 +27,10 @@ public class ElasticContents {
     @Field(type = FieldType.Text)
     private String status;
 
+
+    private String details;
+
+    @Field(type = FieldType.Text)
+    private String date;
+
 }

@@ -16,15 +16,29 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 @Controller
 @RequestMapping("/product")
 public class ProductAddController {
+
+    //For file upload process
+    int chosenId = 0;
+    int sendCount = 0;
+    int sendSuccessCount = 0;
+    String errorMessage = "";
 
     final ProductRepository productRepository;
     final ProductCategoryRepository productCategoryRepository;
@@ -40,6 +54,7 @@ public class ProductAddController {
 
     @GetMapping("")
     public String productAdd(){
+        chosenId = 0;
         return "productAdd";
     }
 
@@ -160,6 +175,84 @@ public class ProductAddController {
             map.put(Check.message,error);
             Util.logger(error,ProductCategory.class);
             System.err.println(e);
+        }
+        return map;
+    }
+
+    //Change status for product category - Active
+    @ResponseBody
+    @GetMapping("/changeCategoryStatus/{stId}/active")
+    public Map<Check,Object> changeStatusActiveProductCategory(@PathVariable String stId){
+        Map<Check,Object> map = new LinkedHashMap<>();
+        try {
+            int id = Integer.parseInt(stId);
+            Optional<ProductCategory> optionalProductCategory = productCategoryRepository.findById(id);
+            if(optionalProductCategory.isPresent()){
+                map.put(Check.status,true);
+                map.put(Check.message, "Product category change status operation is successful!");
+                ProductCategory pc = optionalProductCategory.get();
+                ElasticProductCategory elasticProductCategory = elasticProductCategoryRepository.findById(pc.getId()).get();
+                elasticProductCategoryRepository.deleteById(elasticProductCategory.getId());
+                pc.setStatus("Active");
+                ProductCategory productCategory = productCategoryRepository.saveAndFlush(pc);
+                ElasticProductCategory elasticProductCategoryNew = new ElasticProductCategory();
+                elasticProductCategoryNew.setCategoryId(productCategory.getId());
+                elasticProductCategoryNew.setNo(productCategory.getNo());
+                elasticProductCategoryNew.setName(productCategory.getName());
+                elasticProductCategoryNew.setDetails(productCategory.getDetails());
+                elasticProductCategoryNew.setDate(productCategory.getDate());
+                elasticProductCategoryNew.setStatus(productCategory.getStatus());
+                elasticProductCategoryRepository.save(elasticProductCategoryNew);
+                //ElasticSearch and SQL DB Update - End
+            }else {
+                map.put(Check.status,false);
+                map.put(Check.message, "Product category is not found!");
+            }
+        } catch (Exception e) {
+            map.put(Check.status,false);
+            String error = "An error occurred during the change status operation!";
+            System.err.println(e);
+            Util.logger(error, ProductCategory.class);
+            map.put(Check.message,error);
+        }
+        return map;
+    }
+
+    //Change status for product category - Passive
+    @ResponseBody
+    @GetMapping("/changeCategoryStatus/{stId}/passive")
+    public Map<Check,Object> changeStatusPassiveProductCategory(@PathVariable String stId){
+        Map<Check,Object> map = new LinkedHashMap<>();
+        try {
+            int id = Integer.parseInt(stId);
+            Optional<ProductCategory> optionalProductCategory = productCategoryRepository.findById(id);
+            if(optionalProductCategory.isPresent()){
+                map.put(Check.status,true);
+                map.put(Check.message, "Product category change status operation is successful!");
+                ProductCategory pc = optionalProductCategory.get();
+                ElasticProductCategory elasticProductCategory = elasticProductCategoryRepository.findById(pc.getId()).get();
+                elasticProductCategoryRepository.deleteById(elasticProductCategory.getId());
+                pc.setStatus("Passive");
+                ProductCategory productCategory = productCategoryRepository.saveAndFlush(pc);
+                ElasticProductCategory elasticProductCategoryNew = new ElasticProductCategory();
+                elasticProductCategoryNew.setCategoryId(productCategory.getId());
+                elasticProductCategoryNew.setNo(productCategory.getNo());
+                elasticProductCategoryNew.setName(productCategory.getName());
+                elasticProductCategoryNew.setDetails(productCategory.getDetails());
+                elasticProductCategoryNew.setDate(productCategory.getDate());
+                elasticProductCategoryNew.setStatus(productCategory.getStatus());
+                elasticProductCategoryRepository.save(elasticProductCategoryNew);
+                //ElasticSearch and SQL DB Update - End
+            }else {
+                map.put(Check.status,false);
+                map.put(Check.message, "Product category is not found!");
+            }
+        } catch (Exception e) {
+            map.put(Check.status,false);
+            String error = "An error occurred during the change status operation!";
+            System.err.println(e);
+            Util.logger(error, ProductCategory.class);
+            map.put(Check.message,error);
         }
         return map;
     }
@@ -355,6 +448,7 @@ public class ProductAddController {
         return map;
     }
 
+    //Delete product
     @ResponseBody
     @DeleteMapping("/delete/{stId}")
     public Map<Check,Object> deleteProduct(@PathVariable String stId){
@@ -363,6 +457,17 @@ public class ProductAddController {
             int id = Integer.parseInt(stId);
             Optional<Product> optionalProduct = productRepository.findById(id);
             if(optionalProduct.isPresent()){
+                //Images Delete
+                Product product = optionalProduct.get();
+                product.getFileName().forEach(item -> {
+                    File file = new File(Util.UPLOAD_DIR_PRODUCTS + stId + "/" + item);
+                    file.delete();
+                });
+                File file = new File(Util.UPLOAD_DIR_PRODUCTS + stId );
+                if(file.exists()){
+                    file.delete();
+                }
+                //Images Delete
                 ElasticProduct elasticProduct = elasticProductRepository.findById(id).get();
                 productRepository.deleteById(id);
                 elasticProductRepository.deleteById(elasticProduct.getId());
@@ -402,6 +507,38 @@ public class ProductAddController {
             System.err.println(e);
             Util.logger(error, Product.class);
             map.put(Check.message,error);
+        }
+        return map;
+    }
+
+    //Chosen image delete
+    @ResponseBody
+    @DeleteMapping("/chosenImages/delete/{images}")
+    public Map<Check,Object> deleteChosenImage(@PathVariable List<String> images){
+        Map<Check,Object> map = new LinkedHashMap<>();
+        System.out.println(images);
+        System.out.println(chosenId);
+        try {
+            if(images.size() > 0){
+                for (int i = 0; i < images.size() ; i++) {
+                    System.out.println("Silinmek istenen dosya: " + images.get(i));
+                    productRepository.deleteImageByFileName(images.get(i));
+                    File file = new File(Util.UPLOAD_DIR_PRODUCTS + chosenId + "/" + images.get(i));
+                    file.delete();
+                }
+
+                map.put(Check.status,true);
+                map.put(Check.message,"The selected pictures have been deleted!");
+            }else{
+                map.put(Check.status,false);
+                map.put(Check.message,"Please select a picture!");
+            }
+        } catch (Exception e) {
+            String error = "An error occurred during the image delete operation";
+            map.put(Check.status,false);
+            map.put(Check.message,error);
+            Util.logger(error,Product.class);
+            System.err.println(e);
         }
         return map;
     }
@@ -484,6 +621,79 @@ public class ProductAddController {
             map.put(Check.message,error);
         }
         return map;
+    }
+
+    // Get id data from Choosen product
+    @ResponseBody
+    @GetMapping("/chosenId/{stId}")
+    public int chosenId(@PathVariable String stId){
+        try {
+            int id = Integer.parseInt(stId);
+            Optional<Product> optionalProduct = productRepository.findById(id);
+            if(optionalProduct.isPresent()){
+                chosenId = id;
+            }
+        } catch (Exception e) {
+            System.err.println("Chosen Id Error: " + e);
+        }
+        System.out.println("Resim eklemek için seçilen ürünün ıd numarası: " + chosenId);
+        return chosenId;
+    }
+
+    //Add product Images
+    @PostMapping("/imageUpload")
+    public String imageUpload(@RequestParam("imageName") MultipartFile[] files) {
+        System.out.println(chosenId);
+        Optional<Product> optionalProduct = productRepository.findById(chosenId);
+        List<String> imageNameList = new ArrayList<>();
+        File f = new File(Util.UPLOAD_DIR_PRODUCTS + ("" + chosenId));
+        f.delete(); //Varsa önce sil
+        if(optionalProduct.isPresent()){
+            Product product = optionalProduct.get();
+            if ( files != null && files.length != 0 ) {
+                sendCount = files.length;
+                String idFolder = "" + chosenId + "/";
+                File folderProduct = new File(Util.UPLOAD_DIR_PRODUCTS + idFolder);
+                boolean status = folderProduct.mkdir();
+                for ( MultipartFile file : files ) {
+                    long fileSizeMB = file.getSize() / 1024;
+                    if ( fileSizeMB > Util.maxFileUploadSize ) {
+                        System.err.println("Dosya boyutu çok büyük Max 5MB");
+                        errorMessage = "Dosya boyutu çok büyük Max "+ (Util.maxFileUploadSize / 1024) +"MB olmalıdır";
+                        System.err.println(errorMessage);
+                    }else {
+                        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+                        String ext = fileName.substring(fileName.length()-5, fileName.length());
+                        String uui = UUID.randomUUID().toString();
+                        fileName = uui + ext;
+                        try {
+                            if(status){
+                                Path path = Paths.get(Util.UPLOAD_DIR_PRODUCTS + idFolder +  fileName);
+                                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                                sendSuccessCount += 1;
+                            }else {
+                                errorMessage = "Id numarasına ait ürün dosyası bulunamadı!";
+                                System.err.println(errorMessage);
+                            }
+                            // add database
+                            imageNameList.add(fileName);
+
+                        } catch (IOException e) {
+                            System.err.println(e);
+                        }
+                    }
+                }
+                product.setFileName(imageNameList);
+                productRepository.saveAndFlush(product);
+            }else {
+                errorMessage = "Lütfen resim seçiniz!";
+                System.err.println(errorMessage);
+            }
+        }else{
+            errorMessage = "Product is not found!";
+            System.err.println(errorMessage);
+        }
+        return "redirect:/product";
     }
 
     //Elasticsearch for product

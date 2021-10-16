@@ -154,11 +154,27 @@ function getAllProductCategoryByPage(page,showNumber){
 }
 
 function createRowData(data){
-    let html = ``
+    let html = ``;
+    let statusHtml = ``;
+    let statusDropdownHtml = ``;
+    let statusInt;
     //console.log(data)
     for (let i = 0; i < data.result.length; i++) {
         globalArr = data.result
         const itm = data.result[i]
+        let status = itm.status;
+        if(status === "Active"){
+            statusInt = 1;
+            statusHtml = `<i class="fas fa-check-circle"></i>`;
+            statusDropdownHtml = `<i class="mr-50 fas fa-ban"></i>
+                                  <span>Passive</span>`;
+        }
+        if(status === "Passive"){
+            statusInt = 0;
+            statusHtml = `<i class="fas fa-ban"></i>`;
+            statusDropdownHtml = `<i class="fas fa-check-circle"></i>
+                                  <span>Active</span>`;
+        }
         html += `<tr>
                      <td>${itm.no}</td>
                      <td>${itm.name}</td>
@@ -176,10 +192,9 @@ function createRowData(data){
                                      <i class="mr-50 fas fa-pen"></i>
                                      <span>Edit</span>
                                  </a>
-                                 <a class="dropdown-item" href="javascript:void(0);">
-                                     <i class="mr-50 fas fa-ban"></i>
-                                     <span>Ban</span>
-                                 </a>
+                                 <a class="dropdown-item" href="javascript:changeProductCategoryStatus(${itm.categoryId}, ${statusInt});">
+                                    `+statusDropdownHtml+`
+                                </a>
                                  <a class="dropdown-item" href="javascript:productCategoryDelete(${itm.categoryId});">
                                      <i class="mr-50 far fa-trash-alt"></i>
                                      <span>Delete</span>
@@ -314,12 +329,90 @@ $('#searchCategory').keyup( function (event) {
 })
 //-------------------------------------- Product Category Search - End --------------------------------------------------//
 
+//-------------------------------------- Product Category Status - Start ----------------------------------------------//
+function changeProductCategoryStatus(id, statusInt) {
+
+    let url;
+    let text;
+    let confirmButtonText;
+    let successTitle;
+    if(statusInt === 1){ //Passive
+        url = '/product/changeCategoryStatus/' + id + "/passive";
+        text = "This product category will be passive and won't be able to do any operations!";
+        confirmButtonText = "Ok";
+        successTitle = "Passive!"
+    }else if(statusInt === 0){ //Active
+        url = '/product/changeCategoryStatus/' + id + "/active";
+        text = "This product category will be active and will be able to do any operations!";
+        confirmButtonText = "Ok";
+        successTitle = "Active!"
+    }else{
+        return;
+    }
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: text,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: confirmButtonText,
+        customClass: {
+            confirmButton: 'btn btn-primary',
+            cancelButton: 'btn btn-outline-danger ml-1'
+        },
+        buttonsStyling: false
+    }).then(function (result) {
+        console.log(url)
+        if (result.value) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if( data.status === true){
+                        Swal.fire({
+                            icon: 'success',
+                            title: successTitle,
+                            text: data.message,
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                        resetFormCategory()
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: "Error",
+                            text: data.message,
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                    }
+                },
+                error: function (err) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: "Error",
+                        text: "An error occurred during the operation",
+                        customClass: {
+                            confirmButton: 'btn btn-success'
+                        }
+                    });
+                    console.log(err)
+                }
+            })
+        }
+    });
+}
+//-------------------------------------- Product Category Status - End ------------------------------------------------//
+
 function resetFormCategory(){
     select_id = 0
     $('#categoryName').val("")
     $('#categoryDetails').val("")
     $('#categoryStatus').val("")
-    getAllProductCategoryByPage(1, 10);
+    getAllProductCategoryByPage(1, $('#showCategoryTableRow').val());
 }
 
 function allProductCategoryList(){
@@ -563,6 +656,14 @@ function createRowDataProduct(data){
                                  <i class="fas fa-ellipsis-v"></i>
                              </button>
                              <div class="dropdown-menu">
+                                <a class="dropdown-item" href="javascript:productAddImages(${i});">
+                                     <i class="mr-50 far fa-images"></i>
+                                     <span>Add Images</span>
+                                 </a>
+                                 <a class="dropdown-item" type="button" href="javascript:productDetail(${i});" >
+                                      <i class="mr-50 fas fa-info-circle"></i>
+                                      <span>Detail</span>
+                                 </a>
                                  <a class="dropdown-item" href="javascript:productUpdate(${i});">
                                      <i class="mr-50 fas fa-pen"></i>
                                      <span>Edit</span>
@@ -650,7 +751,7 @@ function productDelete(id){
 //-------------------------------------- Product Delete - End --------------------------------------------//
 
 //-------------------------------------- Product Update - End --------------------------------------------//
-
+/*
 function detailByProductId(id){
     $.ajax({
         url:"./product/detail/" + id,
@@ -675,7 +776,7 @@ function detailByProductId(id){
         }
     })
 }
-
+*/
 function productUpdate(i){
     $('#productAdd_modal').modal('toggle');
     const itm = globalProductArr[i]
@@ -718,7 +819,199 @@ function productUpdate(i){
     })
 
 }
+
+function productAddImages(i){
+    $('#productImage').modal('toggle');
+    const itm = globalProductArr[i]
+    $("#modalTitle").text(itm.name + "  " + itm.description + " - " + itm.productId)
+    $.ajax({
+        url: './product/chosenId/' + itm.productId,
+        type: 'get',
+        dataType: "json",
+        contentType : 'application/json; charset=utf-8',
+        success: function (data) {
+            console.log(data)
+        },
+        error: function (err) {
+            Swal.fire({
+                title: "Error!",
+                text: "An error occurred during the chosen id operation!",
+                icon: "error",
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            });
+            console.log(err)
+        }
+    })
+}
+
 //-------------------------------------- Product Update - End --------------------------------------------//
+
+//-------------------------------------- Product Details - Start --------------------------------------------//
+// progress
+var mySwiper3 = new Swiper('.swiper-progress', {
+    pagination: {
+        el: '.swiper-pagination',
+        type: 'progressbar'
+    },
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev'
+    }
+});
+// navigation
+var mySwiper1 = new Swiper('.swiper-navigations', {
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev'
+    }
+});
+function productDetail(i){
+    $('#productDetail').modal('toggle')
+    $('#imagesChose').empty()
+    const itm = globalProductArr[i]
+    let html = ``
+    var fileName
+    $.ajax({
+        url: './product/chosenId/' + itm.productId,
+        type: 'get',
+        dataType: "json",
+        contentType : 'application/json; charset=utf-8',
+        success: function (data) {
+            console.log(data)
+            $.ajax({
+                url:"./product/detail/" + itm.productId,
+                type: "get",
+                dataType: "json",
+                contentType : 'application/json; charset=utf-8',
+                success: function (data){
+                    console.log(data.result)
+                    for (let j = 0; j < data.result.fileName.length; j++) {
+                        fileName = data.result.fileName[j]
+                        html += `<div class="swiper-slide">
+                             <img class="img-fluid" src="/uploadImages/_products/${itm.productId}/${fileName}" alt="banner"/>
+                         </div>`
+
+                        $('#imagesChose').append('<option value="' + fileName + '">Image -  ' + j + '</option>'); //Ürüne ait image'leri silme aksiyonu select2 bölümüne eklenmesi
+
+                    }$("#imageSlide").html(html)
+                    $("#title").text(itm.no + " - " + itm.name + "  " + itm.description)
+                    $("#priceDetail").text(itm.price)
+                    $("#dateDetail").text(itm.date)
+                    $("#statusDetail").text(itm.status)
+                    $("#details").text(data.result.details)
+                    if(data.result.campaignStatus === "Yes"){
+                        let campaign1 = `<label style="color: black" class="form-label">Campaign Status</label>
+                                <div   id="campaignStatusDetail" class="form-text"></div>`
+                        let campaign2 = `<label style="color: black" class="form-label">Campaign Name</label>
+                            <div   id="campaignNameDetail" class="form-text"></div>`
+                        let campaign3 = `<label style="color: black" class="form-label mt-1" >Campaign Details</label>
+                                <div   id="campaignDetailsInfo" class="form-text"></div>`
+                        $('#campaignStatusDetail').text(data.result.campaignStatus)
+                        $('#campaignNameDetail').text(data.result.campaignName)
+                        $('#campaignDetailsInfo').text(data.result.campaignDetails)
+
+                        $("#campaign-1").html(campaign1)
+                        $("#campaign-2").html(campaign2)
+                        $("#campaign-3").html(campaign3)
+                    }
+
+                },
+                error: function (err){
+                    Swal.fire({
+                        title: "Error!",
+                        text: "An error occurred during the product list operation!",
+                        icon: "error",
+                        customClass: {
+                            confirmButton: 'btn btn-primary'
+                        },
+                        buttonsStyling: false
+                    });
+                    console.log(err)
+                }
+            })
+        },
+        error: function (err) {
+            Swal.fire({
+                title: "Error!",
+                text: "An error occurred during the chosen id operation!",
+                icon: "error",
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            });
+            console.log(err)
+        }
+    })
+
+}
+//-------------------------------------- Product Details - End ----------------------------------------------//
+
+//-------------------------------------- Product Image Delete - Start ----------------------------------------------//
+function deleteImage(){
+
+    const chosenImages = $("#imagesChose").val()
+    console.log(chosenImages)
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        customClass: {
+            confirmButton: 'btn btn-primary',
+            cancelButton: 'btn btn-outline-danger ml-1'
+        },
+        buttonsStyling: false
+    }).then(function (result) {
+        if (result.value) {
+            $.ajax({
+                url: './product/chosenImages/delete/' + chosenImages,
+                type: 'DELETE',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if( chosenImages.length > 0){
+                        Swal.fire({
+                            icon: 'success',
+                            title: "Deleted!",
+                            text: data.message,
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                    }else{
+                        Swal.fire({
+                            icon: 'warning',
+                            title: "Warning",
+                            text: data.message,
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                    }
+                },
+                error: function (err) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: "Error",
+                        text: "An error occurred during the delete operation",
+                        customClass: {
+                            confirmButton: 'btn btn-success'
+                        }
+                    });
+                    console.log(err)
+                }
+            })
+        }
+    });
+
+}
+//-------------------------------------- Product Image Delete - End ------------------------------------------------//
 
 //-------------------------------------- Product Search - Start --------------------------------------------//
 function searchProduct(page,showPageSize,searchData){
