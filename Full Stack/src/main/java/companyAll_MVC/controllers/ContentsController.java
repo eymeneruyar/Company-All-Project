@@ -1,7 +1,9 @@
 package companyAll_MVC.controllers;
 
 import companyAll_MVC.documents.ElasticContents;
+import companyAll_MVC.documents.ElasticProductCategory;
 import companyAll_MVC.entities.Contents;
+import companyAll_MVC.entities.ProductCategory;
 import companyAll_MVC.repositories._elastic.ElasticContentsRepository;
 import companyAll_MVC.repositories._jpa.ContentsRepository;
 import org.elasticsearch.common.unit.Fuzziness;
@@ -157,6 +159,7 @@ public class ContentsController {
         return totalPage;
     }
 
+    //Delete contents by id
     @ResponseBody
     @DeleteMapping("/delete/{stId}")
     public Map<Check,Object> delete(@PathVariable String stId){
@@ -183,6 +186,45 @@ public class ContentsController {
             map.put(Check.message,error);
             Util.logger(error,Contents.class);
             System.err.println(e);
+        }
+        return map;
+    }
+
+    //Change status content -> 0 (Active), 1 (Passive)
+    @ResponseBody
+    @GetMapping("/changeContentStatus/{stId}/{stStatus}")
+    public Map<Check,Object> changeStatusContent(@PathVariable String stId,@PathVariable String stStatus){
+        Map<Check,Object> map = new LinkedHashMap<>();
+        try {
+            int id = Integer.parseInt(stId);
+            int statusInt = Integer.parseInt(stStatus);
+            Optional<Contents> optionalContents = contentsRepository.findById(id);
+            if(optionalContents.isPresent()){
+                map.put(Check.status,true);
+                map.put(Check.message, "Content change status operation is successful!");
+                Contents c = optionalContents.get();
+                ElasticContents elasticContents = elasticContentsRepository.findById(c.getId()).get();
+                if(statusInt == 1){ //Passive
+                    c.setStatus("Passive");
+                    elasticContents.setStatus("Passive");
+                    Contents contents = contentsRepository.saveAndFlush(c);
+                    elasticContentsRepository.save(elasticContents);
+                }else{ //Active
+                    c.setStatus("Active");
+                    elasticContents.setStatus("Active");
+                    Contents contents = contentsRepository.saveAndFlush(c);
+                    elasticContentsRepository.save(elasticContents);
+                }
+            }else {
+                map.put(Check.status,false);
+                map.put(Check.message, "Content is not found!");
+            }
+        } catch (Exception e) {
+            map.put(Check.status,false);
+            String error = "An error occurred during the change status operation!";
+            System.err.println(e);
+            Util.logger(error, Contents.class);
+            map.put(Check.message,error);
         }
         return map;
     }

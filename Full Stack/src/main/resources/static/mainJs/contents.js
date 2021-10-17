@@ -166,12 +166,27 @@ function getAllContentsByPage(page,showNumber){
 
 //-------------------------------------- Contents Create Row - Start ------------------------------------------//
 function createRowData(data){
-    let html = ``
+    let html = ``;
+    let statusHtml = ``;
+    let statusDropdownHtml = ``;
+    let statusInt;
     console.log(data)
     for (let i = 0; i < data.result.length; i++) {
         globalArr = data.result
         const itm = data.result[i]
-        //console.log(itm.title + " " +  itm.details)
+        let status = itm.status;
+        if(status === "Active"){
+            statusInt = 1;
+            statusHtml = `<i class="fas fa-check-circle"></i>`;
+            statusDropdownHtml = `<i class="mr-50 fas fa-ban"></i>
+                                  <span>Passive</span>`;
+        }
+        if(status === "Passive"){
+            statusInt = 0;
+            statusHtml = `<i class="fas fa-ban"></i>`;
+            statusDropdownHtml = `<i class="fas fa-check-circle"></i>
+                                  <span>Active</span>`;
+        }
         html += `<tr>
                       <td>${itm.no}</td>
                       <td>${itm.title}</td>
@@ -192,10 +207,9 @@ function createRowData(data){
                                       <i class="mr-50 fas fa-info-circle"></i>
                                       <span>Detail</span>
                                   </a>
-                                  <a class="dropdown-item" type="button" href="javascript:void(0);">
-                                      <i class="mr-50 fas fa-ban"></i>
-                                      <span>Ban</span>
-                                  </a>
+                                  <a class="dropdown-item" href="javascript:changeContentStatus(${itm.contentsId}, ${statusInt});">
+                                    `+statusDropdownHtml+`
+                                </a>
                                   <a class="dropdown-item" type="button" id="confirm-text" href="javascript:contentDelete(${itm.contentsId})">
                                       <i class="mr-50 far fa-trash-alt"></i>
                                       <span>Delete</span>
@@ -293,6 +307,84 @@ function contentDetail(i){
     $("#content_title").text(itm.title + " - " + itm.contentsId)
 }
 //-------------------------------------- Contents Detail - End ----------------------------------------------//
+
+//-------------------------------------- Change Content Status - Start ----------------------------------------------//
+function changeContentStatus(id, statusInt) {
+
+    let url;
+    let text;
+    let confirmButtonText;
+    let successTitle;
+    if(statusInt === 1){ //Passive
+        url = '/contents/changeContentStatus/' + id + "/" + statusInt;
+        text = "This contents will be passive and won't be able to do any operations!";
+        confirmButtonText = "Ok";
+        successTitle = "Passive!"
+    }else if(statusInt === 0){ //Active
+        url = '/contents/changeContentStatus/' + id + "/" + statusInt;
+        text = "This contents will be active and will be able to do any operations!";
+        confirmButtonText = "Ok";
+        successTitle = "Active!"
+    }else{
+        return;
+    }
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: text,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: confirmButtonText,
+        customClass: {
+            confirmButton: 'btn btn-primary',
+            cancelButton: 'btn btn-outline-danger ml-1'
+        },
+        buttonsStyling: false
+    }).then(function (result) {
+        console.log(url)
+        if (result.value) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if( data.status === true){
+                        Swal.fire({
+                            icon: 'success',
+                            title: successTitle,
+                            text: data.message,
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                        resetForm()
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: "Error",
+                            text: data.message,
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                    }
+                },
+                error: function (err) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: "Error",
+                        text: "An error occurred during the operation",
+                        customClass: {
+                            confirmButton: 'btn btn-success'
+                        }
+                    });
+                    console.log(err)
+                }
+            })
+        }
+    });
+}
+//-------------------------------------- Change Content Status - End ------------------------------------------------//
 
 //-------------------------------------- Contents Search - Start --------------------------------------------//
 

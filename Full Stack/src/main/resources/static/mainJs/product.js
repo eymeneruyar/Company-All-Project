@@ -629,6 +629,7 @@ function createRowDataProduct(data){
         globalProductArr = data.result
         const itm = data.result[i]
         let status = itm.status;
+        let price = priceFormatter(itm.price)
         if(status === "Available"){
             statusInt = 1;
             statusHtml = `<i class="fas fa-check-circle"></i>`;
@@ -646,7 +647,7 @@ function createRowDataProduct(data){
                      <td>${itm.name}</td>
                      <td>${itm.description}</td>
                      <td>${itm.no}</td>
-                     <td>${itm.price}</td>
+                     <td>${price}</td>
                      <td>${itm.date}</td>
                      <td>${itm.status}</td>
                      <td>
@@ -751,32 +752,6 @@ function productDelete(id){
 //-------------------------------------- Product Delete - End --------------------------------------------//
 
 //-------------------------------------- Product Update - End --------------------------------------------//
-/*
-function detailByProductId(id){
-    $.ajax({
-        url:"./product/detail/" + id,
-        type: "get",
-        dataType: "json",
-        contentType : 'application/json; charset=utf-8',
-        success: function (data){
-            console.log(data.result)
-            productDetailData =  data.result
-        },
-        error: function (err){
-            Swal.fire({
-                title: "Error!",
-                text: "An error occurred during the product list operation!",
-                icon: "error",
-                customClass: {
-                    confirmButton: 'btn btn-primary'
-                },
-                buttonsStyling: false
-            });
-            console.log(err)
-        }
-    })
-}
-*/
 function productUpdate(i){
     $('#productAdd_modal').modal('toggle');
     const itm = globalProductArr[i]
@@ -898,7 +873,7 @@ function productDetail(i){
 
                     }$("#imageSlide").html(html)
                     $("#title").text(itm.no + " - " + itm.name + "  " + itm.description)
-                    $("#priceDetail").text(itm.price)
+                    $("#priceDetail").text(priceFormatter(itm.price)+" TL")
                     $("#dateDetail").text(itm.date)
                     $("#statusDetail").text(itm.status)
                     $("#details").text(data.result.details)
@@ -984,6 +959,10 @@ function deleteImage(){
                                 confirmButton: 'btn btn-success'
                             }
                         });
+                        $('#imagesChose').empty()
+                        setTimeout(function(){
+                            $("#productDetail").modal('hide');
+                        }, 2000);
                     }else{
                         Swal.fire({
                             icon: 'warning',
@@ -1156,6 +1135,11 @@ function resetFormProduct(){
     $('#campaignDetails').val("")
     getAllProductsByPage(1, 10);
     allProductCategoryList()
+}
+
+function priceFormatter(price){
+    var formattedPrice = (price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+    return formattedPrice
 }
 
 function codeGenerator() {

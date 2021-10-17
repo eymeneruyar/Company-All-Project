@@ -1,9 +1,7 @@
 package companyAll_MVC.controllers;
 
-import companyAll_MVC.documents.ElasticContents;
 import companyAll_MVC.documents.ElasticProduct;
 import companyAll_MVC.documents.ElasticProductCategory;
-import companyAll_MVC.entities.Contents;
 import companyAll_MVC.entities.Product;
 import companyAll_MVC.entities.ProductCategory;
 import companyAll_MVC.repositories._elastic.ElasticProductCategoryRepository;
@@ -24,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
