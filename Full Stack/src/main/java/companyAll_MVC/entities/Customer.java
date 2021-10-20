@@ -21,7 +21,7 @@ public class Customer extends AuditEntity<String> {
     @Column(unique = true)
     @NotNull(message = "Invalid customer no! (null)")
     @NotEmpty(message = "Invalid customer no! (empty)")
-    @Pattern(regexp="(^$|[0-9]{10})", message = "Invalid customer no!")
+    @Pattern(regexp="(^$|[0-9]{10})")
     private String no;
 
     @Size(max = 50, message = "Customer name's size can be 50 at max!")
@@ -37,7 +37,7 @@ public class Customer extends AuditEntity<String> {
     @Column(unique = true)
     @NotNull(message = "Invalid customer phone number(phone1)! (null)")
     @NotEmpty(message = "Invalid customer phone number(phone1)! (empty)")
-    @Pattern(regexp="(^$|[0-9]{10})", message = "Invalid customer phone number!")
+    @Pattern(regexp="(^$|[0-9]{10})")
     private String phone1;
 
     @Pattern(regexp="(^$|[0-9]{10})")
@@ -47,13 +47,13 @@ public class Customer extends AuditEntity<String> {
     @Size(max = 50)
     @NotNull(message = "Invalid customer mail! (null)")
     @NotEmpty(message = "Invalid customer mail! (empty)")
-    @Pattern(regexp="(^(.+)@(.+)$)", message = "Invalid customer mail!")
+    @Pattern(regexp="(^(.+)@(.+)$)")
     private String mail;
 
     @Column(unique = true)
     @NotNull(message = "Invalid customer tax no! (null)")
     @NotEmpty(message = "Invalid customer tax no! (empty)")
-    @Pattern(regexp="(^$|[0-9]{11})", message = "Invalid customer tax no!")
+    @Pattern(regexp="(^$|[0-9]{11})")
     private String taxno;
 
     @NotNull(message = "Invalid customer country! (null)")
@@ -64,8 +64,7 @@ public class Customer extends AuditEntity<String> {
     @NotEmpty(message = "Invalid customer city! (empty)")
     private String city;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @Size(min=1, max=20, message = "Customers only can have minimum 1 and maximum 20 addresses!")
+    @OneToMany
     private List<@Valid Address> addresses;
 
     @NotNull(message = "Invalid customer status! (null)")
@@ -74,3 +73,4 @@ public class Customer extends AuditEntity<String> {
     private String status;
 
 }
+

@@ -33,11 +33,11 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row align-items-center">
-                            <div class="col-md-9">
+                            <div class="col-md-8">
                                 <div class="buttons">
                                     <label>
                                         Show
-                                        <select class="custom-select form-control">
+                                        <select class="custom-select form-control" id="advertisement_pagesize">
                                             <option value="10">10</option>
                                             <option value="25">25</option>
                                             <option value="50">50</option>
@@ -45,14 +45,28 @@
                                         </select>
                                     </label>
                                     <button class="dt-button btn btn-primary ml-2" tabindex="0" type="button"
-                                        data-toggle="modal" data-target="#ad_form_modal">
+                                        data-toggle="modal" data-target="#advertisement_form_modal" id="advertisement_form_modal_button">
                                         <span><i class="fas fa-plus"></i> Add New</span>
                                     </button>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="buttons">
-                                    <input type="text" class="form-control" id="basicInput" placeholder="Search">
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>
+                                            Status
+                                            <select class="custom-select form-control"
+                                                    id="advertisement_status">
+                                                <option value="Active">Active</option>
+                                                <option value="Passive">Passive</option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8 mt-1">
+                                        <input class="form-control" id="advertisement_search" placeholder="Search" type="text">
+                                    </div>
+
+
                                 </div>
                             </div>
 
@@ -67,105 +81,32 @@
                                     <th>Name</th>
                                     <th>Views</th>
                                     <th>Click</th>
-                                    <th>Start</th>
-                                    <th>Finish</th>
                                     <th>Image</th>
                                     <th>Width</th>
                                     <th>Height</th>
-                                    <th>Link</th>
                                     <th>Status</th>
                                     <th>Actions</th>
 
                                 </tr>
                             </thead>
-                            <tbody style="font-size: 14px;">
-                                <tr>
-                                    <td>123</td>
-                                    <td>Reklam1</td>
-                                    <td>5623</td>
-                                    <td>896</td>
-                                    <td>2021-09-08 18:45:00</td>
-                                    <td>2021-09-26 18:45:00</td>
-                                    <td>
-                                        <button type="button" class="btn btn-sm">
-                                            <i class="far fa-eye" style="font-size: 20px;"></i>
-                                        </button>
-                                    </td>
-                                    <td>500</td>
-                                    <td>300</td>
-                                    <td>www.google.com.tr</td>
-                                    <td>Active</td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-sm dropdown-toggle hide-arrow"
-                                                data-toggle="dropdown">
-                                                <i data-feather="more-vertical"></i>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <i class="mr-50 fas fa-pen"></i>
-                                                    <span>Edit</span>
-                                                </a>
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <i class="mr-50 far fa-trash-alt"></i>
-                                                    <span>Delete</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>123</td>
-                                    <td>Reklam1</td>
-                                    <td>5623</td>
-                                    <td>896</td>
-                                    <td>2021-09-08 18:45:00</td>
-                                    <td>2021-09-26 18:45:00</td>
-                                    <td>
-                                        <button type="button" class="btn btn-sm">
-                                            <i class="far fa-eye" style="font-size: 20px;"></i>
-                                        </button>
-                                    </td>
-                                    <td>500</td>
-                                    <td>300</td>
-                                    <td>www.google.com.tr</td>
-                                    <td>Active</td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-sm dropdown-toggle hide-arrow"
-                                                data-toggle="dropdown">
-                                                <i data-feather="more-vertical"></i>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <i class="mr-50 fas fa-pen"></i>
-                                                    <span>Edit</span>
-                                                </a>
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <i class="mr-50 far fa-trash-alt"></i>
-                                                    <span>Delete</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                            <tbody style="font-size: 14px;" id="tBodyAdvertisement">
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <ul class="pagination firstLast1-links justify-content-end "></ul>
+                <ul class="pagination firstLast1-links justify-content-end " id="advertisement_pagination"></ul>
             </div>
         </div>
     </div>
     <!-- END: Content-->
 
     <!-- Modal -->
-    <div class="modal fade text-left" id="ad_form_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16"
+    <div class="modal fade text-left" id="advertisement_form_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16"
         aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel4">New Advertisement</h4>
+                    <h4 class="modal-title" id="advertisement_form_modal_title">New Advertisement</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -176,37 +117,37 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
-                                    <form class="needs-validation invalid" novalidate>
+                                    <form class="needs-validation invalid" id="advertisement_add_form" novalidate>
                                         <div class="row">
                                             <div class="col-md-6 col-12">
                                                 <div class="form-group">
-                                                    <label for="adname">Name</label>
-                                                    <input type="text" id="adname" class="form-control"
-                                                        placeholder="Name" name="adname" required />
+                                                    <label for="name">Name</label>
+                                                    <input type="text" id="name" class="form-control"
+                                                        placeholder="Name" name="name" required />
                                                     <div class="valid-feedback">Looks good!</div>
                                                     <div class="invalid-feedback">Please enter ads name.</div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6 col-12">
                                                 <div class="form-group">
-                                                    <label for="ad_number_of_view">Number of View</label>
-                                                    <input type="number" id="ad_number_of_view" class="form-control"
-                                                        placeholder="Number of View" name="adstaging" required />
+                                                    <label for="view">Number of View</label>
+                                                    <input type="number" id="view" class="form-control"
+                                                        placeholder="View" name="view" required />
                                                     <div class="valid-feedback">Looks good!</div>
                                                     <div class="invalid-feedback">Please enter staging.</div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label for="startdate">Start Date</label>
-                                                <input type="text" id="startdate"
+                                                <label for="startDate">Start Date</label>
+                                                <input type="text" id="startDate"
                                                     class="form-control flatpickr-date-time"
                                                     placeholder="YYYY-MM-DD HH:MM" required/>
                                                 <div class="valid-feedback">Looks good!</div>
                                                 <div class="invalid-feedback">Please enter a start date.</div>
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label for="finishdate">Finish Date</label>
-                                                <input type="text" id="finishdate"
+                                                <label for="finishDate">Finish Date</label>
+                                                <input type="text" id="finishDate"
                                                     class="form-control flatpickr-date-time"
                                                     placeholder="YYYY-MM-DD HH:MM" required/>
                                                 <div class="valid-feedback">Looks good!</div>
@@ -214,36 +155,36 @@
                                             </div>
                                             <div class="col-md-6 col-12">
                                                 <div class="form-group">
-                                                    <label for="adwidth">Width</label>
-                                                    <input type="number" id="adwidth" class="form-control"
-                                                        placeholder="Width" name="adwidth" required />
+                                                    <label for="width">Width</label>
+                                                    <input type="number" id="width" class="form-control"
+                                                        placeholder="Width" name="width" required />
                                                     <div class="valid-feedback">Looks good!</div>
                                                     <div class="invalid-feedback">Please enter ads width.</div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6 col-12">
                                                 <div class="form-group">
-                                                    <label for="adheight">Height</label>
-                                                    <input type="number" id="adheight" class="form-control"
-                                                        placeholder="Height" name="adheight" required />
+                                                    <label for="height">Height</label>
+                                                    <input type="number" id="height" class="form-control"
+                                                        placeholder="Height" name="height" required />
                                                     <div class="valid-feedback">Looks good!</div>
                                                     <div class="invalid-feedback">Please enter ads height.</div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 form-group">
-                                                <label for="addimage">Image</label>
+                                            <div class="col-md-6 form-group" id="advertisement_edit_image_col">
+                                                <label for="image">Image</label>
                                                 <div class="custom-file">
-                                                    <input type="file" class="custom-file-input" id="addimage" required/>
-                                                    <label class="custom-file-label" for="addimage">Choose file</label>
+                                                    <input type="file" class="custom-file-input" name="image" id="image" accept="image/*" required/>
+                                                    <label class="custom-file-label" for="image">Choose file</label>
                                                     <div class="valid-feedback">Looks good!</div>
                                                     <div class="invalid-feedback">Please choose an image.</div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6 col-12">
                                                 <div class="form-group">
-                                                    <label for="adlink">Link</label>
-                                                    <input type="text" id="adlink" class="form-control"
-                                                        placeholder="Link" name="adlink" required />
+                                                    <label for="link">Link</label>
+                                                    <input type="text" id="link" class="form-control"
+                                                        placeholder="Link" name="link" required />
                                                     <div class="valid-feedback">Looks good!</div>
                                                     <div class="invalid-feedback">Please enter ads link.</div>
                                                 </div>
@@ -263,12 +204,133 @@
                                 </div>
                             </div>
                         </div>
+                    </section>
                 </div>
-                </section>
                 <!-- Basic Floating Label Form section end -->
             </div>
         </div>
     </div>
+
+    <div aria-hidden="true" aria-labelledby="myModalLabel16" class="modal fade text-left" data-backdrop="static"
+         id="advertisement_detail_modal" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="advertisement_detail_modal_title"></h4>
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12 col-12">
+                                                <div class="form-group">
+                                                    <span>Name</span>
+                                                    <h3 id="detail_name"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>View</span>
+                                                    <h3 id="detail_view"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Start Date</span>
+                                                    <h3 id="detail_startdate"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Finish Date</span>
+                                                    <h3 id="detail_finishdate"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Width</span>
+                                                    <h3 id="detail_width"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Height</span>
+                                                    <h3 id="detail_height"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Link</span>
+                                                    <h3 id="detail_link"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Click</span>
+                                                    <h3 id="detail_click"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Status</span>
+                                                    <h3 id="detail_status"></h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Basic Floating Label Form section end -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div aria-hidden="true" aria-labelledby="myModalLabel16" class="modal fade text-left" data-backdrop="static"
+         id="advertisement_image_modal" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="advertisement_image_modal_title"></h4>
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row" id="image_modal_row">
+                                            <img id="advertisement_image"/>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Basic Floating Label Form section end -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
 </th:block>
 
 <th:block layout:fragment="contentJs">
@@ -295,6 +357,9 @@
         <script th:src="@{/app-assets/js/scripts/forms/form-validation.js}"></script>
 
     <!------------------------------------------------------ Valdiation Js - End -------------------------------------------------------->
+
+        <script th:src="@{/mainJs/advertisement.js}"></script>
+
 
 </th:block>
 

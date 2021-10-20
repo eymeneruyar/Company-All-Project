@@ -74,47 +74,51 @@
                                     <div role="tabpanel" class="tab-pane active" id="account-vertical-general" aria-labelledby="account-pill-general" aria-expanded="true">
                                         <!-- header media -->
                                         <div class="media">
-                                            <a href="javascript:void(0);" class="mr-25">
-                                                <img src="../../../app-assets/images/portrait/small/avatar-s-11.jpg" id="account-upload-img" class="rounded mr-50" alt="profile image" height="80" width="80" />
-                                            </a>
+                                            <img th:src="@{'/uploadImages/_profileImages/'+${user.profileImage}}" id="settings-image" class="rounded mr-50" height="80" width="80" />
                                             <!-- upload and reset button -->
-                                            <div class="media-body mt-75 ml-1">
-                                                <label for="account-upload" class="btn btn-sm btn-primary mb-75 mr-75">Upload</label>
-                                                <input type="file" id="account-upload" hidden accept="image/*" />
-                                                <button class="btn btn-sm btn-outline-secondary mb-75">Reset</button>
-                                            </div>
+                                            <form>
+                                                <div class="media-body mt-75 ml-1">
+                                                    <label for="account-upload" class="btn btn-sm btn-primary mb-75 mr-75">Upload</label>
+                                                    <input type="file" id="account-upload" hidden accept="image/*" />
+                                                    <button class="btn btn-sm btn-outline-success mb-75">Save</button>
+                                                </div>
+                                            </form>
                                             <!--/ upload and reset button -->
                                         </div>
                                         <!--/ header media -->
 
                                         <!-- form -->
-                                        <form class="validate-form mt-2">
+                                        <form class="validate-form mt-2" id="companyInfo_form">
                                             <div class="row">
                                                 <div class="col-12 col-sm-4">
                                                     <div class="form-group">
-                                                        <label for="account-company">Company</label>
-                                                        <input type="text" class="form-control" id="account-company" name="company" placeholder="Company name" value="Crystal Technologies" />
+                                                        <label for="settings-companyName">Company</label>
+                                                        <input th:value="${user.companyName}" type="text" class="form-control" id="settings-companyName"  placeholder="Company name" />
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-sm-4">
                                                     <div class="form-group">
-                                                        <label for="industry">Industry</label>
-                                                            <select class="select2 form-control form-control" id="industry">
-                                                                <option value="active">Active</option>
-                                                                <option value="passive">Passive</option>
-                                                            </select>
+                                                        <label for="settings-companySector">Company Sector</label>
+                                                        <select class="select2 form-control" id="settings-companySector" th:field="${user.companySector}">
+                                                            <option value="Justice and Security">Justice and Security</option>
+                                                            <option value="Engineering">Engineering</option>
+                                                            <option value="Software">Software</option>
+                                                            <option value="Tourism">Tourism</option>
+                                                            <option value="Education">Education</option>
+                                                            <option value="Energy">Energy</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-sm-4">
                                                     <div class="form-group">
-                                                        <label for="account-name">Phone</label>
-                                                        <input type="text" class="form-control" name="phone" placeholder="Phone" />
+                                                        <label for="settings-companyPhone">Phone</label>
+                                                        <input th:value="${user.companyPhone}" type="text" class="form-control" id="settings-companyPhone" placeholder="Phone" />
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="account-name">Address</label>
-                                                        <textarea type="text" class="form-control" name="phone" placeholder="Address"></textarea>
+                                                        <label for="settings-companyAddress">Address</label>
+                                                        <textarea th:text="${user.companyAddress}" type="text" class="form-control" id="settings-companyAddress" placeholder="Address"></textarea>
                                                     </div>
                                                 </div>
                                                 <!-- User Location Starts -->
@@ -129,15 +133,7 @@
                                                     </div>
                                                 </div>
                                                 <!-- /User Location Ends -->
-                                                
-                                                <div class="col-12 mt-75">
-                                                    <div class="alert alert-warning mb-50" role="alert">
-                                                        <h4 class="alert-heading">Your email is not confirmed. Please check your inbox.</h4>
-                                                        <div class="alert-body">
-                                                            <a href="javascript: void(0);" class="alert-link">Resend confirmation</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
+
                                                 <div class="col-12">
                                                     <button type="submit" class="btn btn-primary mt-2 mr-1">Save changes</button>
                                                     <button type="reset" class="btn btn-outline-secondary mt-2">Cancel</button>
@@ -151,13 +147,13 @@
                                     <!-- change password -->
                                     <div class="tab-pane fade" id="account-vertical-password" role="tabpanel" aria-labelledby="account-pill-password" aria-expanded="false">
                                         <!-- form -->
-                                        <form class="validate-form">
+                                        <form class="validate-form" id="changePassword_form">
                                             <div class="row">
                                                 <div class="col-12 col-sm-6">
                                                     <div class="form-group">
                                                         <label for="account-old-password">Old Password</label>
                                                         <div class="input-group form-password-toggle input-group-merge">
-                                                            <input type="password" class="form-control" id="account-old-password" name="password" placeholder="Old Password" />
+                                                            <input type="password" class="form-control" id="account-old-password" name="old-password" placeholder="Old Password" />
                                                             <div class="input-group-append">
                                                                 <div class="input-group-text cursor-pointer">
                                                                     <i data-feather="eye"></i>
@@ -205,51 +201,36 @@
                                     <!-- information -->
                                     <div class="tab-pane fade" id="account-vertical-info" role="tabpanel" aria-labelledby="account-pill-info" aria-expanded="false">
                                         <!-- form -->
-                                        <form class="validate-form">
+                                        <form class="validate-form" id="userInfo_form">
                                             <div class="row">
                                                 <div class="col-12 col-sm-6">
-                                                    <div class="form-group">
-                                                        <label for="account-name">Name</label>
-                                                        <input type="text" class="form-control" id="account-name" name="name" placeholder="Name" />
+                                                    <div class="form-group" >
+                                                        <label for="settings-name">Name</label>
+                                                        <input th:value="${user.name}" type="text" class="form-control" id="settings-name" placeholder="Name" />
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-sm-6">
-                                                    <div class="form-group">
-                                                        <label for="account-name">Surname</label>
-                                                        <input type="text" class="form-control" id="account-name" name="name" placeholder="Surname" />
+                                                    <div class="form-group" >
+                                                        <label for="settings-surname">Surname</label>
+                                                        <input th:value="${user.surname}" type="text" class="form-control" id="settings-surname" placeholder="Surname" />
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-sm-6">
-                                                    <div class="form-group">
-                                                        <label for="account-e-mail">E-mail</label>
-                                                        <input type="email" class="form-control" id="account-e-mail" name="email" placeholder="Email" />
+                                                    <div class="form-group" >
+                                                        <label for="settings-Email">E-Mail</label>
+                                                        <input th:value="${user.email}" type="email" class="form-control" id="settings-Email" name="email" placeholder="Email" />
                                                     </div>
                                                 </div>
-                                                <div class="col-12 col-sm-6">
-                                                    <div class="form-group">
-                                                        <label for="country">Country</label>
-                                                        <select class="select2 form-control form-control-lg" id="country" required>
-                                                            <option value="">Select Country</option>
-                                                            <option value="AK">Alaska</option>
-                                                            <option value="HI">Hawaii</option>
-                                                            <option value="CA">California</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 col-md-6 form-group">
-                                                    <label for="pd-default">Birth Date</label>
-                                                    <input type="text" id="pd-default" class="form-control pickadate" placeholder="Birth Date" />
-                                                </div>
-                                                <div class="col-12 col-sm-6">
-                                                    <div class="form-group">
-                                                        <label for="account-phone">Phone</label>
-                                                        <input type="text" class="form-control" id="account-phone" placeholder="Phone number"  name="phone" />
+                                                <div class="col-12 col-md-6">
+                                                    <div class="form-group" >
+                                                        <label for="settings-birtDate">Birth Date</label>
+                                                        <input th:value="${user.birthday}" type="text" id="settings-birtDate" class="form-control flatpickr-human-friendly" placeholder="Birth Date"/>
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="accountTextarea">Bio</label>
-                                                        <textarea class="form-control" id="accountTextarea" rows="4" placeholder="Your Bio data here..."></textarea>
+                                                        <label for="settings-bio">Bio</label>
+                                                        <textarea th:text="${user.bio}" class="form-control" id="settings-bio" rows="4" placeholder="Your Bio data here..."></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
@@ -301,6 +282,8 @@
         <script th:src="@{/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js}"></script>
         <script th:src="@{/app-assets/js/scripts/forms/pickers/form-pickers.js}"></script>
     <!------------------------------------------------------ Date Js - End     -------------------------------------------------------->
+
+        <script th:src="@{/mainJs/settings.js}"></script>
 
 </th:block>
 

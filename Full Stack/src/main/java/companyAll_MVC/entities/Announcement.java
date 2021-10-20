@@ -19,11 +19,15 @@ public class Announcement extends AuditEntity<String>{
     @Column(unique = true)
     @NotNull(message = "Invalid announcement no! (null)")
     @NotEmpty(message = "Invalid announcement no! (empty)")
-    @Pattern(regexp="(^$|[0-9]{10})")
+    @Pattern(regexp="(^$|[0-9]{10})", message = "Invalid announcement no!")
     private String no;
 
-    @NotNull(message = "Invalid announcement date! (null)")
-    @NotEmpty(message = "Invalid announcement date! (empty)")
+    @Column(unique = true)
+    @Size(max = 50, message = "Announcement title's size can be 50 at max!")
+    @NotNull(message = "Invalid announcement title! (null)")
+    @NotEmpty(message = "Invalid announcement title! (empty)")
+    private String title;
+
     private String date;
 
     @NotNull(message = "Invalid announcement status! (null)")

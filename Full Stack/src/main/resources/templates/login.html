@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
@@ -10,24 +10,35 @@
 </head>
 
 <body>
+
+
 <div id="container" style="background-image: url(/login/images/background/background_img.jpg);">
   <div id="inviteContainer">
-    <div class="logoContainer"><img class="text" th:src="@{/login/images/logo/logo.png}"/><h2 class="brand-text">Company All</h2></div>
+
+    <div class="logoContainer">
+      <img class="text" th:src="@{/login/images/logo/logo.png}"/>
+      <h2 class="brand-text">Company All</h2>
+    </div>
+
     <div class="acceptContainer">
-      <form>
+      <form th:action="@{/login}" method="post">
         <h1>Welcome!</h1>
         <div class="formContainer">
           <div class="formDiv" style="transition-delay: 0.2s">
             <p>MAIL</p>
-            <input type="email" required="" autofocus/>
+            <input type="email" name="username" required autofocus/>
           </div>
           <div class="formDiv" style="transition-delay: 0.4s">
             <p>PASSWORD</p>
-            <input type="password" required=""/><a class="forgotPas" href="forgotPassword.html">FORGOT YOUR PASSWORD?</a>
+            <input type="password" name="password" required/>
+            <a class="forgotPas" href="/forgotPassword">FORGOT YOUR PASSWORD?</a>
           </div>
-          <input type="checkbox" value="lsRememberMe" id="rememberMe"> <label  class="rememberBtn"  for="rememberMe">Remember Me</label>
+          <input type="checkbox" value="lsRememberMe" name="remember-me">
+          <label  class="rememberBtn"  for="rememberMe">Remember Me</label>
           <div class="formDiv" style="transition-delay: 0.6s">
-            <button class="acceptBtn" type="submit">Login</button><span class="register">You don't have an account?<a href="register.html">Register</a></span>
+            <button class="acceptBtn" type="submit">Login</button>
+            <span class="register">You don't have an account?<a href="/register">Register</a></span>
+            <span class="register"><a href="/home">Back Home</a></span>
           </div>
         </div>
       </form>

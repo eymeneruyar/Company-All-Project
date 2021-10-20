@@ -136,7 +136,7 @@ public class ProductAddController {
             Page<ElasticProductCategory> categoryPage = elasticProductCategoryRepository.findByOrderByIdAsc(pageable);
             map.put(Check.status,true);
             map.put(Check.totalPage,categoryPage.getTotalPages());
-            map.put(Check.message, "Content listing on page " + (pageNo + 1) + " is successful");
+            map.put(Check.message, "Product category listing on page " + (pageNo + 1) + " is successful");
             map.put(Check.result,categoryPage.getContent());
         } catch (Exception e) {
             map.put(Check.status,false);

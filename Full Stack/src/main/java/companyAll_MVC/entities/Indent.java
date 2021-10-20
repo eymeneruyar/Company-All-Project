@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
 
 @Entity
 @Data
@@ -34,13 +35,15 @@ public class Indent extends AuditEntity<String>{
     @NotEmpty(message = "Invalid indent date! (empty)")
     private String date;
 
-    @OneToOne
-    @Valid
-    private Address address;
+    @Positive(message = "Address index should be positive number!")
+    @NotNull(message = "Invalid address index! (null)")
+    private int adressIndex;
 
     @NotNull(message = "Invalid indent status! (null)")
     @NotEmpty(message = "Invalid indent status! (empty)")
     @Pattern(regexp = "Active|Delivered", message = "Indent status must be either 'Active' or 'Delivered'")
     private String status;
+
+    private boolean orderStatus=false;
 
 }

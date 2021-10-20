@@ -49,6 +49,7 @@ public class ProductDetailsController {
             //System.out.println(product);
         } catch (Exception e) {
             System.err.println(e);
+            return "redirect:/productList";
         }
         return "productDetails";
     }

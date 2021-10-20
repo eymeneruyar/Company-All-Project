@@ -1,20 +1,18 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="inc/layout"
-      class="loading semi-dark-layout" lang="en" data-layout="semi-dark-layout" data-textdirection="ltr">
+<html class="loading semi-dark-layout"
+      data-layout="semi-dark-layout"
+      data-textdirection="ltr"
+      lang="en" layout:decorate="inc/layout" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
     <title>Customer</title>
 
 
-    <!------------------------------------------------------ CSS - Start ------------------------------------------------------>
-
-
-        <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/form-validation.css}">
-
-    <!------------------------------------------------------ CSS - End ------------------------------------------------------>
+    <!------------------------------------------------------ Valdiation CSS - Start ------------------------------------------------------>
+    <link rel="stylesheet" th:href="@{/app-assets/css/plugins/forms/form-validation.css}" type="text/css">
+    <!------------------------------------------------------ Valdiation CSS - End ------------------------------------------------------>
 
 </head>
 
@@ -33,17 +31,19 @@
                     <div class="card-body">
                         <ul class="nav nav-tabs justify-content-center" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="home-tab-center" data-toggle="tab" href="#customers"
-                                    aria-controls="home-center" role="tab" aria-selected="true">Customer</a>
+                                <a aria-controls="home-center" aria-selected="true" class="nav-link active"
+                                   data-toggle="tab"
+                                   href="#customers" id="home-tab-center" role="tab">Customer</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="service-tab-center" data-toggle="tab" href="#addresses"
-                                    aria-controls="service-center" role="tab" aria-selected="false">Addresses</a>
+                                <a aria-controls="service-center" aria-selected="false" class="nav-link"
+                                   data-toggle="tab"
+                                   href="#addresses" id="service-tab-center" role="tab">Addresses</a>
                             </li>
                         </ul>
                         <div class="tab-content">
-                            <div class="tab-pane active" id="customers" aria-labelledby="home-tab-center"
-                                role="tabpanel">
+                            <div aria-labelledby="home-tab-center" class="tab-pane active" id="customers"
+                                 role="tabpanel">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row align-items-center">
@@ -51,16 +51,16 @@
                                                 <div class="buttons">
                                                     <label>
                                                         Show
-                                                        <select class="custom-select form-control" id="pagesize">
+                                                        <select class="custom-select form-control"
+                                                                id="customer_pagesize">
                                                             <option value="10">10</option>
                                                             <option value="25">25</option>
                                                             <option value="50">50</option>
                                                             <option value="100">100</option>
                                                         </select>
                                                     </label>
-                                                    <button class="dt-button btn btn-primary ml-2" tabindex="0"
-                                                        type="button" data-toggle="modal"
-                                                        data-target="#customer_form_modal">
+                                                    <button class="dt-button btn btn-primary ml-2"
+                                                            id="customer_form_modal_button" tabindex="0">
                                                         <span><i class="fas fa-plus"></i> Add New</span>
                                                     </button>
                                                 </div>
@@ -71,16 +71,16 @@
                                                         <label>
                                                             Status
                                                             <select class="custom-select form-control"
-                                                                id="customerstatus">
-                                                                <option value="10">Active</option>
-                                                                <option value="25">Banned</option>
+                                                                    id="customer_status">
+                                                                <option value="Active">Active</option>
+                                                                <option value="Passive">Banned</option>
                                                             </select>
                                                         </label>
                                                     </div>
                                                     <div class="col-md-8 mt-1">
-                                                        <input type="text" class="form-control" id="customersearch"
-                                                            placeholder="Search">
-
+                                                        <input class="form-control" id="customer_search"
+                                                               placeholder="Search"
+                                                               type="text">
                                                     </div>
 
 
@@ -94,115 +94,45 @@
                                     <div class="table-responsive">
                                         <table class="table">
                                             <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>Firstname</th>
-                                                    <th>Lastname</th>
-                                                    <th>Mail</th>
-                                                    <th>Phone</th>
-                                                    <th>Actions</th>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Firstname</th>
+                                                <th>Lastname</th>
+                                                <th>Mail</th>
+                                                <th>Phone1</th>
+                                                <th>Tax No</th>
+                                                <th>Country</th>
+                                                <th>City</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
 
-                                                </tr>
+                                            </tr>
                                             </thead>
-                                            <tbody style="font-size: 14px;">
-                                                <tr>
-                                                    <td>
-                                                        1111111111
-                                                    </td>
-                                                    <td>Oğuzkaan</td>
-                                                    <td>Sarı</td>
-                                                    <td>oguzkaansari@outlook.com</td>
-                                                    <td>5530589819</td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <button type="button"
-                                                                class="btn btn-sm dropdown-toggle hide-arrow"
-                                                                data-toggle="dropdown">
-                                                                <i data-feather="more-vertical"></i>
-                                                            </button>
-                                                            <div class="dropdown-menu">
-                                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                                    <i class="mr-50 fas fa-pen"></i>
-                                                                    <span>Edit</span>
-                                                                </a>
-                                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                                    <i class="mr-50 fas fa-ban"></i>
-                                                                    <span>Ban</span>
-                                                                </a>
-                                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                                    <i class="mr-50 far fa-trash-alt"></i>
-                                                                    <span>Delete</span>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        1111111111
-                                                    </td>
-                                                    <td>Oğuzkaan</td>
-                                                    <td>Sarı</td>
-                                                    <td>oguzkaansari@outlook.com</td>
-                                                    <td>5530589819</td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <button type="button"
-                                                                class="btn btn-sm dropdown-toggle hide-arrow"
-                                                                data-toggle="dropdown">
-                                                                <i data-feather="more-vertical"></i>
-                                                            </button>
-                                                            <div class="dropdown-menu">
-                                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                                    <i class="mr-50 fas fa-pen"></i>
-                                                                    <span>Edit</span>
-                                                                </a>
-                                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                                    <i class="mr-50 fas fa-ban"></i>
-                                                                    <span>Ban</span>
-                                                                </a>
-                                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                                    <i class="mr-50 far fa-trash-alt"></i>
-                                                                    <span>Delete</span>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                            <tbody id="tbodyCustomer" style="font-size: 14px;">
+
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
-                                <ul class="pagination firstLast1-links justify-content-end "></ul>
+                                <ul class="pagination firstLast1-links justify-content-end " id="customer_pagination"></ul>
                             </div>
-                            <div class="tab-pane" id="addresses" aria-labelledby="service-tab-center"
-                                role="tabpanel">
+                            <div aria-labelledby="service-tab-center" class="tab-pane" id="addresses"
+                                 role="tabpanel">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row align-items-center">
                                             <div class="col-md-8">
                                                 <div class="buttons">
                                                     <label style="width: 200px;">Customer
-                                                        <select class="select2 form-control form-control" id="customer">
-                                                            <option value="">Select Customer
-                                                            </option>
-                                                            <option value="AK">Alaska Alaska</option>
-                                                            <option value="HI">Hawaii Hawaii</option>
-                                                            <option value="CA">California California</option>
+                                                        <select class="select2 form-control form-control-lg"
+                                                                id="customer_select">
+                                                            <option value="" selected>Select Customer</option>
                                                         </select>
                                                     </label>
-                                                    <label class="ml-1">
-                                                        Show
-                                                        <select class="custom-select form-control-lg" id="pagesize">
-                                                            <option value="10">10</option>
-                                                            <option value="25">25</option>
-                                                            <option value="50">50</option>
-                                                            <option value="100">100</option>
-                                                        </select>
-                                                    </label>
-                                                    <button class="dt-button btn btn-primary ml-2" tabindex="0"
-                                                        type="button" data-toggle="modal"
-                                                        data-target="#address_form_modal">
+                                                    <button class="dt-button btn btn-primary ml-2"
+                                                            data-target="#address_form_modal"
+                                                            data-toggle="modal" tabindex="0"
+                                                            type="button">
                                                         <span><i class="fas fa-plus"></i> Add New</span>
                                                     </button>
                                                 </div>
@@ -213,19 +143,18 @@
                                                         <label>
                                                             Type
                                                             <select class="custom-select form-control"
-                                                                id="customerstatus">
-                                                                <option value="10">Home</option>
-                                                                <option value="25">Work</option>
+                                                                    id="address_type">
+                                                                <option value="All">All</option>
+                                                                <option value="Home">Home</option>
+                                                                <option value="Work">Work</option>
                                                             </select>
                                                         </label>
                                                     </div>
                                                     <div class="col-md-8 mt-1">
-                                                        <input type="text" class="form-control" id="customersearch"
-                                                            placeholder="Search">
-
+                                                        <input class="form-control" id="address_search"
+                                                               placeholder="Search"
+                                                               type="text"/>
                                                     </div>
-
-
                                                 </div>
                                             </div>
 
@@ -234,70 +163,19 @@
                                     </div>
 
                                     <div class="table-responsive">
-                                        <table class="table">
+                                        <table class="table" id="address_table">
                                             <thead>
-                                                <tr>
-                                                    <th>Address</th>
-                                                    <th>Type</th>
-                                                    <th>Actions</th>
-                                                </tr>
+                                            <tr>
+                                                <th>Address</th>
+                                                <th>Type</th>
+                                                <th>Actions</th>
+                                            </tr>
                                             </thead>
-                                            <tbody style="font-size: 14px;">
-                                                <tr>
-                                                    <td>
-                                                        75. Yıl Mah. Eke Cad. Adanur Sit. C Blok Daire 14 Yıldırım/Bursa
-                                                    </td>
-                                                    <td>Home</td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <button type="button"
-                                                                class="btn btn-sm dropdown-toggle hide-arrow"
-                                                                data-toggle="dropdown">
-                                                                <i data-feather="more-vertical"></i>
-                                                            </button>
-                                                            <div class="dropdown-menu">
-                                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                                    <i class="mr-50 fas fa-pen"></i>
-                                                                    <span>Edit</span>
-                                                                </a>
-                                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                                    <i class="mr-50 far fa-trash-alt"></i>
-                                                                    <span>Delete</span>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        75. Yıl Mah. Eke Cad. Adanur Sit. C Blok Daire 14 Yıldırım/Bursa
-                                                    </td>
-                                                    <td>Work</td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <button type="button"
-                                                                class="btn btn-sm dropdown-toggle hide-arrow"
-                                                                data-toggle="dropdown">
-                                                                <i data-feather="more-vertical"></i>
-                                                            </button>
-                                                            <div class="dropdown-menu">
-                                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                                    <i class="mr-50 fas fa-pen"></i>
-                                                                    <span>Edit</span>
-                                                                </a>
-                                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                                    <i class="mr-50 far fa-trash-alt"></i>
-                                                                    <span>Delete</span>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                            <tbody id="tBodyAddresses" style="font-size: 14px;">
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
-                                <ul class="pagination firstLast1-links justify-content-end "></ul>
                             </div>
                         </div>
                     </div>
@@ -308,30 +186,30 @@
     <!-- END: Content-->
 
     <!-- Customer Form Modal Start-->
-    <div class="modal fade text-left" id="customer_form_modal" tabindex="-1" role="dialog"
-        aria-labelledby="myModalLabel16" aria-hidden="true" data-backdrop="static">
+    <div aria-hidden="true" aria-labelledby="myModalLabel16" class="modal fade text-left" data-backdrop="static"
+         id="customer_form_modal" role="dialog" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel4">New Customer</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h4 class="modal-title" id="customer_form_modal_title">New Customer</h4>
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="customerFormModalBody">
                     <!-- Basic multiple Column Form section start -->
-                    <section id="multiple-column-form">
+                    <section>
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <form class="needs-validation invalid" novalidate>
+                                        <form class="needs-validation invalid" id="customer_form" novalidate>
                                             <div class="row">
                                                 <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label for="firstname">First Name</label>
-                                                        <input type="text" id="firstname" class="form-control"
-                                                            placeholder="First Name" name="firstname" required />
+                                                        <input class="form-control" id="firstname" name="firstname"
+                                                               placeholder="First Name" required type="text"/>
                                                         <div class="valid-feedback">Looks good!</div>
                                                         <div class="invalid-feedback">Please enter your firstname.</div>
                                                     </div>
@@ -339,8 +217,8 @@
                                                 <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label for="lastname">Last Name</label>
-                                                        <input type="text" id="lastname" class="form-control"
-                                                            placeholder="Last Name" name="lastname" required />
+                                                        <input class="form-control" id="lastname" name="lastname"
+                                                               placeholder="Last Name" required type="text"/>
                                                         <div class="valid-feedback">Looks good!</div>
                                                         <div class="invalid-feedback">Please enter your lastname.</div>
                                                     </div>
@@ -348,8 +226,8 @@
                                                 <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label for="phone1">Phone 1</label>
-                                                        <input type="tel" id="phone1" class="form-control"
-                                                            placeholder="Phone 1" name="phone1" required />
+                                                        <input class="form-control" id="phone1" name="phone1"
+                                                               placeholder="Phone 1" required type="tel"/>
                                                         <div class="valid-feedback">Looks good!</div>
                                                         <div class="invalid-feedback">Please enter your first phone.
                                                         </div>
@@ -358,8 +236,8 @@
                                                 <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label for="phone2">Phone 2</label>
-                                                        <input type="tel" id="phone2" class="form-control"
-                                                            placeholder="Phone 2" name="phone2" required />
+                                                        <input class="form-control" id="phone2" name="phone2"
+                                                               placeholder="Phone 2" required type="tel"/>
                                                         <div class="valid-feedback">Looks good!</div>
                                                         <div class="invalid-feedback">Please enter your second phone.
                                                         </div>
@@ -368,17 +246,17 @@
                                                 <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label for="mail">E-Mail</label>
-                                                        <input type="email" id="mail" class="form-control"
-                                                            placeholder="E-Mail" name="mail" required />
+                                                        <input class="form-control" id="mail" name="mail"
+                                                               placeholder="E-Mail" required type="email"/>
                                                         <div class="valid-feedback">Looks good!</div>
                                                         <div class="invalid-feedback">Please enter your e-mail.</div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 col-12">
                                                     <div class="form-group">
-                                                        <label for="taxno">Tax No.</label>
-                                                        <input type="number" id="taxno" class="form-control"
-                                                            name="taxno" placeholder="Tax No." required />
+                                                        <label for="tax_no">Tax No.</label>
+                                                        <input class="form-control" id="tax_no" name="tax_no"
+                                                               placeholder="Tax No." required type="number"/>
                                                         <div class="valid-feedback">Looks good!</div>
                                                         <div class="invalid-feedback">Please enter your tax number.
                                                         </div>
@@ -388,7 +266,7 @@
                                                     <div class="form-group">
                                                         <label for="country">Country</label>
                                                         <select class="select2 form-control form-control-lg"
-                                                            id="country" required>
+                                                                id="country" required>
                                                             <option value="">Select Country</option>
                                                             <option value="AK">Alaska</option>
                                                             <option value="HI">Hawaii</option>
@@ -402,7 +280,7 @@
                                                     <div class="form-group">
                                                         <label for="city">City</label>
                                                         <select class="select2 form-control form-control-lg" id="city"
-                                                            required>
+                                                                required>
                                                             <option value="">Select City</option>
                                                             <option value="AK">Alaska</option>
                                                             <option value="HI">Hawaii</option>
@@ -413,39 +291,18 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col-12">
-                                                    <div class="form-group mt-1">
-                                                        <label>
-                                                            Address Type
-                                                            <select class="custom-select form-control-lg"
-                                                                id="address_type_customer_form">
-                                                                <option value="10">Home</option>
-                                                                <option value="25">Work</option>
-                                                            </select>
-                                                        </label>
-                                                    </div>
+                                                <div class="col-12" id="customer_form_col">
                                                 </div>
-                                                <div class="col-12">
-                                                    <div class="form-group">
-                                                        <label for="address1">Address (You can add more addresses
-                                                            later.)</label>
-                                                        <textarea type="text" id="address" class="form-control"
-                                                            name="address1" required></textarea>
-                                                        <div class="valid-feedback">Looks good!</div>
-                                                        <div class="invalid-feedback">Please enter you full address
-                                                        </div>
-                                                    </div>
-                                                </div>
-
                                                 <div class="col-md-8"></div>
                                                 <div class="col-md-4">
                                                     <div class="row mt-2">
                                                         <div class="col-md-2"></div>
                                                         <div class="col-md-10">
-                                                            <button type="reset"
-                                                                class="btn btn-outline-secondary">Reset</button>
-                                                            <button type="submit"
-                                                                class="btn btn-primary">Submit</button>
+                                                            <button class="btn btn-outline-secondary"
+                                                                    type="reset">Reset
+                                                            </button>
+                                                            <button class="btn btn-primary" type="submit">Submit
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -464,14 +321,96 @@
     </div>
     <!-- Customer Form Modal End -->
 
-    <!-- Customer Address Modal Start-->
-    <div class="modal fade text-left" id="address_form_modal" tabindex="-1" role="dialog"
-        aria-labelledby="myModalLabel16" aria-hidden="true" data-backdrop="static">
+    <!-- Customer Detail Modal Start-->
+    <div aria-hidden="true" aria-labelledby="myModalLabel16" class="modal fade text-left" data-backdrop="static"
+         id="customer_detail_modal" role="dialog" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel4">Addresses</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h4 class="modal-title" id="customer_detail_modal_title"></h4>
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>First Name</span>
+                                                    <h3 id="detail_firstname"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Last Name</span>
+                                                    <h3 id="detail_lastname"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Phone 1</span>
+                                                    <h3 id="detail_phone1"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Phone 2</span>
+                                                    <h3 id="detail_phone2"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>E-Mail</span>
+                                                    <h3 id="detail_mail"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Tax No.</span>
+                                                    <h3 id="detail_tax_no"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Country</span>
+                                                    <h3 id="detail_country"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>City</span>
+                                                    <h3 id="detail_city"></h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Basic Floating Label Form section end -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Customer Detail Modal End -->
+
+    <!-- Customer Address Modal Start-->
+    <div aria-hidden="true" aria-labelledby="myModalLabel16" class="modal fade text-left" data-backdrop="static"
+         id="address_form_modal" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="address_form_modal_title">Addresses</h4>
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -482,24 +421,35 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="form-group">
-                                            <label>
-                                                Type
-                                                <select class="custom-select form-control-lg"
-                                                    id="address_type_address_form">
-                                                    <option value="10">Home</option>
-                                                    <option value="25">Work</option>
-                                                </select>
-                                            </label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="address1">Address 1 (Home)</label>
-                                            <textarea type="text" id="address1" class="form-control" name="address1"
-                                                required></textarea>
-                                            <div class="valid-feedback">Looks good!</div>
-                                            <div class="invalid-feedback">Please enter you full address
+                                        <form class="needs-validation invalid" id="address_form" novalidate>
+                                            <div class="form-group">
+                                                <label for="address_type_address_form">Type</label>
+                                                    <select class="custom-select form-control-lg"
+                                                            id="address_type_address_form" required>
+                                                        <option value="Home">Home</option>
+                                                        <option value="Work">Work</option>
+                                                    </select>
+                                                    <div class="valid-feedback">Looks good!</div>
+                                                    <div class="invalid-feedback">Please select an address type.</div>
                                             </div>
-                                        </div>
+                                            <div class="form-group">
+                                                <label for="address_detail_address_form">Address 1 (Home)</label>
+                                                <textarea class="form-control" id="address_detail_address_form"
+                                                          name="address_detail_address_form" required
+                                                          type="text"></textarea>
+                                                <div class="valid-feedback">Looks good!</div>
+                                                <div class="invalid-feedback">Please enter address.</div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-8"></div>
+                                                <div class="col-md-4">
+                                                    <div class="row mt-2">
+                                                            <button class="btn btn-primary" type="submit">Submit
+                                                            </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
 
@@ -518,31 +468,34 @@
 <th:block layout:fragment="contentJs">
 
     <!------------------------------------------------------ Pagination Js - Start -------------------------------------------------------->
-        <script th:src="@{/app-assets/vendors/js/pagination/jquery.bootpag.min.js}"></script>
-        <script th:src="@{/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js}"></script>
-        <script th:src="@{/app-assets/js/scripts/pagination/components-pagination.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/pagination/jquery.bootpag.min.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js}"></script>
+    <!--script th:src="@{/app-assets/js/scripts/pagination/components-pagination.js}"></script-->
     <!------------------------------------------------------ Pagination Js - End ---------------------------------------------------------->
 
     <!------------------------------------------------------ Select Js - Start ---------------------------------------------------------->
 
-        <script th:src="@{/app-assets/vendors/js/forms/select/select2.full.min.js}"></script>
-        <script th:src="@{/app-assets/js/scripts/forms/form-select2.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/forms/select/select2.full.min.js}"></script>
+    <script th:src="@{/app-assets/js/scripts/forms/form-select2.js}"></script>
 
     <!------------------------------------------------------ Select Js - End ---------------------------------------------------------->
 
     <!------------------------------------------------------ Valdiation Js - Start -------------------------------------------------------->
 
-        <script th:src="@{/app-assets/vendors/js/forms/validation/jquery.validate.min.js}"></script>
-        <script th:src="@{/app-assets/js/scripts/forms/form-validation.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/forms/validation/jquery.validate.min.js}"></script>
+    <script th:src="@{/app-assets/js/scripts/forms/form-validation.js}"></script>
 
     <!------------------------------------------------------ Valdiation Js - End -------------------------------------------------------->
 
     <!------------------------------------------------------ Form Repeater Js - Start -------------------------------------------------------->
 
-        <script th:src="@{/app-assets/vendors/js/forms/repeater/jquery.repeater.min.js}"></script>
-        <script th:src="@{/app-assets/js/scripts/forms/form-repeater.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/forms/repeater/jquery.repeater.min.js}"></script>
+    <script th:src="@{/app-assets/js/scripts/forms/form-repeater.js}"></script>
 
     <!------------------------------------------------------ Form Repeater Js - End -------------------------------------------------------->
+
+
+    <script th:src="@{/mainJs/customer.js}"></script>
 
 </th:block>
 

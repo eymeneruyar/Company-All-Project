@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -19,16 +19,20 @@
     <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/core/menu/menu-types/vertical-menu.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/style.css}">
 
+    <!------------------------------------------------------ Sweet Alerts CSS - Start ------------------------------------------------------>
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/animate/animate.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/extensions/sweetalert2.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/extensions/ext-component-sweet-alerts.css}">
+    <!------------------------------------------------------ Sweet Alerts CSS - End -------------------------------------------------------->
+
+
 </head>
 
 <body>
   <div id="container">
-      <div class="logoContainer"><img class="text" th:src="@{/login/images/logo/logo.png}" />
-        <h2 class="brand-text">Company All</h2>
-      </div>
-        
+
         <div class="card-body">
-            <form class="form">
+            <form class="form" id="registerForm">
                 <div class="row">
                     <div class="col-3">
 
@@ -37,68 +41,69 @@
                         <h1 style="color: white;" class="ml-1">Company Information</h1>
                         <div class="col-md-12 col-12">
                             <div class="form-group">
-                                <label for="first-name-column" style="font-size: 20px; color:white;"><strong>Name</strong> </label>
-                                <input type="text" id="first-name-column" class="form-control" placeholder="Company Name" name="fname-column" />
+                                <label for="companyName" style="font-size: 20px; color:white;"><strong>Name</strong> </label>
+                                <input type="text" id="companyName" class="form-control" placeholder="Company Name" />
                             </div>
                         </div>
                         <div class="col-md-12 col-12">
                             <div class="form-group">
-                                <label for="last-name-column" style="font-size: 20px; color:white;"><strong>Address</strong></label>
-                                <input type="text" id="last-name-column"  class="form-control" placeholder="Company Address" name="lname-column" />
+                                <label for="companyAddress" style="font-size: 20px; color:white;"><strong>Address</strong></label>
+                                <input type="text" id="companyAddress"  class="form-control" placeholder="Company Address" />
                             </div>
                         </div>
                         <div class="col-md-12 col-12" >
                             <div class="form-group">
-                                <label for="city-column" style="font-size: 20px; color:white;"><strong>Sector</strong></label>
-                                <select class="select2 form-control" id="default-select">
+                                <label for="companySector" style="font-size: 20px; color:white;"><strong>Sector</strong></label>
+                                <select class="select2 form-control" id="companySector">
                                     <option selected>Please Select Company Sector</option>
-                                    <option value="square">Square</option>
-                                    <option value="rectangle">Rectangle</option>
-                                    <option value="rombo">Rombo</option>
-                                    <option value="romboid">Romboid</option>
-                                    <option value="trapeze">Trapeze</option>
-                                    <option value="traible">Triangle</option>
-                                    <option value="polygon">Polygon</option>
+                                    <option value="Justice and Security">Justice and Security</option>
+                                    <option value="Engineering">Engineering</option>
+                                    <option value="Software">Software</option>
+                                    <option value="Tourism">Tourism</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Energy">Energy</option>
                                 </select>
                             </div>
                         </div>
                         
                         <div class="col-md-12 col-12">
                             <div class="form-group">
-                                <label for="email-id-column" style="font-size: 20px; color:white;"><strong>Phone</strong></label>
-                                <input type="email" id="email-id-column"  class="form-control" name="email-id-column" placeholder="Company Phone" />
+                                <label for="companyPhone" style="font-size: 20px; color:white;"><strong>Phone</strong></label>
+                                <input type="text" id="companyPhone"  class="form-control" placeholder="Company Phone" />
                             </div>
                         </div>
-                        
+                        <div class="col-12">
+                            <a href="/login" type="button" class="btn btn-primary mr-1">Back</a>
+                        </div>
                     </div>
                     <div class="col-3">
                         <h1 style="color: white;" class="ml-1">Admin Information</h1>
                         <div class="col-md-12 col-12">
                             <div class="form-group">
-                                <label for="country-floating" style="font-size: 20px; color:white;"><strong>Name</strong></label>
-                                <input type="text" id="country-floating"  class="form-control" name="country-floating" placeholder="Administrator Name" />
+                                <label for="adminName" style="font-size: 20px; color:white;"><strong>Name</strong></label>
+                                <input type="text" id="adminName"  class="form-control" name="country-floating" placeholder="Administrator Name" />
                             </div>
                         </div>
                         <div class="col-md-12 col-12">
                             <div class="form-group">
-                                <label for="company-column" style="font-size: 20px; color:white;"><strong>Surname</strong></label>
-                                <input type="text" id="company-column"  class="form-control" name="company-column" placeholder="Administrator Surname" />
+                                <label for="adminSurname" style="font-size: 20px; color:white;"><strong>Surname</strong></label>
+                                <input type="text" id="adminSurname"  class="form-control" name="company-column" placeholder="Administrator Surname" />
                             </div>
                         </div>
                         <div class="col-md-12 col-12">
                             <div class="form-group">
-                                <label for="company-column" style="font-size: 20px; color:white;"><strong>Mail</strong></label>
-                                <input type="text" id="company-column"  class="form-control" name="company-column" placeholder="Administrator Mail" />
+                                <label for="adminEmail" style="font-size: 20px; color:white;"><strong>E-Mail</strong></label>
+                                <input type="email" id="adminEmail"  class="form-control" name="company-column" placeholder="Administrator E-Mail" />
                             </div>
                         </div>
                         <div class="col-md-12 col-12">
                             <div class="form-group">
-                                <label for="company-column" style="font-size: 20px; color:white;"><strong>Password</strong></label>
-                                <input type="text" id="company-column"  class="form-control" name="company-column" placeholder="Administrator Password" />
+                                <label for="adminPassword" style="font-size: 20px; color:white;"><strong>Password</strong></label>
+                                <input type="password" id="adminPassword"  class="form-control" name="company-column" placeholder="Administrator Password" />
                             </div>
                         </div>
-                        <div class="col-12">
-                            <button type="reset" class="btn btn-primary mr-1">Submit</button>
+                        <div class="col-12 ">
+                            <button type="submit" class="btn btn-primary mr-1">Submit</button>
                             <button type="reset" class="btn btn-secondary">Reset</button>
                         </div>
                        
@@ -115,14 +120,16 @@
   <!-- partial -->
 
   <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
-  <script th:src="@{https://use.fontawesome.com/releases/v5.0.1/js/all.js}"></script>
-  <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/jquery.transit/0.9.12/jquery.transit.js}" integrity="sha256-mkdmXjMvBcpAyyFNCVdbwg4v+ycJho65QLDwVE3ViDs=" crossorigin="anonymous"></script>
-  <script th:src="@{/login/js/register.js}"></script>
-  <script th:src="@{/app-assets/vendors/js/vendors.min.js}"></script>
   <script th:src="@{/app-assets/vendors/js/forms/select/select2.full.min.js}"></script>
   <script th:src="@{/app-assets/js/scripts/forms/form-select2.js}"></script>
-  <script th:src="@{/app-assets/js/core/app-menu.js}"></script>
-  <script th:src="@{/app-assets/js/core/app.js}"></script>
+  <script th:src="@{/login/js/register.js}"></script>
+  <script th:src="@{/mainJs/register.js}"></script>
+
+  <!------------------------------------------------------ Sweet Alerts Js - Start ------------------------------------------------------>
+  <script th:src="@{/app-assets/vendors/js/extensions/sweetalert2.all.min.js}"></script>
+  <script th:src="@{/app-assets/vendors/js/extensions/polyfill.min.js}"></script>
+  <!------------------------------------------------------ Sweet Alerts - End -------------------------------------------------------->
+
 
 </body>
 

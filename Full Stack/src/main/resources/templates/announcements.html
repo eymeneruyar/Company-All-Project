@@ -40,7 +40,7 @@
                                 <div class="buttons">
                                     <label>
                                         Show
-                                        <select class="custom-select form-control" id="pagesize">
+                                        <select class="custom-select form-control" id="announcement_pagesize">
                                             <option value="10">10</option>
                                             <option value="25">25</option>
                                             <option value="50">50</option>
@@ -48,7 +48,7 @@
                                         </select>
                                     </label>
                                     <button class="dt-button btn btn-primary ml-2" tabindex="0" type="button"
-                                        data-toggle="modal" data-target="#customer_form_modal">
+                                        data-toggle="modal" data-target="#customer_form_modal" id="announcement_form_modal_button">
                                         <span><i class="fas fa-plus"></i> Add New</span>
                                     </button>
                                 </div>
@@ -58,14 +58,14 @@
                                     <div class="col-md-4">
                                         <label>
                                             Status
-                                            <select class="custom-select form-control" id="customerstatus">
-                                                <option value="10">Active</option>
-                                                <option value="25">Passive</option>
+                                            <select class="custom-select form-control" id="announcement_status">
+                                                <option value="Active">Active</option>
+                                                <option value="Passive">Passive</option>
                                             </select>
                                         </label>
                                     </div>
                                     <div class="col-md-8 mt-1">
-                                        <input type="text" class="form-control" id="customersearch"
+                                        <input type="text" class="form-control" id="announcement_search"
                                             placeholder="Search">
 
                                     </div>
@@ -90,86 +90,24 @@
 
                                 </tr>
                             </thead>
-                            <tbody style="font-size: 14px;">
-                                <tr>
-                                    <td>
-                                        1111111111
-                                    </td>
-                                    <td>Duyuru1</td>
-                                    <td>2021-09-08</td>
-                                    <td>Active</td>
-                                    <td>
-                                        <button type="button" class="btn btn-sm">
-                                            <i class="far fa-file-alt" style="font-size: 20px;"></i>
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-sm dropdown-toggle hide-arrow"
-                                                data-toggle="dropdown">
-                                                <i data-feather="more-vertical"></i>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <i class="mr-50 fas fa-pen"></i>
-                                                    <span>Edit</span>
-                                                </a>                                                
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <i class="mr-50 far fa-trash-alt"></i>
-                                                    <span>Delete</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        1111111111
-                                    </td>
-                                    <td>Duyuru1</td>
-                                    <td>2021-09-08</td>
-                                    <td>Active</td>
-                                    <td>
-                                        <button type="button" class="btn btn-sm">
-                                            <i class="far fa-file-alt" style="font-size: 20px;"></i>
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn btn-sm dropdown-toggle hide-arrow"
-                                                data-toggle="dropdown">
-                                                <i data-feather="more-vertical"></i>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <i class="mr-50 fas fa-pen"></i>
-                                                    <span>Edit</span>
-                                                </a>                                                
-                                                <a class="dropdown-item" href="javascript:void(0);">
-                                                    <i class="mr-50 far fa-trash-alt"></i>
-                                                    <span>Delete</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                            <tbody style="font-size: 14px;" id="tBodyAnnouncements">
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <ul class="pagination firstLast1-links justify-content-end "></ul>
+                <ul class="pagination firstLast1-links justify-content-end " id="announcement_pagination"></ul>
             </div>
         </div>
     </div>
     <!-- END: Content-->
 
     <!-- Modal -->
-    <div class="modal fade text-left" id="customer_form_modal" tabindex="-1" role="dialog"
-        aria-labelledby="myModalLabel16" aria-hidden="true" data-backdrop="static">
+    <div class="modal fade text-left" id="announcement_form_modal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel16" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel4">New Announcement</h4>
+                    <h4 class="modal-title" id="announcement_form_modal_title">New Announcement</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -181,13 +119,13 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <form class="needs-validation invalid" novalidate>
+                                        <form class="needs-validation invalid" id="announcement_add_form" novalidate>
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="antitle">Title</label>
-                                                        <input type="text" id="antitle" class="form-control"
-                                                            placeholder="Title" name="antitle" required />
+                                                        <label for="title">Title</label>
+                                                        <input type="text" id="title" class="form-control"
+                                                            placeholder="Title" name="title" required />
                                                         <div class="valid-feedback">Looks good!</div>
                                                         <div class="invalid-feedback">Please enter your firstname.</div>
                                                     </div>
@@ -198,56 +136,8 @@
 
                                                         <div>
                                                             <div id="snow-wrapper">
-                                                                <div id="snow-container" itemid="announcement_detail">
-                                                                    <div class="quill-toolbar">
-                                                                        <span class="ql-formats">
-                                                                            <select class="ql-header">
-                                                                                <option value="1">Heading</option>
-                                                                                <option value="2">Subheading
-                                                                                </option>
-                                                                                <option selected>Normal</option>
-                                                                            </select>
-                                                                            <select class="ql-font">
-                                                                                <option selected>Sailec Light
-                                                                                </option>
-                                                                                <option value="sofia">Sofia Pro
-                                                                                </option>
-                                                                                <option value="slabo">Slabo 27px
-                                                                                </option>
-                                                                                <option value="roboto">Roboto Slab
-                                                                                </option>
-                                                                                <option value="inconsolata">
-                                                                                    Inconsolata
-                                                                                </option>
-                                                                                <option value="ubuntu">Ubuntu Mono
-                                                                                </option>
-                                                                            </select>
-                                                                        </span>
-                                                                        <span class="ql-formats">
-                                                                            <button class="ql-bold"></button>
-                                                                            <button class="ql-italic"></button>
-                                                                            <button class="ql-underline"></button>
-                                                                        </span>
-                                                                        <span class="ql-formats">
-                                                                            <button class="ql-list"
-                                                                                value="ordered"></button>
-                                                                            <button class="ql-list"
-                                                                                value="bullet"></button>
-                                                                        </span>
-                                                                        <span class="ql-formats">
-                                                                            <button class="ql-link"></button>
-                                                                            <button class="ql-image"></button>
-                                                                            <button class="ql-video"></button>
-                                                                        </span>
-                                                                        <span class="ql-formats">
-                                                                            <button class="ql-formula"></button>
-                                                                            <button class="ql-code-block"></button>
-                                                                        </span>
-                                                                        <span class="ql-formats">
-                                                                            <button class="ql-clean"></button>
-                                                                        </span>
-                                                                    </div>
-                                                                    <div class="editor" style="height: 100px;">
+                                                                <div id="snow-container">
+                                                                    <div class="editor" style="height: 100px;" id="detail">
 
                                                                     </div>
                                                                 </div>
@@ -273,10 +163,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                 </div>
-
-
                                             </div>
                                         </form>
                                     </div>
@@ -290,6 +177,40 @@
             </div>
         </div>
     </div>
+
+    <div aria-hidden="true" aria-labelledby="myModalLabel16" class="modal fade text-left" data-backdrop="static"
+         id="announcement_detail_modal" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="announcement_detail_modal_title"></h4>
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row" id="image_modal_row">
+                                            <p id="detail_detail"></p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Basic Floating Label Form section end -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </th:block>
 
 <th:block layout:fragment="contentJs">
@@ -322,6 +243,8 @@
         <script th:src="@{/app-assets/js/scripts/forms/form-quill-editor.js}"></script>
 
     <!------------------------------------------------------  Quill Editor Js - End -------------------------------------------------------->
+
+    <script th:src="@{/mainJs/announcement.js}"></script>
 
 </th:block>
 

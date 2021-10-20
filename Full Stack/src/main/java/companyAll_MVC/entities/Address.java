@@ -29,3 +29,4 @@ public class Address extends AuditEntity<String>{
     @NotEmpty(message = "Invalid address detail! (empty)")
     private String detail;
 }
+
