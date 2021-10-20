@@ -344,6 +344,7 @@ public class ProductAddController {
     public Map<Check,Object> productAdd(@RequestBody @Valid Product p, BindingResult bindingResult){
         Map<Check,Object> map = new LinkedHashMap<>();
         List<ProductCategory> productCategoryList = new ArrayList<>();
+        List<Integer> productCategoryIdList = new ArrayList<>();
         if(!bindingResult.hasErrors()){
             if(p.getId() != null){
                 p.setDate(Util.getDateFormatter());
@@ -371,7 +372,15 @@ public class ProductAddController {
                         elasticProductNew.setName(product.getName());
                         elasticProductNew.setDescription(product.getDescription());
                         elasticProductNew.setPrice(product.getPrice());
+                        elasticProductNew.setDetails(product.getDetails());
                         elasticProductNew.setStatus(product.getStatus());
+                        elasticProductNew.setCampaignStatus(product.getCampaignStatus());
+                        elasticProductNew.setCampaignName(product.getCampaignName());
+                        elasticProductNew.setCampaignDetails(product.getCampaignDetails());
+                        productCategoryList.forEach(item->{
+                            productCategoryIdList.add(item.getId());
+                        });
+                        elasticProductNew.setProductCategoryId(productCategoryIdList);
                         elasticProductRepository.save(elasticProductNew);
                         //ElasticSearch and SQL DB Update - End
                         map.put(Check.status,true);
@@ -384,6 +393,7 @@ public class ProductAddController {
             }else{
                 try {
                     p.setDate(Util.getDateFormatter());
+                    p.setTotalLike(0.0); //Sadece yeni kayıtta default değeri sıfırdır.
                     p.getProductCategories().forEach(item -> {
                         Optional<ProductCategory> optionalProductCategory = productCategoryRepository.findById(item.getId());
                         if(optionalProductCategory.isPresent()){
@@ -403,7 +413,16 @@ public class ProductAddController {
                     elasticProduct.setName(product.getName());
                     elasticProduct.setDescription(product.getDescription());
                     elasticProduct.setPrice(product.getPrice());
+                    elasticProduct.setDetails(product.getDetails());
                     elasticProduct.setStatus(product.getStatus());
+                    elasticProduct.setTotalLike(product.getTotalLike()); //Sadece yeni kayıtta default değeri sıfırdır.
+                    elasticProduct.setCampaignStatus(product.getCampaignStatus());
+                    elasticProduct.setCampaignName(product.getCampaignName());
+                    elasticProduct.setCampaignDetails(product.getCampaignDetails());
+                    productCategoryList.forEach(item->{
+                        productCategoryIdList.add(item.getId());
+                    });
+                    elasticProduct.setProductCategoryId(productCategoryIdList);
                     elasticProductRepository.save(elasticProduct);
                 } catch (Exception e) {
                     map.put(Check.status,false);
@@ -515,8 +534,8 @@ public class ProductAddController {
     @DeleteMapping("/chosenImages/delete/{images}")
     public Map<Check,Object> deleteChosenImage(@PathVariable List<String> images){
         Map<Check,Object> map = new LinkedHashMap<>();
-        System.out.println(images);
-        System.out.println(chosenId);
+        //System.out.println(images);
+        //System.out.println(chosenId);
         try {
             if(images.size() > 0){
                 for (int i = 0; i < images.size() ; i++) {
@@ -525,7 +544,13 @@ public class ProductAddController {
                     File file = new File(Util.UPLOAD_DIR_PRODUCTS + chosenId + "/" + images.get(i));
                     file.delete();
                 }
-
+                //Elasticsearch update images - Start
+                Product product = productRepository.findById(chosenId).get();
+                System.out.println("Id ye ait resimler " + product.getFileName());
+                ElasticProduct elasticProduct = elasticProductRepository.findById(chosenId).get();
+                elasticProduct.setFileName(product.getFileName());
+                elasticProductRepository.save(elasticProduct);
+                //Elasticsearch update images - End
                 map.put(Check.status,true);
                 map.put(Check.message,"The selected pictures have been deleted!");
             }else{
@@ -554,19 +579,11 @@ public class ProductAddController {
                 map.put(Check.status,true);
                 map.put(Check.message, "Product change status operation is successful!");
                 Product p = optionalProduct.get();
-                ElasticProduct elasticProduct = elasticProductRepository.findById(p.getId()).get();
-                elasticProductRepository.deleteById(elasticProduct.getId());
                 p.setStatus("Unavailable");
                 Product product = productRepository.saveAndFlush(p);
-                ElasticProduct elasticProductNew = new ElasticProduct();
-                elasticProductNew.setProductId(product.getId());
-                elasticProductNew.setDate(product.getDate());
-                elasticProductNew.setNo(product.getNo());
-                elasticProductNew.setName(product.getName());
-                elasticProductNew.setDescription(product.getDescription());
-                elasticProductNew.setPrice(product.getPrice());
-                elasticProductNew.setStatus(product.getStatus());
-                elasticProductRepository.save(elasticProductNew);
+                ElasticProduct elasticProduct = elasticProductRepository.findById(p.getId()).get();
+                elasticProduct.setStatus(product.getStatus());
+                elasticProductRepository.save(elasticProduct);
                 //ElasticSearch and SQL DB Update - End
             }else {
                 map.put(Check.status,false);
@@ -594,19 +611,11 @@ public class ProductAddController {
                 map.put(Check.status,true);
                 map.put(Check.message, "Product change status operation is successful!");
                 Product p = optionalProduct.get();
-                ElasticProduct elasticProduct = elasticProductRepository.findById(p.getId()).get();
-                elasticProductRepository.deleteById(elasticProduct.getId());
                 p.setStatus("Available");
                 Product product = productRepository.saveAndFlush(p);
-                ElasticProduct elasticProductNew = new ElasticProduct();
-                elasticProductNew.setProductId(product.getId());
-                elasticProductNew.setDate(product.getDate());
-                elasticProductNew.setNo(product.getNo());
-                elasticProductNew.setName(product.getName());
-                elasticProductNew.setDescription(product.getDescription());
-                elasticProductNew.setPrice(product.getPrice());
-                elasticProductNew.setStatus(product.getStatus());
-                elasticProductRepository.save(elasticProductNew);
+                ElasticProduct elasticProduct = elasticProductRepository.findById(p.getId()).get();
+                elasticProduct.setStatus(product.getStatus());
+                elasticProductRepository.save(elasticProduct);
                 //ElasticSearch and SQL DB Update - End
             }else {
                 map.put(Check.status,false);
@@ -684,6 +693,11 @@ public class ProductAddController {
                 }
                 product.setFileName(imageNameList);
                 productRepository.saveAndFlush(product);
+                //Elasticsearch save Images - Start
+                ElasticProduct elasticProduct = elasticProductRepository.findById(product.getId()).get();
+                elasticProduct.setFileName(imageNameList);
+                elasticProductRepository.save(elasticProduct);
+                //Elasticsearch save Images - End
             }else {
                 errorMessage = "Lütfen resim seçiniz!";
                 System.err.println(errorMessage);
@@ -734,6 +748,8 @@ public class ProductAddController {
         try {
             if(productList.size() > 0){
                 productList.forEach(item -> {
+                    List<String> imageList = new ArrayList<>();
+                    List<Integer> categoryId = new ArrayList<>();
                     //ElasticSearch Save
                     ElasticProduct elasticProduct = new ElasticProduct();
                     elasticProduct.setProductId(item.getId());
@@ -742,7 +758,20 @@ public class ProductAddController {
                     elasticProduct.setName(item.getName());
                     elasticProduct.setDescription(item.getDescription());
                     elasticProduct.setPrice(item.getPrice());
+                    elasticProduct.setDetails(item.getDetails());
                     elasticProduct.setStatus(item.getStatus());
+                    elasticProduct.setTotalLike(item.getTotalLike());
+                    elasticProduct.setCampaignStatus(item.getCampaignStatus());
+                    elasticProduct.setCampaignName(item.getCampaignName());
+                    elasticProduct.setCampaignDetails(item.getCampaignDetails());
+                    item.getFileName().forEach(it -> {
+                        imageList.add(it);
+                    });
+                    item.getProductCategories().forEach(it->{
+                        categoryId.add(it.getId());
+                    });
+                    elasticProduct.setFileName(imageList);
+                    elasticProduct.setProductCategoryId(categoryId);
                     elasticProductRepository.save(elasticProduct);
                 });
                 map.put(Check.status,true);

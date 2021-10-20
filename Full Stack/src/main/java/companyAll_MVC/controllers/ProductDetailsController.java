@@ -53,4 +53,14 @@ public class ProductDetailsController {
         return "productDetails";
     }
 
+    @ResponseBody
+    @GetMapping("/mostPopularProducts")
+    public Map<Check,Object> mostPopular(){
+        Map<Check,Object> map = new LinkedHashMap<>();
+        map.put(Check.status,true);
+        map.put(Check.message,"Most popular 5 products listing operations success!");
+        map.put(Check.result,productRepository.mostPopularFiveProducts());
+        return map;
+    }
+
 }

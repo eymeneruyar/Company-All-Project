@@ -7,6 +7,7 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @Document(indexName = "product")
@@ -29,9 +30,27 @@ public class ElasticProduct {
     private BigDecimal price;
 
     @Field(type = FieldType.Text)
+    private String details;
+
+    @Field(type = FieldType.Text)
     private String date;
 
     @Field(type = FieldType.Text)
     private String status;
+
+    private List<String> fileName;
+
+    private Double totalLike;
+
+    @Field(type = FieldType.Text)
+    private String campaignStatus; //yes or no
+
+    @Field(type = FieldType.Text)
+    private String campaignName;
+
+    @Field(type = FieldType.Text)
+    private String campaignDetails;
+
+    private List<Integer> productCategoryId;
 
 }

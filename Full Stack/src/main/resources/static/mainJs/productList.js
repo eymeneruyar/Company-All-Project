@@ -9,7 +9,7 @@ function categoryList(){
         dataType: "json",
         contentType : 'application/json; charset=utf-8',
         success: function (data){
-            console.log(data.result)
+            //console.log(data.result)
             for (let i = 0; i < data.result.length; i++) {
                 category = data.result[i]
                 $("#categoryFilter").append('<option value="' + category.id + '">' + category.name + '</option>')
@@ -44,12 +44,12 @@ function dynamicPaginationProductList(totalPage, size) {
         last: 'Last',
         startPage: 1,
         onPageClick: function (event, page) {
-            getAllProductsByCategoryAndPage(page,size,$('#categoryFilter').val())
-            /*if($('#searchProduct').val() === ""){
-                getAllProductsByPage(page, size);
+            //getAllProductsByCategoryAndPage(page,size,$('#categoryFilter').val())
+            if($('#searchProductList').val() === ""){
+                getAllProductsByCategoryAndPage(page, size,$('#categoryFilter').val());
             }else{
                 searchProduct(page,size,$('#searchProduct').val())
-            }*/
+            }
             //$('#firstLast1-content').text('You are on Page ' + page);
             $('.pagination').find('li').addClass('page-item');
             $('.pagination').find('a').addClass('page-link');
@@ -59,10 +59,10 @@ function dynamicPaginationProductList(totalPage, size) {
 function getAllProductsByCategoryAndPage(page,showNumber,categoryId){
 
     //var categoryId = $("#categoryFilter").val()
-    console.log("Category " + categoryId)
+    //console.log("Category " + categoryId)
 
     $.ajax({
-        url:"./productList/listByCategoryId/" + categoryId + "/" + showNumber + "/" + (page-1),
+        url:"./productList/listByCategoryIdElasticsearch/" + categoryId + "/" + showNumber + "/" + (page-1),
         type: "get",
         dataType: "json",
         contentType : 'application/json; charset=utf-8',
@@ -92,29 +92,23 @@ function createProductCard(data){
         globalProductArr = data.result
         const itm = data.result[i]
         let price = priceFormatter(itm.price)
-        console.log(price)
+        //console.log(price)
         html += `<div class="card ecommerce-card">
                      <div class="item-img text-center">
-                         <a href="/productDetail/${itm.id}">
-                             <img class="img-fluid card-img-top" src="/uploadImages/_products/${itm.id}/${itm.fileName[0]}" alt="img-placeholder" /></a>
+                         <a href="/productDetail/${itm.productId}">
+                             <img class="img-fluid card-img-top" src="/uploadImages/_products/${itm.productId}/${itm.fileName[0]}" alt="img-placeholder" /></a>
                      </div>
                      <div class="card-body">
                          <div class="item-wrapper">
-                             <div class="item-rating">
-                                 <ul class="unstyled-list list-inline">
-                                     <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                     <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                     <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                     <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                     <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
-                                 </ul>
-                             </div>
+                                 
+                                 <div id="${itm.productId}" class="read-only-ratings-${itm.productId}" data-rateyo-read-only="true"></div>
+                                
                              <div>
                                  <h6 class="item-price">${price} TL</h6>
                              </div>
                          </div>
                          <h6 class="item-name">
-                             <a class="text-body" href="/productDetail/${itm.id}">${itm.name} ${itm.description}</a>
+                             <a class="text-body" href="/productDetail/${itm.productId}">${itm.name} ${itm.description}</a>
                              <span class="card-text item-company">By <a href="javascript:void(0)" class="company-name">${itm.name}</a></span>
                          </h6>
                          <p class="card-text item-description">
@@ -127,7 +121,7 @@ function createProductCard(data){
                                  <h4 class="item-price">$339.99</h4>
                              </div>
                          </div>
-                         <a href="/productDetail/${itm.id}" class="btn btn-primary btn-cart">
+                         <a href="/productDetail/${itm.productId}" class="btn btn-primary btn-cart">
                              <i data-feather='info'></i>
                              <span class="add-to-cart">More Details</span>
                          </a>
@@ -135,6 +129,20 @@ function createProductCard(data){
                  </div>`
     }
     $("#products").html(html)
+
+    // Ratings To CustomerByProduct
+    data.result.forEach(itm => {
+        var isRtl = $('html').attr("data-textdirection") === 'rtl',
+            readOnlyRatings = $(`.read-only-ratings-${itm.productId}`)
+
+        if (readOnlyRatings.length) {
+            readOnlyRatings.rateYo({
+                rating: itm.totalLike,
+                rtl: isRtl,
+                starWidth: "15px"
+            });
+        }
+    })
 
 }
 
@@ -148,5 +156,46 @@ $('#categoryFilter').change(function(){
     getAllProductsByCategoryAndPage(1, 9,parseInt($(this).val()));
     console.log("Category change Id " + parseInt($(this).val()));
 });
-getAllProductsByCategoryAndPage(1,9, 3)
+getAllProductsByCategoryAndPage(1,9, 1)
 //------------------------------------ Product List Pagination - End ----------------------------------------//
+
+//------------------------------------ Product List Search - Start ----------------------------------------//
+function searchProduct(page,showPageSize,searchData){
+
+    $.ajax({
+        url: './productList/search/' + searchData + "/" + (page-1) + "/" + showPageSize,
+        type: 'get',
+        dataType: "json",
+        contentType : 'application/json; charset=utf-8',
+        success: function (data) {
+            createProductCard(data)
+            dynamicPaginationProductList(data.totalPage,showPageSize)
+        },
+        error: function (err) {
+            Swal.fire({
+                title: "Error!",
+                text: "An error occurred during the operation!",
+                icon: "error",
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            });
+            console.log(err)
+        }
+    })
+}
+
+$('#searchProductList').keyup( function (event) {
+    event.preventDefault();
+    const searchData = $(this).val()
+    if(searchData !== ""){
+        //$("#productTable > tr" ).remove()
+        //$('#content_pagination').twbsPagination('destroy');
+        searchProduct(1,9,searchData)
+    }else{
+        $('#pagination_productList').twbsPagination('destroy');
+        getAllProductsByCategoryAndPage(1, 9,1);
+    }
+})
+//------------------------------------ Product List Search - End ------------------------------------------//

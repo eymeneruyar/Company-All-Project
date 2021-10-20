@@ -49,9 +49,11 @@ public class Product extends AuditEntity<String>{
     @Pattern(regexp = "Available|Unavailable", message = "Product status must be either 'Available' or 'Unavailable'")
     private String status;
 
-
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> fileName;
+
+    @Column(columnDefinition = "Double")
+    private Double totalLike;
 
     @NotNull(message = "Status is not null!")
     @NotEmpty(message = "Status is not empty!")

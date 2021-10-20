@@ -19,6 +19,10 @@
 
 <!------------------------------------------------------ Products List CSS - End   -------------------------------------------------------->
 
+<!------------------------------------------------------ Ratings Star CSS - Start   -------------------------------------------------------->
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/extensions/jquery.rateyo.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/extensions/ext-component-ratings.css}">
+<!------------------------------------------------------ Ratings Star CSS - End   ---------------------------------------------------------->
 
 </head>
 
@@ -71,7 +75,7 @@
                         <div class="row mt-1">
                             <div class="col-sm-12">
                                 <div class="input-group input-group-merge">
-                                    <input type="text" class="form-control search-product" id="productSearch" placeholder="Search Product" aria-label="Search..." aria-describedby="shop-search" />
+                                    <input type="text" class="form-control search-product" id="searchProductList" placeholder="Search Product" aria-label="Search..." aria-describedby="shop-search" />
                                     <div class="input-group-append">
                                         <span class="input-group-text"><i data-feather="search" class="text-muted"></i></span>
                                     </div>
@@ -124,11 +128,24 @@
                                                 <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
                                                 <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
                                                 <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li>& up</li>
+                                            </ul>
+                                        </a>
+                                        <div class="stars-received" th:text="${totalProduct_FiveToFive}"></div>
+                                    </div>
+                                    <div class="ratings-list">
+                                        <a href="javascript:void(0)">
+                                            <ul class="unstyled-list list-inline">
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
                                                 <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
                                                 <li>& up</li>
                                             </ul>
                                         </a>
-                                        <div class="stars-received">160</div>
+                                        <div class="stars-received" th:text="${totalProduct_FourToFive}"></div>
                                     </div>
                                     <div class="ratings-list">
                                         <a href="javascript:void(0)">
@@ -141,7 +158,7 @@
                                                 <li>& up</li>
                                             </ul>
                                         </a>
-                                        <div class="stars-received">176</div>
+                                        <div class="stars-received" th:text="${totalProduct_ThreeToFour}"></div>
                                     </div>
                                     <div class="ratings-list">
                                         <a href="javascript:void(0)">
@@ -154,7 +171,7 @@
                                                 <li>& up</li>
                                             </ul>
                                         </a>
-                                        <div class="stars-received">291</div>
+                                        <div class="stars-received" th:text="${totalProduct_TwoToThree}"></div>
                                     </div>
                                     <div class="ratings-list">
                                         <a href="javascript:void(0)">
@@ -167,16 +184,23 @@
                                                 <li>& up</li>
                                             </ul>
                                         </a>
-                                        <div class="stars-received">190</div>
+                                        <div class="stars-received" th:text="${totalProduct_OneToTwo}"></div>
+                                    </div>
+                                    <div class="ratings-list">
+                                        <a href="javascript:void(0)">
+                                            <ul class="unstyled-list list-inline">
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li>& up</li>
+                                            </ul>
+                                        </a>
+                                        <div class="stars-received" th:text="${totalProduct_ZeroToOne}"></div>
                                     </div>
                                 </div>
                                 <!-- Rating ends -->
-
-                                <!-- Clear Filters Starts -->
-                                <div id="clear-filters">
-                                    <button type="button" class="btn btn-block btn-primary">Clear All Filters</button>
-                                </div>
-                                <!-- Clear Filters Ends -->
                             </div>
                         </div>
                     </div>
@@ -215,7 +239,12 @@
         <script th:src="@{/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js}"></script>
     <!------------------------------------------------------ Pagination Js - End ---------------------------------------------------------->
 
-        <script th:src="@{/mainJs/productList.js}"></script>
+    <!------------------------------------------------------ Ratings Star CSS - Start   -------------------------------------------------------->
+        <script th:src="@{/app-assets/vendors/js/extensions/jquery.rateyo.min.js}"></script>
+    <!------------------------------------------------------ Ratings Star CSS - End   ---------------------------------------------------------->
+
+
+    <script th:src="@{/mainJs/productList.js}"></script>
 
 </th:block>
 

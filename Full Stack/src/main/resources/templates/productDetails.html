@@ -26,6 +26,12 @@
     <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/extensions/ext-component-swiper.css}">
 <!--------------------------------------------- Swiper CSS - End ----------------------------------------------->
 
+<!------------------------------------------------------ Ratings Star CSS - Start   -------------------------------------------------------->
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/extensions/jquery.rateyo.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/extensions/ext-component-ratings.css}">
+<!------------------------------------------------------ Ratings Star CSS - End   ---------------------------------------------------------->
+
+
 </head>
 
 <!-- BEGIN: Body-->
@@ -68,13 +74,6 @@
                                 <span class="card-text item-company">By <a href="javascript:void(0)" class="company-name" th:text="${detail.name}"></a></span>
                                 <div class="ecommerce-details-price d-flex flex-wrap mt-1">
                                     <h4 class="item-price mr-1" th:text="${priceFormat} + ' TL'"></h4>
-                                    <ul class="unstyled-list list-inline pl-1 border-left">
-                                        <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                        <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                        <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                        <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                        <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
-                                    </ul>
                                 </div>
                                 <th:block th:if="${detail.status == 'Available' }">
                                     <p class="card-text">Available - <span class="text-success">In stock</span></p>
@@ -92,35 +91,7 @@
                                     </li>
                                 </ul>
                                 <hr>
-                                <div class="d-flex flex-column flex-sm-row pt-1">
-                                    <a href="javascript:void(0)" class="btn btn-primary btn-cart mr-0 mr-sm-1 mb-1 mb-sm-0">
-                                        <i data-feather="shopping-cart" class="mr-50"></i>
-                                        <span class="add-to-cart">Add to cart</span>
-                                    </a>
-                                    <a href="javascript:void(0)" class="btn btn-outline-secondary btn-wishlist mr-0 mr-sm-1 mb-1 mb-sm-0">
-                                        <i data-feather="heart" class="mr-50"></i>
-                                        <span>Wishlist</span>
-                                    </a>
-                                    <div class="btn-group dropdown-icon-wrapper btn-share">
-                                        <button type="button" class="btn btn-icon hide-arrow btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i data-feather="share-2"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <a href="javascript:void(0)" class="dropdown-item">
-                                                <i data-feather="facebook"></i>
-                                            </a>
-                                            <a href="javascript:void(0)" class="dropdown-item">
-                                                <i data-feather="twitter"></i>
-                                            </a>
-                                            <a href="javascript:void(0)" class="dropdown-item">
-                                                <i data-feather="youtube"></i>
-                                            </a>
-                                            <a href="javascript:void(0)" class="dropdown-item">
-                                                <i data-feather="instagram"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -133,113 +104,9 @@
                         <div class="mt-4 mb-2 text-center">
                             <h4>Most Popular Products</h4>
                         </div>
-                        <div class="swiper-responsive-breakpoints swiper-container px-4 py-2">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <a href="javascript:void(0)">
-                                        <div class="item-heading">
-                                            <h5 class="text-truncate mb-0">Apple Watch Series 6</h5>
-                                            <small class="text-body">by Apple</small>
-                                        </div>
-                                        <div class="img-container w-50 mx-auto py-75">
-                                            <img src="../../../app-assets/images/elements/apple-watch.png" class="img-fluid" alt="image" />
-                                        </div>
-                                        <div class="item-meta">
-                                            <ul class="unstyled-list list-inline mb-25">
-                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
-                                            </ul>
-                                            <p class="card-text text-primary mb-0">$399.98</p>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide">
-                                    <a href="javascript:void(0)">
-                                        <div class="item-heading">
-                                            <h5 class="text-truncate mb-0">Apple MacBook Pro - Silver</h5>
-                                            <small class="text-body">by Apple</small>
-                                        </div>
-                                        <div class="img-container w-50 mx-auto py-50">
-                                            <img src="../../../app-assets/images/elements/macbook-pro.png" class="img-fluid" alt="image" />
-                                        </div>
-                                        <div class="item-meta">
-                                            <ul class="unstyled-list list-inline mb-25">
-                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
-                                            </ul>
-                                            <p class="card-text text-primary mb-0">$2449.49</p>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide">
-                                    <a href="javascript:void(0)">
-                                        <div class="item-heading">
-                                            <h5 class="text-truncate mb-0">Apple HomePod (Space Grey)</h5>
-                                            <small class="text-body">by Apple</small>
-                                        </div>
-                                        <div class="img-container w-50 mx-auto py-75">
-                                            <img src="../../../app-assets/images/elements/homepod.png" class="img-fluid" alt="image" />
-                                        </div>
-                                        <div class="item-meta">
-                                            <ul class="unstyled-list list-inline mb-25">
-                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
-                                            </ul>
-                                            <p class="card-text text-primary mb-0">$229.29</p>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide">
-                                    <a href="javascript:void(0)">
-                                        <div class="item-heading">
-                                            <h5 class="text-truncate mb-0">Magic Mouse 2 - Black</h5>
-                                            <small class="text-body">by Apple</small>
-                                        </div>
-                                        <div class="img-container w-50 mx-auto py-75">
-                                            <img src="../../../app-assets/images/elements/magic-mouse.png" class="img-fluid" alt="image" />
-                                        </div>
-                                        <div class="item-meta">
-                                            <ul class="unstyled-list list-inline mb-25">
-                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                            </ul>
-                                            <p class="card-text text-primary mb-0">$90.98</p>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide">
-                                    <a href="javascript:void(0)">
-                                        <div class="item-heading">
-                                            <h5 class="text-truncate mb-0">iPhone 12 Pro</h5>
-                                            <small class="text-body">by Apple</small>
-                                        </div>
-                                        <div class="img-container w-50 mx-auto py-75">
-                                            <img src="../../../app-assets/images/elements/iphone-x.png" class="img-fluid" alt="image" />
-                                        </div>
-                                        <div class="item-meta">
-                                            <ul class="unstyled-list list-inline mb-25">
-                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
-                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
-                                            </ul>
-                                            <p class="card-text text-primary mb-0">$1559.99</p>
-                                        </div>
-                                    </a>
-                                </div>
+                        <div class="swiper-responsive-breakpoints swiper-container px-4 py-2" >
+                            <div class="swiper-wrapper" id="mostPopularFiveProduct">
+
                             </div>
                             <!-- Add Arrows -->
                             <div class="swiper-button-next"></div>
@@ -283,6 +150,12 @@
     <script th:src="@{/app-assets/vendors/js/extensions/swiper-bundle.min.js}"></script>
     <script th:src="@{/app-assets/js/scripts/extensions/ext-component-swiper.js}"></script>
 <!---------------------------------------------------------- Swiper JS - End ------------------------------------------------------------>
+
+<!------------------------------------------------------ Ratings Star CSS - Start   -------------------------------------------------------->
+    <script th:src="@{/app-assets/vendors/js/extensions/jquery.rateyo.min.js}"></script>
+<!------------------------------------------------------ Ratings Star CSS - End   ---------------------------------------------------------->
+
+    <script th:src="@{/mainJs/productDetails.js}"></script>
 
 </th:block>
 
