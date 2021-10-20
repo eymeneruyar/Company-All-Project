@@ -2,10 +2,14 @@ package companyAll_MVC.services;
 
 import companyAll_MVC.entities.Role;
 import companyAll_MVC.entities.User;
+import companyAll_MVC.entities.UserActivity;
+import companyAll_MVC.repositories._jpa.UserActivityRepository;
 import companyAll_MVC.repositories._jpa.UserRepository;
 import companyAll_MVC.utils.Util;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,8 +19,14 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.naming.AuthenticationException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +36,10 @@ import java.util.Optional;
 public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDetailsService, LogoutSuccessHandler {
 
     final UserRepository userRepository;
-    public UserService(UserRepository userRepository) {
+    final UserActivityRepository userActivityRepository;
+    public UserService(UserRepository userRepository, UserActivityRepository userActivityRepository) {
         this.userRepository = userRepository;
+        this.userActivityRepository = userActivityRepository;
     }
 
     //Security Login
@@ -80,6 +92,48 @@ public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDe
 
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    // User Activity info
+    public UserActivity info(HttpServletRequest req, HttpServletResponse res, UserActivity userActivity) throws IOException {
+
+        Authentication aut = SecurityContextHolder.getContext().getAuthentication();
+        String email = aut.getName(); // username
+        if (email != null) {
+            System.out.println(email);
+        }
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+                .getRequestAttributes()).getRequest();
+        String ip = request.getRemoteAddr();
+
+        String session = req.getSession().getId();
+
+        Optional<User> user = userRepository.findByEmailIgnoreCase(email);
+        if (user.isPresent()) {
+            userActivity.setName(user.get().getName());
+            userActivity.setSurname(user.get().getSurname());
+            String roles = "";
+            for (Role item : user.get().getRoles()) {
+                roles += item.getName() + ", ";
+            }
+            if (roles.length() > 0) {
+                roles = roles.substring(0, roles.length() - 2);
+            }
+            userActivity.setRole(roles);
+        }
+
+        userActivity.setEmail(email);
+        userActivity.setSessionId(session);
+        userActivity.setIp(ip);
+
+        userActivity.setUrl(req.getRequestURI());
+        userActivity.setDate(LocalDateTime.now());
+
+        userActivityRepository.save(userActivity);
+
+        return userActivity;
+
     }
 
 }

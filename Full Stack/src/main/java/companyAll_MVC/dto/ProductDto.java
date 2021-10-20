@@ -68,11 +68,9 @@ public class ProductDto {
     //Last added 10 product
     public Map<Check,Object> addedLast10product(){
         Map<Check,Object> map = new LinkedHashMap<>();
-        List <ElasticProduct> elasticProductList = elasticProductRepository.findAllProducts();
-        System.out.println(elasticProductList);
-        System.out.println(elasticProductList.size());
-        int size = elasticProductList.size();
-        //elasticProductRepository.findElasticProductsBySizeBetween(size-11,size-1);
+        map.put(Check.status,true);
+        map.put(Check.message,"Last added 10 products listing operation success!");
+        map.put(Check.result,elasticProductRepository.findElasticProductsBySizeBetween());
         return map;
     }
 
