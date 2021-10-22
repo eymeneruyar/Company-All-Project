@@ -30,6 +30,11 @@ public interface ElasticProductRepository extends ElasticsearchRepository<Elasti
     @Query("{\"bool\":{\"must\":[{\"match_all\":{}}],\"must_not\":[],\"should\":[]}}")
     List<ElasticProduct> findAllProducts();
 
-    //List<ElasticProduct> findElasticProductsBySizeBetween(Integer size1,Integer size2);
+    @Query("{\"bool\":{\"must\":[{\"match_all\":{}}],\"must_not\":[],\"should\":[]}},\"from\":0,\"size\":10,\"sort\":{ \"productId\": { \"order\": \"desc\" } },\"aggs\":{}")
+    List<ElasticProduct> findElasticProductsBySizeBetween();
+
+    Page<ElasticProduct> findByOrderByProductIdDesc(Pageable pageable);
+
+    List<ElasticProduct> findByProductCategoryIdEquals(Integer categoryId);
 
 }

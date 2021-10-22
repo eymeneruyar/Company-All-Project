@@ -53,11 +53,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //Rest Api Configuration
                 .antMatchers("/api/product/**").hasRole("ADMIN")
                 .antMatchers("/api/likes/**").hasRole("ADMIN")
+                .antMatchers("/api/dashboard/**").hasRole("ADMIN")
 
                 .antMatchers("/static/**").permitAll()
                 .antMatchers("/images/**").permitAll()
                 .antMatchers("/templates/**").permitAll()
                 .antMatchers("/app-assets/**").permitAll()
+                .antMatchers("/assets/**").permitAll()
                 .antMatchers("/homePage/**").permitAll()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/mainJs/**").permitAll()

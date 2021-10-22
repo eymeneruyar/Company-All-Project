@@ -39,11 +39,11 @@
                                 <div class="buttons">
                                     <label>
                                         Show
-                                        <select class="custom-select form-control">
+                                        <select class="custom-select form-control" id="showLikesCustomerSize">
+                                            <option value="5">5</option>
                                             <option value="10">10</option>
                                             <option value="25">25</option>
                                             <option value="50">50</option>
-                                            <option value="100">100</option>
                                         </select>
                                     </label>
                                 </div>
@@ -55,7 +55,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="buttons">
-                                    <input type="text" class="form-control" id="basicInput" placeholder="Search">
+                                    <input type="text" class="form-control" id="searchLikesCustomer" placeholder="Search">
                                 </div>
                             </div>
                         </div>
@@ -68,32 +68,31 @@
                                     <th>Customer Name</th>
                                     <th>Product Name</th>
                                     <th>Rating</th>
-                                    <th>Date</th>
                                     <th>Actions</th>
 
                                 </tr>
                             </thead>
-                            <tbody style="font-size: 14px;">
+                            <tbody style="font-size: 14px;" id="totalLikeTableBody">
                                 <tr>
-                                    <td>1</td>
-                                    <td>Event Transfer</td>
-                                    <td>Active</td>
-                                    <td><div class="read-only-ratings" data-rateyo-read-only="true"></div></td>
-                                    <td>09-10-2021</td>
-                                    <td>
-                                        <button type="button"
-                                                                class="btn btn-danger"
-                                                                data-toggle="dropdown">
-                                                                <i data-feather='trash-2'></i>
-                                                            </button>
-                                        </td>
-                                </tr>
+<!--                                    <td>1</td>-->
+<!--                                    <td>Event Transfer</td>-->
+<!--                                    <td>Active</td>-->
+<!--                                    <td><div class="read-only-ratings" data-rateyo-read-only="true"></div></td>-->
+<!--                                    <td>09-10-2021</td>-->
+<!--                                    <td>-->
+<!--                                        <button type="button"-->
+<!--                                                                class="btn btn-danger"-->
+<!--                                                                data-toggle="dropdown">-->
+<!--                                                                <i data-feather='trash-2'></i>-->
+<!--                                                            </button>-->
+<!--                                        </td>-->
+<!--                                </tr>-->
 
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <ul class="pagination firstLast1-links justify-content-end "></ul>
+                <ul class="pagination firstLast1-links justify-content-end " id="pagination_likesCustomer"></ul>
             </div>
         </div>
 
@@ -108,10 +107,10 @@
                                     <label>
                                         Show
                                         <select class="custom-select form-control">
+                                            <option value="5">5</option>
                                             <option value="10">10</option>
                                             <option value="25">25</option>
                                             <option value="50">50</option>
-                                            <option value="100">100</option>
                                         </select>
                                     </label>
                                 </div>
@@ -138,20 +137,13 @@
 
                                 </tr>
                             </thead>
-                            <tbody style="font-size: 14px;">
-                                <tr>
-                                    <td>1</td>
-                                    <td>Event Transfer</td>
-                                    <td>
-                                        <div class="read-only-ratings" data-rateyo-read-only="true"></div>
-                                    </td>
-                                </tr>
+                            <tbody style="font-size: 14px;" id="productLikeTableBody">
 
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <ul class="pagination firstLast1-links justify-content-end "></ul>
+                <ul class="pagination firstLast1-links justify-content-end " id="pagination_likesProduct"></ul>
             </div>
         </div>
 
@@ -173,7 +165,6 @@
         <script th:src="@{/app-assets/vendors/js/editors/quill/quill.min.js}"></script>
         <script th:src="@{/app-assets/js/scripts/forms/form-quill-editor.js}"></script>
         <script th:src="@{/app-assets/vendors/js/extensions/jquery.rateyo.min.js}"></script>
-        <script th:src="@{/app-assets/js/scripts/extensions/ext-component-ratings.js}"></script>
     <!------------------------------------------------------ Editor Js - End -------------------------------------------------------->
 
     <!------------------------------------------------------ Pagination Js - Start -------------------------------------------------------->
@@ -181,6 +172,8 @@
         <script th:src="@{/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js}"></script>
         <script th:src="@{/app-assets/js/scripts/pagination/components-pagination.js}"></script>
     <!------------------------------------------------------ Pagination Js - End ---------------------------------------------------------->
+    <script th:src="@{/mainJs/likes.js}"></script>
+
 </th:block>
 
 

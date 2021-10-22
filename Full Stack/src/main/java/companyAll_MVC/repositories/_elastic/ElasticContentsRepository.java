@@ -1,6 +1,7 @@
 package companyAll_MVC.repositories._elastic;
 
 import companyAll_MVC.documents.ElasticContents;
+import companyAll_MVC.documents.ElasticLikes;
 import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
@@ -21,5 +22,8 @@ public interface ElasticContentsRepository extends ElasticsearchRepository<Elast
 
     @Query("{\"bool\":{\"must\":[{\"term\":{\"contentsId\":\"?0\"}}],\"must_not\":[],\"should\":[]}}")
     Optional<ElasticContents> findById(Integer contentsId);
+
+    @Query("{\"bool\":{\"must\":[{\"match_all\":{}}],\"must_not\":[],\"should\":[]}}")
+    List<ElasticContents> allContents();
 
 }

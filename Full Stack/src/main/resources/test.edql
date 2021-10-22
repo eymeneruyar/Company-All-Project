@@ -1,0 +1,15 @@
+HOST http://localhost:9200/
+GET /product/_search
+
+{
+  "from": 0,
+  "size": 10,
+  "sort": [
+    {
+      "productId": {
+        "order": "desc"
+      }
+    }
+  ],
+  "aggs": {}
+}

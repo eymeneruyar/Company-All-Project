@@ -28,4 +28,5 @@ public interface ElasticAnnouncementRepository extends ElasticsearchRepository<E
             "{\"term\":{\"status\":\"?1\"}}" +
             "],\"must_not\":[]}}")
     Page<ElasticAnnouncement> searchByKeyAndStatus(String key, String status, Pageable pageable);
+
 }

@@ -27,4 +27,10 @@ public interface ElasticIndentRepository extends ElasticsearchRepository<Elastic
             "{\"term\":{\"pno\":\"?0\"}}," +
             "],\"must_not\":[]}}")
     Page<ElasticIndent> searchByKeyAndStatus(String key, String status, Pageable pageable);
+
+    @Query("{\"bool\":{\"must\":[{\"match_all\":{}}],\"must_not\":[],\"should\":[]}}")
+    List<ElasticIndent> allOrders();
+
+    Page<ElasticIndent> findAllByOrderByIidDesc(Pageable pageable);
+
 }

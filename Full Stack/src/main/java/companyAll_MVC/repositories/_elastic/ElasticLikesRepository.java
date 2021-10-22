@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
+import java.util.List;
+
 public interface ElasticLikesRepository extends ElasticsearchRepository<ElasticLikes,String> {
 
     @Query("{\"bool\":{\"must\":[{\"match_all\":{}}],\"must_not\":[],\"should\":[]}}")
@@ -13,5 +15,8 @@ public interface ElasticLikesRepository extends ElasticsearchRepository<ElasticL
 
     @Query("{\"bool\":{\"must\":[],\"must_not\":[],\"should\":[{\"prefix\":{\"customerName\":\"?0\"}},{\"prefix\":{\"productName\":\"?0\"}}]}}")
     Page<ElasticLikes> findBySearchData(String data, Pageable pageable);
+
+    @Query("{\"bool\":{\"must\":[{\"match_all\":{}}],\"must_not\":[],\"should\":[]}}")
+    List<ElasticLikes> allLikes();
 
 }

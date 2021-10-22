@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
 
@@ -17,9 +18,9 @@ public class AuditingListenerConfig {
             @Override
             public Optional<String> getCurrentAuditor() {
 
-                String uname = "Ali Bilmem";
-                //String uname = SecurityContextHolder.getContext().getAuthentication().getName()
-                // Security varsa SecurityContextHolder'dan username alınır.
+                //String uname = "Ali Bilmem";
+                String uname = SecurityContextHolder.getContext().getAuthentication().getName();
+                //Security varsa SecurityContextHolder'dan username alınır.
 
                 return Optional.ofNullable(uname);
             }

@@ -1,6 +1,7 @@
 package companyAll_MVC.repositories._elastic;
 
 import companyAll_MVC.documents.ElasticCustomer;
+import companyAll_MVC.documents.ElasticLikes;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.annotations.Query;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ElasticCustomerRepository extends ElasticsearchRepository<ElasticCustomer, String> {
+
     @Query("{\"bool\":{\"should\":[{\"match\":{\"status\":\"?0\"}}],\"must_not\":[]}}")
     List<ElasticCustomer> findAllByStatus(String status);
     @Query("{\"bool\":{\"should\":[{\"match\":{\"status\":\"?0\"}}],\"must_not\":[]}}")
@@ -28,6 +30,7 @@ public interface ElasticCustomerRepository extends ElasticsearchRepository<Elast
             "{\"term\":{\"status\":\"?1\"}}"+
             "],\"must_not\":[]}}")
     List<ElasticCustomer> searchByKeyAndStatus(String key, String status);
+
     @Query("{\"bool\":{\"should\":[{\"match\":{\"no\":\"?0\"}},{\"term\":{\"name\":\"?0\"}}, " +
             "{\"term\":{\"surname\":\"?0\"}}," +
             "{\"term\":{\"phone1\":\"?0\"}}," +
@@ -38,5 +41,8 @@ public interface ElasticCustomerRepository extends ElasticsearchRepository<Elast
             "{\"term\":{\"status\":\"?1\"}}" +
             "],\"must_not\":[]}}")
     Page<ElasticCustomer> searchByKeyAndStatus(String key, String status, Pageable pageable);
+
+    @Query("{\"bool\":{\"must\":[{\"match_all\":{}}],\"must_not\":[],\"should\":[]}}")
+    List<ElasticCustomer> allCustomers();
 
 }

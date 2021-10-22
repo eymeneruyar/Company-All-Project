@@ -16041,9 +16041,10 @@
       setTimeoutFunc(fn, 0);
     };
 
+
   Promise$1._unhandledRejectionFn = function _unhandledRejectionFn(err) {
     if (typeof console !== 'undefined' && console) {
-      console.warn('Possible Unhandled Promise Rejection:', err); // eslint-disable-line no-console
+      //console.warn('Possible Unhandled Promise Rejection:', err); // eslint-disable-line no-console
     }
   };
 

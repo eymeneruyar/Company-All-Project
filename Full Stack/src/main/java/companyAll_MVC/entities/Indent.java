@@ -24,11 +24,11 @@ public class Indent extends AuditEntity<String>{
     private String no;
 
     @OneToOne
-    @Valid
+    //@Valid
     private Customer customer;
 
     @OneToOne
-    @Valid
+    //@Valid
     private Product product;
 
     @NotNull(message = "Invalid indent date! (null)")

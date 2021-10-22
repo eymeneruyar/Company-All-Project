@@ -21,4 +21,6 @@ public interface ElasticProductCategoryRepository extends ElasticsearchRepositor
     @Query("{\"bool\":{\"must\":[],\"must_not\":[],\"should\":[{\"prefix\":{\"name\":\"?0\"}},{\"prefix\":{\"status\":\"?0\"}},{\"prefix\":{\"no\":\"?0\"}},{\"prefix\":{\"date\":\"?0\"}}]}}}")
     Page<ElasticProductCategory> findBySearchData(String data, Pageable pageable);
 
+    List<ElasticProductCategory> findAllByOrderByCategoryIdAsc();
+
 }

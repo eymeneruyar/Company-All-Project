@@ -45,7 +45,7 @@ public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDe
     //Security Login
     @Override
     public UserDetails loadUserByUsername(String email) {
-        System.out.println("Email: " + email);
+        //System.out.println("Email: " + email);
         UserDetails userDetails = null;
         Optional<User> userOptional = userRepository.findByEmailIgnoreCase(email);
         if(userOptional.isPresent()){
@@ -99,9 +99,6 @@ public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDe
 
         Authentication aut = SecurityContextHolder.getContext().getAuthentication();
         String email = aut.getName(); // username
-        if (email != null) {
-            System.out.println(email);
-        }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
                 .getRequestAttributes()).getRequest();
@@ -113,6 +110,7 @@ public class UserService extends SimpleUrlLogoutSuccessHandler implements UserDe
         if (user.isPresent()) {
             userActivity.setName(user.get().getName());
             userActivity.setSurname(user.get().getSurname());
+            userActivity.setImage(user.get().getProfileImage());
             String roles = "";
             for (Role item : user.get().getRoles()) {
                 roles += item.getName() + ", ";

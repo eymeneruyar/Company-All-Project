@@ -1,28 +1,25 @@
-package companyAll_MVC.controllers;
+package companyAll_MVC.dto;
 
 import companyAll_MVC.documents.ElasticIndent;
 import companyAll_MVC.documents.ElasticProduct;
-import companyAll_MVC.documents.ElasticProductCategory;
-import companyAll_MVC.entities.Announcement;
 import companyAll_MVC.repositories._elastic.*;
 import companyAll_MVC.repositories._jpa.AnnouncementRepository;
 import companyAll_MVC.utils.Check;
 import companyAll_MVC.utils.Statics;
-import companyAll_MVC.utils.Util;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-@Controller
-@RequestMapping("/dashboard")
-public class DashboardController {
+@Service
+public class DashboardDto {
 
     final ElasticLikesRepository elasticLikesRepository;
     final ElasticCustomerRepository elasticCustomerRepository;
@@ -32,7 +29,7 @@ public class DashboardController {
     final ElasticAnnouncementRepository elasticAnnouncementRepository;
     final ElasticProductCategoryRepository elasticProductCategoryRepository;
     final AnnouncementRepository announcementRepository;
-    public DashboardController(ElasticLikesRepository elasticLikesRepository, ElasticCustomerRepository elasticCustomerRepository, ElasticIndentRepository elasticIndentRepository, ElasticContentsRepository elasticContentsRepository, ElasticProductRepository elasticProductRepository, ElasticAnnouncementRepository elasticAnnouncementRepository, ElasticProductCategoryRepository elasticProductCategoryRepository, AnnouncementRepository announcementRepository) {
+    public DashboardDto(ElasticLikesRepository elasticLikesRepository, ElasticCustomerRepository elasticCustomerRepository, ElasticIndentRepository elasticIndentRepository, ElasticContentsRepository elasticContentsRepository, ElasticProductRepository elasticProductRepository, ElasticAnnouncementRepository elasticAnnouncementRepository, ElasticProductCategoryRepository elasticProductCategoryRepository, AnnouncementRepository announcementRepository) {
         this.elasticLikesRepository = elasticLikesRepository;
         this.elasticCustomerRepository = elasticCustomerRepository;
         this.elasticIndentRepository = elasticIndentRepository;
@@ -43,16 +40,7 @@ public class DashboardController {
         this.announcementRepository = announcementRepository;
     }
 
-    @GetMapping("")
-    public String dashboard(){
-        return "dashboard";
-    }
-
-    //News
-
-    //General Statics
-    @ResponseBody
-    @GetMapping("/generalStatics")
+    //General Statics Information
     public Map<Statics,Object> generalStatics(){
         Map<Statics,Object> map = new LinkedHashMap<>();
         map.put(Statics.status,true);
@@ -65,8 +53,6 @@ public class DashboardController {
     }
 
     //Last Added 6 Product
-    @ResponseBody
-    @GetMapping("/lastAddSixProduct")
     public Map<Statics,Object> lastAddSixProduct(){
         Map<Statics,Object> map = new LinkedHashMap<>();
         Pageable pageable = PageRequest.of(0,6);
@@ -77,9 +63,7 @@ public class DashboardController {
         return map;
     }
 
-    //Last Six Orders
-    @ResponseBody
-    @GetMapping("/lastSixOrder")
+    //Last Six Order
     public Map<Statics,Object> lastSixOrder(){
         Map<Statics,Object> map = new LinkedHashMap<>();
         Pageable pageable = PageRequest.of(0,6);
@@ -90,44 +74,8 @@ public class DashboardController {
         return map;
     }
 
-    //Category Info
-    @ResponseBody
-    @GetMapping("/productCategoryInfo/{stId}")
-    public Map<Check,Object> productCategoryInfo(@PathVariable String stId){
-        Map<Check,Object> map = new LinkedHashMap<>();
-        try {
-            int id = Integer.parseInt(stId);
-            Optional<ElasticProductCategory> productCategoryOptional = elasticProductCategoryRepository.findById(id);
-            if(productCategoryOptional.isPresent()){
-                map.put(Check.status,true);
-                map.put(Check.message,"Product category information listing operations success!");
-                map.put(Check.result,productCategoryOptional.get());
-            }else {
-                map.put(Check.status,false);
-                map.put(Check.message,"Product category is not found!");
-            }
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-        return map;
-    }
-
-    //All Categories
-    @ResponseBody
-    @GetMapping("/allProductCategories")
-    public Map<Check,Object> allProductCategories(){
-        Map<Check,Object> map = new LinkedHashMap<>();
-        List<ElasticProductCategory> elasticProductCategoryList = elasticProductCategoryRepository.findAllByOrderByCategoryIdAsc();
-        map.put(Check.status,true);
-        map.put(Check.message,"All Product category listing operations success!");
-        map.put(Check.result,elasticProductCategoryList);
-        return map;
-    }
-
     //Total product by Category Id
-    @ResponseBody
-    @GetMapping("/totalProductByCategoryId/{stId}")
-    public Map<Check,Object> totalProductByCategoryId(@PathVariable String stId){
+    public Map<Check,Object> totalProductByCategoryId(String stId){
         Map<Check,Object> map = new LinkedHashMap<>();
         try {
             int id = Integer.parseInt(stId);
@@ -142,29 +90,6 @@ public class DashboardController {
         return map;
     }
 
-    //Daily Announcment List
-    @ResponseBody
-    @GetMapping("/dailyAnnouncment/{stPageNo}")
-    public Map<Check,Object> dailyAnnouncment(@PathVariable String stPageNo){
-        Map<Check,Object> map = new LinkedHashMap<>();
-        try {
-            int pageNo = Integer.parseInt(stPageNo);
-            String[] date = Util.getDateFormatter().split(" ");
-            Pageable pageable = PageRequest.of(pageNo,1);
-            Page<Announcement> announcementPage = announcementRepository.findByDateContainsIgnoreCaseOrderByIdAsc(date[0],pageable);
-            //System.out.println(announcementPage.getContent());
-            map.put(Check.status,true);
-            map.put(Check.message,"Daily Announcment Listing Operation Success!");
-            map.put(Check.totalPage,announcementPage.getTotalPages());
-            map.put(Check.result,announcementPage.getContent());
-        } catch (Exception e) {
-            String error = "An error occurred in Daily Announcment Listing listing operation!";
-            map.put(Check.status, false);
-            map.put(Check.message,error);
-            System.err.println(e);
-            Util.logger(error, Announcement.class);
-        }
-        return map;
-    }
+
 
 }

@@ -21,6 +21,7 @@ public class UserActivity {
     private String ip;
     private String role;
     private String url;
+    private String image;
     private LocalDateTime date;
 
 }
