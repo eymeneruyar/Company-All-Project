@@ -15,9 +15,17 @@ function fncAccountActivity (){
             }
 
             //template 'de bulunan avatar resim kısmı
-            htmlNavbarImage = `<img class="round" src="/uploadImages/_profileImages/${data.result.image}" alt="avatar" height="40" width="40">`
-            $("#imageProfile").html(htmlNavbarImage)
-
+            $.ajax({
+                url: '/settings/get_profile_image',
+                type: 'GET',
+                dataType: 'Json',
+                success: function (data) {
+                    $("#imageProfile").attr("src", "data:image/*;base64," + data.result);
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            })
 
         },
         error: function (err){
@@ -27,3 +35,5 @@ function fncAccountActivity (){
 
 }
 fncAccountActivity ()
+
+

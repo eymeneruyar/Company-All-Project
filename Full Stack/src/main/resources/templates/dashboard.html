@@ -18,6 +18,11 @@
 
 <!------------------------------------------------------ Dashboards Charts CSS - End   -------------------------------------------------------->
 
+<!--------------------------------------------- Swiper CSS - Start --------------------------------------------->
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/extensions/swiper.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/extensions/ext-component-swiper.css}">
+<!--------------------------------------------- Swiper CSS - End ----------------------------------------------->
+
 </head>
 
 <!-- BEGIN: Body-->
@@ -84,6 +89,7 @@
                 <div class="col-lg-8 col-12">
                     <div class="card card-company-table">
                         <div class="card-body p-0">
+                            <h4 class="card-title mt-1 ml-1">Last Added 8 Product</h4>
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
@@ -129,246 +135,21 @@
                 <div class="col-lg-8 col-12">
                     <div class="card card-company-table">
                         <div class="card-body p-0">
+                            <h4 class="card-title mt-1 ml-1">Last 8 Order</h4>
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>Company</th>
-                                            <th>Category</th>
-                                            <th>Views</th>
-                                            <th>Revenue</th>
-                                            <th>Sales</th>
+                                            <th>Order No</th>
+                                            <th>Customer</th>
+                                            <th>Product</th>
+                                            <th>Detail</th>
+                                            <th>Price</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar rounded">
-                                                        <div class="avatar-content">
-                                                            <img src="../../../app-assets/images/icons/toolbox.svg" alt="Toolbar svg" />
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="font-weight-bolder">Dixons</div>
-                                                        <div class="font-small-2 text-muted">meguc@ruj.io</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar bg-light-primary mr-1">
-                                                        <div class="avatar-content">
-                                                            <i data-feather="monitor" class="font-medium-3"></i>
-                                                        </div>
-                                                    </div>
-                                                    <span>Technology</span>
-                                                </div>
-                                            </td>
-                                            <td class="text-nowrap">
-                                                <div class="d-flex flex-column">
-                                                    <span class="font-weight-bolder mb-25">23.4k</span>
-                                                    <span class="font-small-2 text-muted">in 24 hours</span>
-                                                </div>
-                                            </td>
-                                            <td>$891.2</td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="font-weight-bolder mr-1">68%</span>
-                                                    <i data-feather="trending-down" class="text-danger font-medium-1"></i>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar rounded">
-                                                        <div class="avatar-content">
-                                                            <img src="../../../app-assets/images/icons/parachute.svg" alt="Parachute svg" />
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="font-weight-bolder">Motels</div>
-                                                        <div class="font-small-2 text-muted">vecav@hodzi.co.uk</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar bg-light-success mr-1">
-                                                        <div class="avatar-content">
-                                                            <i data-feather="coffee" class="font-medium-3"></i>
-                                                        </div>
-                                                    </div>
-                                                    <span>Grocery</span>
-                                                </div>
-                                            </td>
-                                            <td class="text-nowrap">
-                                                <div class="d-flex flex-column">
-                                                    <span class="font-weight-bolder mb-25">78k</span>
-                                                    <span class="font-small-2 text-muted">in 2 days</span>
-                                                </div>
-                                            </td>
-                                            <td>$668.51</td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="font-weight-bolder mr-1">97%</span>
-                                                    <i data-feather="trending-up" class="text-success font-medium-1"></i>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar rounded">
-                                                        <div class="avatar-content">
-                                                            <img src="../../../app-assets/images/icons/brush.svg" alt="Brush svg" />
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="font-weight-bolder">Zipcar</div>
-                                                        <div class="font-small-2 text-muted">davcilse@is.gov</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar bg-light-warning mr-1">
-                                                        <div class="avatar-content">
-                                                            <i data-feather="watch" class="font-medium-3"></i>
-                                                        </div>
-                                                    </div>
-                                                    <span>Fashion</span>
-                                                </div>
-                                            </td>
-                                            <td class="text-nowrap">
-                                                <div class="d-flex flex-column">
-                                                    <span class="font-weight-bolder mb-25">162</span>
-                                                    <span class="font-small-2 text-muted">in 5 days</span>
-                                                </div>
-                                            </td>
-                                            <td>$522.29</td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="font-weight-bolder mr-1">62%</span>
-                                                    <i data-feather="trending-up" class="text-success font-medium-1"></i>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar rounded">
-                                                        <div class="avatar-content">
-                                                            <img src="../../../app-assets/images/icons/star.svg" alt="Star svg" />
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="font-weight-bolder">Owning</div>
-                                                        <div class="font-small-2 text-muted">us@cuhil.gov</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar bg-light-primary mr-1">
-                                                        <div class="avatar-content">
-                                                            <i data-feather="monitor" class="font-medium-3"></i>
-                                                        </div>
-                                                    </div>
-                                                    <span>Technology</span>
-                                                </div>
-                                            </td>
-                                            <td class="text-nowrap">
-                                                <div class="d-flex flex-column">
-                                                    <span class="font-weight-bolder mb-25">214</span>
-                                                    <span class="font-small-2 text-muted">in 24 hours</span>
-                                                </div>
-                                            </td>
-                                            <td>$291.01</td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="font-weight-bolder mr-1">88%</span>
-                                                    <i data-feather="trending-up" class="text-success font-medium-1"></i>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar rounded">
-                                                        <div class="avatar-content">
-                                                            <img src="../../../app-assets/images/icons/book.svg" alt="Book svg" />
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="font-weight-bolder">Cafés</div>
-                                                        <div class="font-small-2 text-muted">pudais@jife.com</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar bg-light-success mr-1">
-                                                        <div class="avatar-content">
-                                                            <i data-feather="coffee" class="font-medium-3"></i>
-                                                        </div>
-                                                    </div>
-                                                    <span>Grocery</span>
-                                                </div>
-                                            </td>
-                                            <td class="text-nowrap">
-                                                <div class="d-flex flex-column">
-                                                    <span class="font-weight-bolder mb-25">208</span>
-                                                    <span class="font-small-2 text-muted">in 1 week</span>
-                                                </div>
-                                            </td>
-                                            <td>$783.93</td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="font-weight-bolder mr-1">16%</span>
-                                                    <i data-feather="trending-down" class="text-danger font-medium-1"></i>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar rounded">
-                                                        <div class="avatar-content">
-                                                            <img src="../../../app-assets/images/icons/rocket.svg" alt="Rocket svg" />
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="font-weight-bolder">Kmart</div>
-                                                        <div class="font-small-2 text-muted">bipri@cawiw.com</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar bg-light-warning mr-1">
-                                                        <div class="avatar-content">
-                                                            <i data-feather="watch" class="font-medium-3"></i>
-                                                        </div>
-                                                    </div>
-                                                    <span>Fashion</span>
-                                                </div>
-                                            </td>
-                                            <td class="text-nowrap">
-                                                <div class="d-flex flex-column">
-                                                    <span class="font-weight-bolder mb-25">990</span>
-                                                    <span class="font-small-2 text-muted">in 1 month</span>
-                                                </div>
-                                            </td>
-                                            <td>$780.05</td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="font-weight-bolder mr-1">78%</span>
-                                                    <i data-feather="trending-up" class="text-success font-medium-1"></i>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                    <tbody id="lastOrderTable">
+
+
                                     </tbody>
                                 </table>
                             </div>
@@ -383,6 +164,48 @@
 
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
+
+    <!-- Product Detail Modal Start-->
+    <div class="modal fade text-left" id="order_product_modal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel16" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="order_product_modal_title"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card" >
+                                    <div class="card-body" id="order_product_card_body">
+                                        <div class="swiper-autoplay swiper-container" >
+                                            <div class="swiper-wrapper" id="order_product_image_slider">
+                                            </div>
+                                            <div class="swiper-pagination"></div>
+                                            <div class="swiper-button-next"></div>
+                                            <div class="swiper-button-prev"></div>
+                                        </div>
+                                        <h4 class="card-title mt-3" id="order_product_title"></h4>
+                                        <p class="card-text" id="order_product_detail"></p>
+                                        <div id="order_product_button_div"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Basic Floating Label Form section end -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Product Detail Modal End-->
 
 </th:block>
 
@@ -399,6 +222,11 @@
         <script th:src="@{/app-assets/vendors/js/pagination/jquery.bootpag.min.js}"></script>
         <script th:src="@{/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js}"></script>
     <!------------------------------------------------------ Pagination Js - End ---------------------------------------------------------->
+
+    <!---------------------------------------------------------- Swiper JS - Start ---------------------------------------------------------->
+        <script th:src="@{/app-assets/vendors/js/extensions/swiper-bundle.min.js}"></script>
+        <script th:src="@{/app-assets/js/scripts/extensions/ext-component-swiper.js}"></script>
+    <!---------------------------------------------------------- Swiper JS - End ------------------------------------------------------------>
 
 
     <script th:src="@{/mainJs/dashboard.js}"></script>

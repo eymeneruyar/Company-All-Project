@@ -4,6 +4,16 @@ getAllNewsByPage(1, $("#showNewsSize").val());
 
 $('#pagination_category').twbsPagination('destroy');
 getAllNewsCategoryByPage(1, $("#showCategorySize").val());
+
+$('#pagination_news').change(function (){
+    $('#pagination_news').twbsPagination('destroy');
+    getAllNewsByPage(1, $("#showNewsSize").val());
+});
+$('#pagination_category').change(function (){
+    console.log("değişti")
+    $('#pagination_category').twbsPagination('destroy');
+    getAllNewsCategoryByPage(1, $("#showCategorySize").val());
+});
 // <------------------------------------------------FUNCTIONS - START-------------------------------------------------->
 
 function noGenerator() {
@@ -320,7 +330,7 @@ function createRowData(data) {
 }
 
 $('#showCategorySize').change(function () {
-   // $('#pagination_category').twbsPagination('destroy');
+   $('#pagination_category').twbsPagination('destroy');
     getAllNewsCategoryByPage(1, parseInt($(this).val()));
 });
 getAllNewsCategoryByPage(1, 10);
@@ -619,7 +629,7 @@ function createRowDataNews(data) {
 }
 
 $('#showNewsTableRow').change(function () {
-    //$('#pagination_news').twbsPagination('destroy');
+    $('#pagination_news').twbsPagination('destroy');
     getAllNewsByPage(1, parseInt($(this).val()));
 });
 getAllNewsByPage(1, 10);
@@ -839,6 +849,7 @@ $('#searchNewsData').keyup(function (event) {
 
     if (searchDataNews !== "") {
         $("#newsTable > tr").remove()
+        $('#pagination_news').twbsPagination('destroy');
         searchNews(1, $("#showNewsTableRow").val(), searchDataNews)
     } else {
         $('#pagination_news').twbsPagination('destroy');

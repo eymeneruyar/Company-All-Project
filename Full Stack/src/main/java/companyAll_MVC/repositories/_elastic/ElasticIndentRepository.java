@@ -1,6 +1,7 @@
 package companyAll_MVC.repositories._elastic;
 
 import companyAll_MVC.documents.ElasticIndent;
+import companyAll_MVC.documents.ElasticProduct;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.annotations.Query;
@@ -19,12 +20,16 @@ public interface ElasticIndentRepository extends ElasticsearchRepository<Elastic
     @Query("{\"bool\":{\"should\":[{\"match\":{\"status\":\"?0\"}}],\"must_not\":[]}}")
     Page<ElasticIndent> findAllByStatus(String status, Pageable pageable);
 
-    @Query("{\"bool\":{\"should\":[{\"match\":{\"no\":\"?0\"}},{\"term\":{\"cno\":\"?0\"}}, " +
-            "{\"term\":{\"pno\":\"?0\"}}," +
+    @Query("{\"bool\":{\"should\":[{\"prefix\":{\"no\":\"?0\"}},{\"prefix\":{\"cno\":\"?0\"}}, " +
+            "{\"prefix\":{\"cname\":\"?0\"}}," +
+            "{\"prefix\":{\"pno\":\"?0\"}}," +
+            "{\"prefix\":{\"status\":\"?1\"}}" +
             "],\"must_not\":[]}}")
     List<ElasticIndent> searchByKeyAndStatus(String key, String status);
-    @Query("{\"bool\":{\"should\":[{\"match\":{\"no\":\"?0\"}},{\"term\":{\"cno\":\"?0\"}}, " +
-            "{\"term\":{\"pno\":\"?0\"}}," +
+    @Query("{\"bool\":{\"should\":[{\"prefix\":{\"no\":\"?0\"}},{\"prefix\":{\"cno\":\"?0\"}}, " +
+            "{\"prefix\":{\"cname\":\"?0\"}}," +
+            "{\"prefix\":{\"pno\":\"?0\"}}," +
+            "{\"prefix\":{\"status\":\"?1\"}}" +
             "],\"must_not\":[]}}")
     Page<ElasticIndent> searchByKeyAndStatus(String key, String status, Pageable pageable);
 

@@ -43,7 +43,7 @@ public class RegisterController {
                 int roleId = 1; //ADMIN
                 user.setEnabled(true);
                 user.setTokenExpired(true);
-                user.setProfileImage("defaultProfileImage.png");
+                //user.setProfileImage("default_profile_image.jpg");
                 Role role = roleRepository.findById(roleId).get();
                 roleList.add(role);
                 user.setRoles(roleList);

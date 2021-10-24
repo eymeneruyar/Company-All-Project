@@ -2,10 +2,12 @@ package companyAll_MVC.dto;
 
 import companyAll_MVC.documents.ElasticIndent;
 import companyAll_MVC.documents.ElasticProduct;
+import companyAll_MVC.entities.Announcement;
 import companyAll_MVC.repositories._elastic.*;
 import companyAll_MVC.repositories._jpa.AnnouncementRepository;
 import companyAll_MVC.utils.Check;
 import companyAll_MVC.utils.Statics;
+import companyAll_MVC.utils.Util;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -55,7 +57,7 @@ public class DashboardDto {
     //Last Added 6 Product
     public Map<Statics,Object> lastAddSixProduct(){
         Map<Statics,Object> map = new LinkedHashMap<>();
-        Pageable pageable = PageRequest.of(0,6);
+        Pageable pageable = PageRequest.of(0,8);
         Page<ElasticProduct> elasticProductPage = elasticProductRepository.findByOrderByProductIdDesc(pageable);
         map.put(Statics.status,true);
         map.put(Statics.message,"Last added 6 product information listing operation success!");
@@ -66,7 +68,7 @@ public class DashboardDto {
     //Last Six Order
     public Map<Statics,Object> lastSixOrder(){
         Map<Statics,Object> map = new LinkedHashMap<>();
-        Pageable pageable = PageRequest.of(0,6);
+        Pageable pageable = PageRequest.of(0,8);
         Page<ElasticIndent> elasticIndentPage = elasticIndentRepository.findAllByOrderByIidDesc(pageable);
         map.put(Statics.status,true);
         map.put(Statics.message,"Last 6 order information listing operation success!");
@@ -90,6 +92,28 @@ public class DashboardDto {
         return map;
     }
 
+    //Daily Announcment
+    public Map<Check,Object> dailyAnnouncment(String stPageNo){
+        Map<Check,Object> map = new LinkedHashMap<>();
+        try {
+            int pageNo = Integer.parseInt(stPageNo);
+            String[] date = Util.getDateFormatter().split(" ");
+            Pageable pageable = PageRequest.of(pageNo,1);
+            Page<Announcement> announcementPage = announcementRepository.findByDateContainsIgnoreCaseOrderByIdAsc(date[0],pageable);
+            //System.out.println(announcementPage.getContent());
+            map.put(Check.status,true);
+            map.put(Check.message,"Daily Announcment Listing Operation Success!");
+            map.put(Check.totalPage,announcementPage.getTotalPages());
+            map.put(Check.result,announcementPage.getContent());
+        } catch (Exception e) {
+            String error = "An error occurred in Daily Announcment Listing listing operation!";
+            map.put(Check.status, false);
+            map.put(Check.message,error);
+            System.err.println(e);
+            Util.logger(error, Announcement.class);
+        }
+        return map;
+    }
 
 
 }

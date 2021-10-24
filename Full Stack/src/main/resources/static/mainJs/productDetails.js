@@ -25,14 +25,13 @@ function mostPopularProduct(){
     })
 
 }
-mostPopularProduct()
+mostPopularProduct();
 
 function createCard(data){
-    console.log(data)
     let html = ``
     for (let i = 0; i <data.length ; i++) {
         const itm = data[i]
-        let price = priceFormatter(itm.price)
+        let price = priceFormatter(itm.price);
         html += `<div class="swiper-slide">
                          <a href="/productDetail/${itm.id}">
                              <div class="item-heading">
@@ -40,7 +39,7 @@ function createCard(data){
                                  <small class="text-body">by ${itm.name}</small>
                              </div>
                              <div class="img-container w-50 mx-auto py-75">
-                                 <img src="/uploadImages/_products/${itm.id}/${itm.fileName[0]}" class="img-fluid" alt="image" />
+                                 <img src="get_image/id=${itm.id}name=${itm.fileName[0]}" class="img-fluid" alt="image" />
                              </div>
                              <div class="item-meta">
                                 <div class="row">
@@ -54,7 +53,7 @@ function createCard(data){
                      </div>
                  </div>`
     }
-    $("#mostPopularFiveProduct").html(html)
+    $("#mostPopularFiveProduct").html(html);
 
     // Ratings To CustomerByProduct
     data.forEach(itm => {

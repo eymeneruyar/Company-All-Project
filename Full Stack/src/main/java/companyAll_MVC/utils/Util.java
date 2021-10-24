@@ -16,9 +16,9 @@ import java.util.*;
 
 public class Util {
 
-    public static final String UPLOAD_DIR_PRODUCTS =  "src/main/resources/static/uploadImages/_products/";
+    public static final String UPLOAD_DIR_PRODUCTS =  "src/main/resources/images/product_images/";
     public static final String UPLOAD_DIR_NEWS =  "src/main/resources/static/uploadImages/_news/";
-    public static final String UPLOAD_DIR_PROFILEIMAGES  = "src/main/resources/static/uploadImages/_profileImages/";
+    public static final String UPLOAD_DIR_PROFILE_IMAGES  = "src/main/resources/images/profile_images/";
     public static final String UPLOAD_DIR_ADVERTISEMENT = "src/main/resources/images/ad_images/";
 
     public static long maxFileUploadSize = 5120;
@@ -53,6 +53,7 @@ public class Util {
 
     //Add Folder
     public static Map<Check, Object> imageUpload(MultipartFile file, String UPLOAD_DIR) {
+        String fileName = "";
         String errorMessage = "";
         Map<Check, Object> hm = new LinkedHashMap<>();
         if (!file.isEmpty() ) {
@@ -60,7 +61,7 @@ public class Util {
             if ( fileSizeMB > maxFileUploadSize ) {
                 errorMessage = "File should be max "+ (maxFileUploadSize / 1024) +"MB!";
             }else {
-                String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+                fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
                 String ext = fileName.substring(fileName.length()-5);
                 String uui = UUID.randomUUID().toString();
                 fileName = uui + ext;
@@ -78,6 +79,7 @@ public class Util {
 
         if ( errorMessage.equals("") ) {
             hm.put(Check.status, true);
+            hm.put(Check.message, fileName);
         }else {
             hm.put(Check.status, false);
             hm.put(Check.message, errorMessage);
@@ -101,8 +103,7 @@ public class Util {
     public static String getDateFormatter(){
         String pattern = "dd-MM-yyyy HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        String date = simpleDateFormat.format(new Date());
-        return date;
+        return simpleDateFormat.format(new Date());
     }
 
     //Total Page Calculation

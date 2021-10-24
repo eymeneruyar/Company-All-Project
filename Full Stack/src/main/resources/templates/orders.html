@@ -15,6 +15,8 @@
     <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/pickers/form-pickadate.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/form-validation.css}">
 
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/extensions/swiper.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/extensions/ext-component-swiper.css}">
     <!------------------------------------------------------ CSS - End ------------------------------------------------------>
 
 </head>
@@ -95,7 +97,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="order_product_modal_title">Product</h4>
+                    <h4 class="modal-title" id="order_product_modal_title"></h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -105,14 +107,20 @@
                     <section>
                         <div class="row">
                             <div class="col-12">
-                                <div class="card">
-                                    <img class="card-img-top" id="order_product_modal_image"/>
-                                    <div class="card-body">
-                                        <h4 class="card-title" id="order_product_title"></h4>
+                                <div class="card" >
+                                    <div class="card-body" id="order_product_card_body">
+                                        <div class="swiper-autoplay swiper-container" >
+                                                <div class="swiper-wrapper" id="order_product_image_slider">
+                                                </div>
+                                            <div class="swiper-pagination"></div>
+                                            <div class="swiper-button-next"></div>
+                                            <div class="swiper-button-prev"></div>
+                                        </div>
+                                        <h4 class="card-title mt-3" id="order_product_title"></h4>
                                         <p class="card-text" id="order_product_detail"></p>
-                                        <button onclick="location.href = 'productDetails.html';"
-                                            class="btn btn-outline-primary">Details</button>
+                                        <div id="order_product_button_div"></div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -143,7 +151,8 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <p id="order_address_detail"></p>
+                                        <h3 id="order_address_type"></h3>
+                                        <p id="order_address_detail" class="mt-3"></p>
                                     </div>
                                 </div>
                             </div>
@@ -184,6 +193,10 @@
     <script th:src="@{/app-assets/js/scripts/forms/form-validation.js}"></script>
 
     <!------------------------------------------------------ Valdiation Js - End -------------------------------------------------------->
+
+    <script th:src="@{/app-assets/vendors/js/extensions/swiper-bundle.min.js}"></script>
+    <script th:src="@{/app-assets/js/scripts/extensions/ext-component-swiper.js}"></script>
+
     <script th:src="@{/mainJs/order.js}"></script>
 
 

@@ -1,11 +1,11 @@
 package companyAll_MVC.controllers;
 
 import companyAll_MVC.documents.ElasticIndent;
-import companyAll_MVC.entities.Address;
+import companyAll_MVC.entities.Customer;
 import companyAll_MVC.entities.Indent;
 import companyAll_MVC.entities.Product;
 import companyAll_MVC.repositories._elastic.ElasticIndentRepository;
-import companyAll_MVC.repositories._jpa.AddressRepository;
+import companyAll_MVC.repositories._jpa.CustomerRepository;
 import companyAll_MVC.repositories._jpa.IndentRepository;
 import companyAll_MVC.repositories._jpa.ProductRepository;
 import companyAll_MVC.utils.Check;
@@ -29,13 +29,13 @@ public class OrdersController {
     final IndentRepository indentRepository;
     final ElasticIndentRepository elasticIndentRepository;
     final ProductRepository productRepository;
-    final AddressRepository addressRepository;
+    final CustomerRepository customerRepository;
 
-    public OrdersController(IndentRepository indentRepository, ElasticIndentRepository elasticIndentRepository, ProductRepository productRepository, AddressRepository addressRepository) {
+    public OrdersController(IndentRepository indentRepository, ElasticIndentRepository elasticIndentRepository, ProductRepository productRepository, CustomerRepository customerRepository) {
         this.indentRepository = indentRepository;
         this.elasticIndentRepository = elasticIndentRepository;
         this.productRepository = productRepository;
-        this.addressRepository = addressRepository;
+        this.customerRepository = customerRepository;
     }
 
     @GetMapping("")
@@ -117,18 +117,33 @@ public class OrdersController {
             resultMap.put(Check.errors, Util.errors(bindingResult));
         } else {
             try{
-                indent.setDate(Util.getDateFormatter());
-                int savedIndentId = indentRepository.save(indent).getId();
-                ElasticIndent elasticIndent = new ElasticIndent();
-                elasticIndent.setIid(indent.getId());
-                elasticIndent.setNo(indent.getNo());
-                elasticIndent.setCno(indent.getCustomer().getNo());
-                elasticIndent.setPno(indent.getProduct().getNo());
-                elasticIndent.setStatus(indent.getStatus());
-                elasticIndentRepository.save(elasticIndent);
-                resultMap.put(Check.status, true);
-                resultMap.put(Check.message, "Order successfully saved!");
-                resultMap.put(Check.result, savedIndentId);
+                Optional<Customer> customerOptional = customerRepository.findById(indent.getCustomer().getId());
+                Optional<Product> productOptional = productRepository.findById(indent.getProduct().getId());
+                if(customerOptional.isPresent() && productOptional.isPresent()){
+                    Customer customer = customerOptional.get();
+                    Product product = productOptional.get();
+                    indent.setCustomer(customer);
+                    indent.setProduct(product);
+                    indent.setDate(Util.getDateFormatter());
+                    int savedIndentId = indentRepository.save(indent).getId();
+                    ElasticIndent elasticIndent = new ElasticIndent();
+                    elasticIndent.setIid(indent.getId());
+                    elasticIndent.setNo(indent.getNo());
+                    elasticIndent.setDate(indent.getDate());
+                    elasticIndent.setCid(customer.getId());
+                    elasticIndent.setPid(product.getId());
+                    elasticIndent.setCno(customer.getNo());
+                    elasticIndent.setPno(product.getNo());
+                    elasticIndent.setCname(customer.getName() + " " + customer.getSurname());
+                    elasticIndent.setStatus(indent.getStatus());
+                    elasticIndentRepository.save(elasticIndent);
+                    resultMap.put(Check.status, true);
+                    resultMap.put(Check.message, "Order successfully saved!");
+                    resultMap.put(Check.result, savedIndentId);
+                }else{
+                    resultMap.put(Check.status, false);
+                    resultMap.put(Check.message, "Customer or product couldn't found");
+                }
             }catch (Exception e){
                 resultMap.put(Check.status, false);
                 resultMap.put(Check.message, "An error occurred in save operation!");

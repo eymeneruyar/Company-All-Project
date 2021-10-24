@@ -33,16 +33,15 @@ import java.util.*;
 @RequestMapping("/product")
 public class ProductAddController {
 
+    final ProductRepository productRepository;
+    final ProductCategoryRepository productCategoryRepository;
+    final ElasticProductCategoryRepository elasticProductCategoryRepository;
+    final ElasticProductRepository elasticProductRepository;
     //For file upload process
     int chosenId = 0;
     int sendCount = 0;
     int sendSuccessCount = 0;
     String errorMessage = "";
-
-    final ProductRepository productRepository;
-    final ProductCategoryRepository productCategoryRepository;
-    final ElasticProductCategoryRepository elasticProductCategoryRepository;
-    final ElasticProductRepository elasticProductRepository;
 
     public ProductAddController(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository, ElasticProductCategoryRepository elasticProductCategoryRepository, ElasticProductRepository elasticProductRepository) {
         this.productRepository = productRepository;
@@ -52,7 +51,7 @@ public class ProductAddController {
     }
 
     @GetMapping("")
-    public String productAdd(){
+    public String productAdd() {
         chosenId = 0;
         return "productAdd";
     }
@@ -62,15 +61,15 @@ public class ProductAddController {
     //Product category add
     @ResponseBody
     @PostMapping("/categoryAdd")
-    public Map<Check,Object> categoryAdd(@RequestBody @Valid ProductCategory pc, BindingResult bindingResult){
-        Map<Check,Object> map = new LinkedHashMap<>();
-        if(!bindingResult.hasErrors()){
-            if( pc.getId() != null ){
+    public Map<Check, Object> categoryAdd(@RequestBody @Valid ProductCategory pc, BindingResult bindingResult) {
+        Map<Check, Object> map = new LinkedHashMap<>();
+        if (!bindingResult.hasErrors()) {
+            if (pc.getId() != null) {
                 pc.setDate(Util.getDateFormatter());
                 String no = productCategoryRepository.findById(pc.getId()).get().getNo();
                 pc.setNo(no);
                 Optional<ProductCategory> optionalProductCategory = productCategoryRepository.findById(pc.getId());
-                if(optionalProductCategory.isPresent()){
+                if (optionalProductCategory.isPresent()) {
                     try {
                         //ElasticSearch and SQL DB Update -Start
                         ElasticProductCategory elasticProductCategory = elasticProductCategoryRepository.findById(pc.getId()).get();
@@ -85,20 +84,20 @@ public class ProductAddController {
                         elasticProductCategoryNew.setStatus(productCategory.getStatus());
                         elasticProductCategoryRepository.save(elasticProductCategoryNew);
                         //ElasticSearch and SQL DB Update - End
-                        map.put(Check.status,true);
-                        map.put(Check.message,"Updated operations success!");
-                        map.put(Check.result,productCategory);
+                        map.put(Check.status, true);
+                        map.put(Check.message, "Updated operations success!");
+                        map.put(Check.result, productCategory);
                     } catch (Exception e) {
                         System.err.println("Elasticsearch product category update" + e);
                     }
                 }
-            }else{
+            } else {
                 try {
                     pc.setDate(Util.getDateFormatter());
                     ProductCategory productCategory = productCategoryRepository.saveAndFlush(pc);
-                    map.put(Check.status,true);
-                    map.put(Check.message,"Adding of Product Category Operations Successful!");
-                    map.put(Check.result,productCategory);
+                    map.put(Check.status, true);
+                    map.put(Check.message, "Adding of Product Category Operations Successful!");
+                    map.put(Check.result, productCategory);
                     //Elasticsearch save
                     ElasticProductCategory elasticProductCategory = new ElasticProductCategory();
                     elasticProductCategory.setCategoryId(productCategory.getId());
@@ -109,16 +108,16 @@ public class ProductAddController {
                     elasticProductCategory.setStatus(productCategory.getStatus());
                     elasticProductCategoryRepository.save(elasticProductCategory);
                 } catch (Exception e) {
-                    map.put(Check.status,false);
-                    if(e.toString().contains("constraint")){
+                    map.put(Check.status, false);
+                    if (e.toString().contains("constraint")) {
                         String error = "This product category name has already been registered!";
                         Util.logger(error, ProductCategory.class);
-                        map.put(Check.message,error);
+                        map.put(Check.message, error);
                     }
                 }
             }
-        }else{
-            map.put(Check.status,false);
+        } else {
+            map.put(Check.status, false);
             map.put(Check.errors, Util.errors(bindingResult));
         }
         return map;
@@ -127,52 +126,52 @@ public class ProductAddController {
     //List of Product Category with pagination
     @ResponseBody
     @GetMapping("/categoryList/{stShowNumber}/{stPageNo}")
-    public Map<Check,Object> categoryList(@PathVariable String stShowNumber,@PathVariable String stPageNo){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> categoryList(@PathVariable String stShowNumber, @PathVariable String stPageNo) {
+        Map<Check, Object> map = new LinkedHashMap<>();
         try {
             int pageNo = Integer.parseInt(stPageNo); // .th number of page
             int showNumber = Integer.parseInt(stShowNumber); // Get the show number value
-            Pageable pageable = PageRequest.of(pageNo,showNumber);
+            Pageable pageable = PageRequest.of(pageNo, showNumber);
             Page<ElasticProductCategory> categoryPage = elasticProductCategoryRepository.findByOrderByIdAsc(pageable);
-            map.put(Check.status,true);
-            map.put(Check.totalPage,categoryPage.getTotalPages());
+            map.put(Check.status, true);
+            map.put(Check.totalPage, categoryPage.getTotalPages());
             map.put(Check.message, "Product category listing on page " + (pageNo + 1) + " is successful");
-            map.put(Check.result,categoryPage.getContent());
+            map.put(Check.result, categoryPage.getContent());
         } catch (Exception e) {
-            map.put(Check.status,false);
+            map.put(Check.status, false);
             String error = "An error occurred during the operation!";
             System.err.println(e);
             Util.logger(error, ProductCategory.class);
-            map.put(Check.message,error);
+            map.put(Check.message, error);
         }
         return map;
     }
 
     @ResponseBody
     @DeleteMapping("/categoryDelete/{stId}")
-    public Map<Check,Object> delete(@PathVariable String stId){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> delete(@PathVariable String stId) {
+        Map<Check, Object> map = new LinkedHashMap<>();
         try {
             int id = Integer.parseInt(stId);
             Optional<ProductCategory> optionalProductCategory = productCategoryRepository.findById(id);
-            if(optionalProductCategory.isPresent()){
+            if (optionalProductCategory.isPresent()) {
                 ElasticProductCategory elasticProductCategory = elasticProductCategoryRepository.findById(id).get();
                 productCategoryRepository.deleteById(id);
                 elasticProductCategoryRepository.deleteById(elasticProductCategory.getId());
-                map.put(Check.status,true);
-                map.put(Check.message,"Data has been deleted!");
-                map.put(Check.result,optionalProductCategory.get());
-            }else{
+                map.put(Check.status, true);
+                map.put(Check.message, "Data has been deleted!");
+                map.put(Check.result, optionalProductCategory.get());
+            } else {
                 String error = "Product Category not found";
-                map.put(Check.status,false);
-                map.put(Check.message,error);
-                Util.logger(error,ProductCategory.class);
+                map.put(Check.status, false);
+                map.put(Check.message, error);
+                Util.logger(error, ProductCategory.class);
             }
         } catch (Exception e) {
             String error = "An error occurred during the delete operation";
-            map.put(Check.status,false);
-            map.put(Check.message,error);
-            Util.logger(error,ProductCategory.class);
+            map.put(Check.status, false);
+            map.put(Check.message, error);
+            Util.logger(error, ProductCategory.class);
             System.err.println(e);
         }
         return map;
@@ -181,13 +180,13 @@ public class ProductAddController {
     //Change status for product category - Active
     @ResponseBody
     @GetMapping("/changeCategoryStatus/{stId}/active")
-    public Map<Check,Object> changeStatusActiveProductCategory(@PathVariable String stId){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> changeStatusActiveProductCategory(@PathVariable String stId) {
+        Map<Check, Object> map = new LinkedHashMap<>();
         try {
             int id = Integer.parseInt(stId);
             Optional<ProductCategory> optionalProductCategory = productCategoryRepository.findById(id);
-            if(optionalProductCategory.isPresent()){
-                map.put(Check.status,true);
+            if (optionalProductCategory.isPresent()) {
+                map.put(Check.status, true);
                 map.put(Check.message, "Product category change status operation is successful!");
                 ProductCategory pc = optionalProductCategory.get();
                 ElasticProductCategory elasticProductCategory = elasticProductCategoryRepository.findById(pc.getId()).get();
@@ -203,16 +202,16 @@ public class ProductAddController {
                 elasticProductCategoryNew.setStatus(productCategory.getStatus());
                 elasticProductCategoryRepository.save(elasticProductCategoryNew);
                 //ElasticSearch and SQL DB Update - End
-            }else {
-                map.put(Check.status,false);
+            } else {
+                map.put(Check.status, false);
                 map.put(Check.message, "Product category is not found!");
             }
         } catch (Exception e) {
-            map.put(Check.status,false);
+            map.put(Check.status, false);
             String error = "An error occurred during the change status operation!";
             System.err.println(e);
             Util.logger(error, ProductCategory.class);
-            map.put(Check.message,error);
+            map.put(Check.message, error);
         }
         return map;
     }
@@ -220,13 +219,13 @@ public class ProductAddController {
     //Change status for product category - Passive
     @ResponseBody
     @GetMapping("/changeCategoryStatus/{stId}/passive")
-    public Map<Check,Object> changeStatusPassiveProductCategory(@PathVariable String stId){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> changeStatusPassiveProductCategory(@PathVariable String stId) {
+        Map<Check, Object> map = new LinkedHashMap<>();
         try {
             int id = Integer.parseInt(stId);
             Optional<ProductCategory> optionalProductCategory = productCategoryRepository.findById(id);
-            if(optionalProductCategory.isPresent()){
-                map.put(Check.status,true);
+            if (optionalProductCategory.isPresent()) {
+                map.put(Check.status, true);
                 map.put(Check.message, "Product category change status operation is successful!");
                 ProductCategory pc = optionalProductCategory.get();
                 ElasticProductCategory elasticProductCategory = elasticProductCategoryRepository.findById(pc.getId()).get();
@@ -242,16 +241,16 @@ public class ProductAddController {
                 elasticProductCategoryNew.setStatus(productCategory.getStatus());
                 elasticProductCategoryRepository.save(elasticProductCategoryNew);
                 //ElasticSearch and SQL DB Update - End
-            }else {
-                map.put(Check.status,false);
+            } else {
+                map.put(Check.status, false);
                 map.put(Check.message, "Product category is not found!");
             }
         } catch (Exception e) {
-            map.put(Check.status,false);
+            map.put(Check.status, false);
             String error = "An error occurred during the change status operation!";
             System.err.println(e);
             Util.logger(error, ProductCategory.class);
-            map.put(Check.message,error);
+            map.put(Check.message, error);
         }
         return map;
     }
@@ -259,41 +258,41 @@ public class ProductAddController {
     //Elasticsearch for product category
     @ResponseBody
     @GetMapping("/searchProductCategory/{data}/{stPageNo}/{stShowNumber}")
-    public Map<Check,Object> searchProductCategory(@PathVariable String data,@PathVariable String stPageNo,@PathVariable String stShowNumber){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> searchProductCategory(@PathVariable String data, @PathVariable String stPageNo, @PathVariable String stShowNumber) {
+        Map<Check, Object> map = new LinkedHashMap<>();
         try {
             int pageNo = Integer.parseInt(stPageNo); // .th number of page
             int showNumber = Integer.parseInt(stShowNumber); // Get the show number value
-            Pageable pageable = PageRequest.of(pageNo,showNumber);
-            Page<ElasticProductCategory> searchPage = elasticProductCategoryRepository.findBySearchData(data,pageable);
+            Pageable pageable = PageRequest.of(pageNo, showNumber);
+            Page<ElasticProductCategory> searchPage = elasticProductCategoryRepository.findBySearchData(data, pageable);
             List<ElasticProductCategory> elasticProductCategoryList = searchPage.getContent();
-            int totalData =  elasticProductCategoryList.size(); //for total data in table
-            if(totalData > 0 ){
-                map.put(Check.status,true);
-                map.put(Check.totalPage,searchPage.getTotalPages());
-                map.put(Check.message,"Search operation success!");
-                map.put(Check.result,elasticProductCategoryList);
-            }else{
-                map.put(Check.status,false);
-                map.put(Check.message,"Could not find a result for your search!");
+            int totalData = elasticProductCategoryList.size(); //for total data in table
+            if (totalData > 0) {
+                map.put(Check.status, true);
+                map.put(Check.totalPage, searchPage.getTotalPages());
+                map.put(Check.message, "Search operation success!");
+                map.put(Check.result, elasticProductCategoryList);
+            } else {
+                map.put(Check.status, false);
+                map.put(Check.message, "Could not find a result for your search!");
             }
         } catch (NumberFormatException e) {
-            map.put(Check.status,false);
+            map.put(Check.status, false);
             String error = "An error occurred during the search operation!";
             System.err.println(e);
             Util.logger(error, ProductCategory.class);
-            map.put(Check.message,error);
+            map.put(Check.message, error);
         }
         return map;
     }
 
     //Product Category insert all data to elasticsearch database
     @GetMapping("/elasticInsertData/productCategory")
-    public Map<Check,Object> elasticInsertDataPC(){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> elasticInsertDataPC() {
+        Map<Check, Object> map = new LinkedHashMap<>();
         List<ProductCategory> productCategoryList = productCategoryRepository.findAll();
         try {
-            if(productCategoryList.size() > 0){
+            if (productCategoryList.size() > 0) {
                 productCategoryList.forEach(item -> {
                     //ElasticSearch Save
                     ElasticProductCategory elasticProductCategory = new ElasticProductCategory();
@@ -305,20 +304,20 @@ public class ProductAddController {
                     elasticProductCategory.setStatus(item.getStatus());
                     elasticProductCategoryRepository.save(elasticProductCategory);
                 });
-                map.put(Check.status,true);
-                map.put(Check.message,"Elasticsearch veri ekleme işlemi başarılı!");
+                map.put(Check.status, true);
+                map.put(Check.message, "Elasticsearch veri ekleme işlemi başarılı!");
                 //map.put(Check.result,elasticContentsRepository.findAll());
-            }else {
+            } else {
                 String error = "Sisteme kayıtlı içerik bulunmamaktadır!";
-                map.put(Check.status,false);
-                map.put(Check.message,error);
-                Util.logger(error,ProductCategory.class);
+                map.put(Check.status, false);
+                map.put(Check.message, error);
+                Util.logger(error, ProductCategory.class);
             }
         } catch (Exception e) {
             String error = "Elasticsearch veri tabanına ekleme yapılırken bir hata oluştu!" + e;
-            map.put(Check.status,false);
-            map.put(Check.message,error);
-            Util.logger(error,ProductCategory.class);
+            map.put(Check.status, false);
+            map.put(Check.message, error);
+            Util.logger(error, ProductCategory.class);
         }
         return map;
     }
@@ -326,11 +325,11 @@ public class ProductAddController {
     //Product Category List
     @ResponseBody
     @GetMapping("/categoryList")
-    public Map<Check,Object> categoryList(){
-        Map<Check,Object> map = new LinkedHashMap<>();
-        map.put(Check.status,true);
-        map.put(Check.message,"Product category list operations success!");
-        map.put(Check.result,productCategoryRepository.findAll());
+    public Map<Check, Object> categoryList() {
+        Map<Check, Object> map = new LinkedHashMap<>();
+        map.put(Check.status, true);
+        map.put(Check.message, "Product category list operations success!");
+        map.put(Check.result, productCategoryRepository.findAll());
         return map;
     }
 
@@ -341,25 +340,25 @@ public class ProductAddController {
     //Addition and update of product
     @ResponseBody
     @PostMapping("/add")
-    public Map<Check,Object> productAdd(@RequestBody @Valid Product p, BindingResult bindingResult){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> productAdd(@RequestBody @Valid Product p, BindingResult bindingResult) {
+        Map<Check, Object> map = new LinkedHashMap<>();
         List<ProductCategory> productCategoryList = new ArrayList<>();
         List<Integer> productCategoryIdList = new ArrayList<>();
-        if(!bindingResult.hasErrors()){
-            if(p.getId() != null){
+        if (!bindingResult.hasErrors()) {
+            if (p.getId() != null) {
                 p.setDate(Util.getDateFormatter());
                 String no = productRepository.findById(p.getId()).get().getNo();
                 p.setNo(no);
                 p.getProductCategories().forEach(item -> {
                     Optional<ProductCategory> optionalProductCategory = productCategoryRepository.findById(item.getId());
-                    if(optionalProductCategory.isPresent()){
+                    if (optionalProductCategory.isPresent()) {
                         ProductCategory productCategory = optionalProductCategory.get();
                         productCategoryList.add(productCategory);
                     }
                 });
                 System.out.println("Update Section " + productCategoryList);
                 Optional<Product> optionalProduct = productRepository.findById(p.getId());
-                if (optionalProduct.isPresent()){
+                if (optionalProduct.isPresent()) {
                     try {
                         //ElasticSearch and SQL DB Update -Start
                         ElasticProduct elasticProduct = elasticProductRepository.findById(p.getId()).get();
@@ -377,35 +376,35 @@ public class ProductAddController {
                         elasticProductNew.setCampaignStatus(product.getCampaignStatus());
                         elasticProductNew.setCampaignName(product.getCampaignName());
                         elasticProductNew.setCampaignDetails(product.getCampaignDetails());
-                        productCategoryList.forEach(item->{
+                        productCategoryList.forEach(item -> {
                             productCategoryIdList.add(item.getId());
                         });
                         elasticProductNew.setProductCategoryId(productCategoryIdList);
                         elasticProductRepository.save(elasticProductNew);
                         //ElasticSearch and SQL DB Update - End
-                        map.put(Check.status,true);
-                        map.put(Check.message,"Updated operations success!");
-                        map.put(Check.result,product);
+                        map.put(Check.status, true);
+                        map.put(Check.message, "Updated operations success!");
+                        map.put(Check.result, product);
                     } catch (Exception e) {
                         System.err.println("Elasticsearch update" + e);
                     }
                 }
-            }else{
+            } else {
                 try {
                     p.setDate(Util.getDateFormatter());
                     p.setTotalLike(0.0); //Sadece yeni kayıtta default değeri sıfırdır.
                     p.getProductCategories().forEach(item -> {
                         Optional<ProductCategory> optionalProductCategory = productCategoryRepository.findById(item.getId());
-                        if(optionalProductCategory.isPresent()){
+                        if (optionalProductCategory.isPresent()) {
                             ProductCategory productCategory = optionalProductCategory.get();
                             productCategoryList.add(productCategory);
                         }
                     });
                     System.out.println("New Save Section " + productCategoryList);
                     Product product = productRepository.saveAndFlush(p);
-                    map.put(Check.status,true);
-                    map.put(Check.message,"Adding of Product Operations Successful!");
-                    map.put(Check.result,product);
+                    map.put(Check.status, true);
+                    map.put(Check.message, "Adding of Product Operations Successful!");
+                    map.put(Check.result, product);
                     ElasticProduct elasticProduct = new ElasticProduct();
                     elasticProduct.setProductId(product.getId());
                     elasticProduct.setDate(product.getDate());
@@ -419,22 +418,22 @@ public class ProductAddController {
                     elasticProduct.setCampaignStatus(product.getCampaignStatus());
                     elasticProduct.setCampaignName(product.getCampaignName());
                     elasticProduct.setCampaignDetails(product.getCampaignDetails());
-                    productCategoryList.forEach(item->{
+                    productCategoryList.forEach(item -> {
                         productCategoryIdList.add(item.getId());
                     });
                     elasticProduct.setProductCategoryId(productCategoryIdList);
                     elasticProductRepository.save(elasticProduct);
                 } catch (Exception e) {
-                    map.put(Check.status,false);
-                    if(e.toString().contains("constraint")){
+                    map.put(Check.status, false);
+                    if (e.toString().contains("constraint")) {
                         String error = "This product no has already been registered! Please try again.";
                         Util.logger(error, Product.class);
-                        map.put(Check.message,error);
+                        map.put(Check.message, error);
                     }
                 }
             }
-        }else{
-            map.put(Check.status,false);
+        } else {
+            map.put(Check.status, false);
             map.put(Check.errors, Util.errors(bindingResult));
         }
         System.out.println(map);
@@ -444,24 +443,24 @@ public class ProductAddController {
     //List of Product with pagination
     @ResponseBody
     @GetMapping("/list/{stShowNumber}/{stPageNo}")
-    public Map<Check,Object> listProduct(@PathVariable String stShowNumber,@PathVariable String stPageNo){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> listProduct(@PathVariable String stShowNumber, @PathVariable String stPageNo) {
+        Map<Check, Object> map = new LinkedHashMap<>();
         //System.out.println(stShowNumber + " " + stPageNo);
         try {
             int pageNo = Integer.parseInt(stPageNo); // .th number of page
             int showNumber = Integer.parseInt(stShowNumber); // Get the show number value
-            Pageable pageable = PageRequest.of(pageNo,showNumber);
+            Pageable pageable = PageRequest.of(pageNo, showNumber);
             Page<ElasticProduct> productPage = elasticProductRepository.findByOrderByIdAsc(pageable);
-            map.put(Check.status,true);
-            map.put(Check.totalPage,productPage.getTotalPages());
+            map.put(Check.status, true);
+            map.put(Check.totalPage, productPage.getTotalPages());
             map.put(Check.message, "Product listing on page " + (pageNo + 1) + " is successful");
-            map.put(Check.result,productPage.getContent());
+            map.put(Check.result, productPage.getContent());
         } catch (Exception e) {
-            map.put(Check.status,false);
+            map.put(Check.status, false);
             String error = "An error occurred during the operation!";
             System.err.println(e);
             Util.logger(error, Product.class);
-            map.put(Check.message,error);
+            map.put(Check.message, error);
         }
         return map;
     }
@@ -469,40 +468,40 @@ public class ProductAddController {
     //Delete product
     @ResponseBody
     @DeleteMapping("/delete/{stId}")
-    public Map<Check,Object> deleteProduct(@PathVariable String stId){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> deleteProduct(@PathVariable String stId) {
+        Map<Check, Object> map = new LinkedHashMap<>();
         try {
             int id = Integer.parseInt(stId);
             Optional<Product> optionalProduct = productRepository.findById(id);
-            if(optionalProduct.isPresent()){
+            if (optionalProduct.isPresent()) {
                 //Images Delete
                 Product product = optionalProduct.get();
                 product.getFileName().forEach(item -> {
                     File file = new File(Util.UPLOAD_DIR_PRODUCTS + stId + "/" + item);
                     file.delete();
                 });
-                File file = new File(Util.UPLOAD_DIR_PRODUCTS + stId );
-                if(file.exists()){
+                File file = new File(Util.UPLOAD_DIR_PRODUCTS + stId);
+                if (file.exists()) {
                     file.delete();
                 }
                 //Images Delete
                 ElasticProduct elasticProduct = elasticProductRepository.findById(id).get();
                 productRepository.deleteById(id);
                 elasticProductRepository.deleteById(elasticProduct.getId());
-                map.put(Check.status,true);
-                map.put(Check.message,"Data has been deleted!");
-                map.put(Check.result,optionalProduct.get());
-            }else{
+                map.put(Check.status, true);
+                map.put(Check.message, "Data has been deleted!");
+                map.put(Check.result, optionalProduct.get());
+            } else {
                 String error = "Product is not found";
-                map.put(Check.status,false);
-                map.put(Check.message,error);
-                Util.logger(error,Product.class);
+                map.put(Check.status, false);
+                map.put(Check.message, error);
+                Util.logger(error, Product.class);
             }
         } catch (Exception e) {
             String error = "An error occurred during the delete operation";
-            map.put(Check.status,false);
-            map.put(Check.message,error);
-            Util.logger(error,Product.class);
+            map.put(Check.status, false);
+            map.put(Check.message, error);
+            Util.logger(error, Product.class);
             System.err.println(e);
         }
         return map;
@@ -511,28 +510,28 @@ public class ProductAddController {
     //Detail of product
     @ResponseBody
     @GetMapping("/detail/{stId}")
-    public Map<Check,Object> detailProduct(@PathVariable String stId){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> detailProduct(@PathVariable String stId) {
+        Map<Check, Object> map = new LinkedHashMap<>();
         //System.out.println(stShowNumber + " " + stPageNo);
         try {
             int id = Integer.parseInt(stId);
-            map.put(Check.status,true);
+            map.put(Check.status, true);
             map.put(Check.message, "Product detail operation is successful!");
-            map.put(Check.result,productRepository.findById(id).get());
+            map.put(Check.result, productRepository.findById(id).get());
         } catch (Exception e) {
-            map.put(Check.status,false);
+            map.put(Check.status, false);
             String error = "An error occurred during the operation!";
             System.err.println(e);
             Util.logger(error, Product.class);
-            map.put(Check.message,error);
+            map.put(Check.message, error);
         }
         return map;
     }
 
     //Chosen image delete
     @ResponseBody
-    @DeleteMapping("/chosenImages/delete/{images}")
-    public Map<Check,Object> deleteChosenImage(@PathVariable List<String> images){
+    @DeleteMapping("/chosenImages/delete/images={images}")
+    public Map<Check, Object> deleteChosenImage(@PathVariable List<String> images) {
         Map<Check,Object> map = new LinkedHashMap<>();
         //System.out.println(images);
         //System.out.println(chosenId);
@@ -570,13 +569,13 @@ public class ProductAddController {
     //Change status for product
     @ResponseBody
     @GetMapping("/changeStatus/{stId}/passive")
-    public Map<Check,Object> changeStatusPassiveProduct(@PathVariable String stId){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> changeStatusPassiveProduct(@PathVariable String stId) {
+        Map<Check, Object> map = new LinkedHashMap<>();
         try {
             int id = Integer.parseInt(stId);
             Optional<Product> optionalProduct = productRepository.findById(id);
-            if(optionalProduct.isPresent()){
-                map.put(Check.status,true);
+            if (optionalProduct.isPresent()) {
+                map.put(Check.status, true);
                 map.put(Check.message, "Product change status operation is successful!");
                 Product p = optionalProduct.get();
                 p.setStatus("Unavailable");
@@ -585,16 +584,16 @@ public class ProductAddController {
                 elasticProduct.setStatus(product.getStatus());
                 elasticProductRepository.save(elasticProduct);
                 //ElasticSearch and SQL DB Update - End
-            }else {
-                map.put(Check.status,false);
+            } else {
+                map.put(Check.status, false);
                 map.put(Check.message, "Product is not found!");
             }
         } catch (Exception e) {
-            map.put(Check.status,false);
+            map.put(Check.status, false);
             String error = "An error occurred during the change status operation!";
             System.err.println(e);
             Util.logger(error, Product.class);
-            map.put(Check.message,error);
+            map.put(Check.message, error);
         }
         return map;
     }
@@ -602,13 +601,13 @@ public class ProductAddController {
     //Change status for product
     @ResponseBody
     @GetMapping("/changeStatus/{stId}/active")
-    public Map<Check,Object> changeStatusActiveProduct(@PathVariable String stId){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> changeStatusActiveProduct(@PathVariable String stId) {
+        Map<Check, Object> map = new LinkedHashMap<>();
         try {
             int id = Integer.parseInt(stId);
             Optional<Product> optionalProduct = productRepository.findById(id);
-            if(optionalProduct.isPresent()){
-                map.put(Check.status,true);
+            if (optionalProduct.isPresent()) {
+                map.put(Check.status, true);
                 map.put(Check.message, "Product change status operation is successful!");
                 Product p = optionalProduct.get();
                 p.setStatus("Available");
@@ -617,16 +616,16 @@ public class ProductAddController {
                 elasticProduct.setStatus(product.getStatus());
                 elasticProductRepository.save(elasticProduct);
                 //ElasticSearch and SQL DB Update - End
-            }else {
-                map.put(Check.status,false);
+            } else {
+                map.put(Check.status, false);
                 map.put(Check.message, "Product is not found!");
             }
         } catch (Exception e) {
-            map.put(Check.status,false);
+            map.put(Check.status, false);
             String error = "An error occurred during the change status operation!";
             System.err.println(e);
             Util.logger(error, Product.class);
-            map.put(Check.message,error);
+            map.put(Check.message, error);
         }
         return map;
     }
@@ -634,11 +633,11 @@ public class ProductAddController {
     // Get id data from Choosen product
     @ResponseBody
     @GetMapping("/chosenId/{stId}")
-    public int chosenId(@PathVariable String stId){
+    public int chosenId(@PathVariable String stId) {
         try {
             int id = Integer.parseInt(stId);
             Optional<Product> optionalProduct = productRepository.findById(id);
-            if(optionalProduct.isPresent()){
+            if (optionalProduct.isPresent()) {
                 chosenId = id;
             }
         } catch (Exception e) {
@@ -655,54 +654,38 @@ public class ProductAddController {
         Optional<Product> optionalProduct = productRepository.findById(chosenId);
         List<String> imageNameList = new ArrayList<>();
         File f = new File(Util.UPLOAD_DIR_PRODUCTS + ("" + chosenId));
-        f.delete(); //Varsa önce sil
-        if(optionalProduct.isPresent()){
+        boolean isDeleted = f.delete(); //Varsa önce sil
+        if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
-            if ( files != null && files.length != 0 ) {
+            imageNameList = product.getFileName();
+            if (files != null && files.length != 0) {
                 sendCount = files.length;
                 String idFolder = "" + chosenId + "/";
                 File folderProduct = new File(Util.UPLOAD_DIR_PRODUCTS + idFolder);
                 boolean status = folderProduct.mkdir();
-                for ( MultipartFile file : files ) {
-                    long fileSizeMB = file.getSize() / 1024;
-                    if ( fileSizeMB > Util.maxFileUploadSize ) {
-                        System.err.println("Dosya boyutu çok büyük Max 5MB");
-                        errorMessage = "Dosya boyutu çok büyük Max "+ (Util.maxFileUploadSize / 1024) +"MB olmalıdır";
-                        System.err.println(errorMessage);
-                    }else {
-                        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-                        String ext = fileName.substring(fileName.length()-5, fileName.length());
-                        String uui = UUID.randomUUID().toString();
-                        fileName = uui + ext;
-                        try {
-                            if(status){
-                                Path path = Paths.get(Util.UPLOAD_DIR_PRODUCTS + idFolder +  fileName);
-                                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                                sendSuccessCount += 1;
-                            }else {
-                                errorMessage = "Id numarasına ait ürün dosyası bulunamadı!";
-                                System.err.println(errorMessage);
-                            }
-                            // add database
-                            imageNameList.add(fileName);
-
-                        } catch (IOException e) {
-                            System.err.println(e);
-                        }
-                    }
+                for (MultipartFile file : files) {
+                    Map<Check, Object> imgResult = Util.imageUpload(file, Util.UPLOAD_DIR_PRODUCTS + idFolder);
+                    imageNameList.add(imgResult.get(Check.message).toString());
                 }
                 product.setFileName(imageNameList);
                 productRepository.saveAndFlush(product);
                 //Elasticsearch save Images - Start
-                ElasticProduct elasticProduct = elasticProductRepository.findById(product.getId()).get();
-                elasticProduct.setFileName(imageNameList);
-                elasticProductRepository.save(elasticProduct);
+                Optional<ElasticProduct> elasticProductOptional = elasticProductRepository.findById(product.getId());
+                if (elasticProductOptional.isPresent()) {
+                    ElasticProduct elasticProduct = elasticProductOptional.get();
+                    elasticProduct.setFileName(imageNameList);
+                    elasticProductRepository.save(elasticProduct);
+                } else {
+                    errorMessage = "Elastic Product is not found!";
+                }
                 //Elasticsearch save Images - End
-            }else {
-                errorMessage = "Lütfen resim seçiniz!";
+
+
+            } else {
+                errorMessage = "Please choose an image!";
                 System.err.println(errorMessage);
             }
-        }else{
+        } else {
             errorMessage = "Product is not found!";
             System.err.println(errorMessage);
         }
@@ -712,41 +695,41 @@ public class ProductAddController {
     //Elasticsearch for product
     @ResponseBody
     @GetMapping("/search/{data}/{stPageNo}/{stShowNumber}")
-    public Map<Check,Object> searchProduct(@PathVariable String data,@PathVariable String stPageNo,@PathVariable String stShowNumber){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> searchProduct(@PathVariable String data, @PathVariable String stPageNo, @PathVariable String stShowNumber) {
+        Map<Check, Object> map = new LinkedHashMap<>();
         try {
             int pageNo = Integer.parseInt(stPageNo); // .th number of page
             int showNumber = Integer.parseInt(stShowNumber); // Get the show number value
-            Pageable pageable = PageRequest.of(pageNo,showNumber);
-            Page<ElasticProduct> searchPage = elasticProductRepository.findBySearchData(data,pageable);
+            Pageable pageable = PageRequest.of(pageNo, showNumber);
+            Page<ElasticProduct> searchPage = elasticProductRepository.findBySearchData(data, pageable);
             List<ElasticProduct> elasticProductList = searchPage.getContent();
-            int totalData =  elasticProductList.size(); //for total data in table
-            if(totalData > 0 ){
-                map.put(Check.status,true);
-                map.put(Check.totalPage,searchPage.getTotalPages());
-                map.put(Check.message,"Search operation success!");
-                map.put(Check.result,elasticProductList);
-            }else{
-                map.put(Check.status,false);
-                map.put(Check.message,"Could not find a result for your search!");
+            int totalData = elasticProductList.size(); //for total data in table
+            if (totalData > 0) {
+                map.put(Check.status, true);
+                map.put(Check.totalPage, searchPage.getTotalPages());
+                map.put(Check.message, "Search operation success!");
+                map.put(Check.result, elasticProductList);
+            } else {
+                map.put(Check.status, false);
+                map.put(Check.message, "Could not find a result for your search!");
             }
         } catch (NumberFormatException e) {
-            map.put(Check.status,false);
+            map.put(Check.status, false);
             String error = "An error occurred during the search operation!";
             System.err.println(e);
             Util.logger(error, Product.class);
-            map.put(Check.message,error);
+            map.put(Check.message, error);
         }
         return map;
     }
 
     //Product insert all data to elasticsearch database
     @GetMapping("/elasticInsertData")
-    public Map<Check,Object> elasticInsertData(){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> elasticInsertData() {
+        Map<Check, Object> map = new LinkedHashMap<>();
         List<Product> productList = productRepository.findAll();
         try {
-            if(productList.size() > 0){
+            if (productList.size() > 0) {
                 productList.forEach(item -> {
                     List<String> imageList = new ArrayList<>();
                     List<Integer> categoryId = new ArrayList<>();
@@ -767,27 +750,27 @@ public class ProductAddController {
                     item.getFileName().forEach(it -> {
                         imageList.add(it);
                     });
-                    item.getProductCategories().forEach(it->{
+                    item.getProductCategories().forEach(it -> {
                         categoryId.add(it.getId());
                     });
                     elasticProduct.setFileName(imageList);
                     elasticProduct.setProductCategoryId(categoryId);
                     elasticProductRepository.save(elasticProduct);
                 });
-                map.put(Check.status,true);
-                map.put(Check.message,"Elasticsearch veri ekleme işlemi başarılı!");
+                map.put(Check.status, true);
+                map.put(Check.message, "Elasticsearch veri ekleme işlemi başarılı!");
                 //map.put(Check.result,elasticContentsRepository.findAll());
-            }else {
+            } else {
                 String error = "Sisteme kayıtlı içerik bulunmamaktadır!";
-                map.put(Check.status,false);
-                map.put(Check.message,error);
-                Util.logger(error,Product.class);
+                map.put(Check.status, false);
+                map.put(Check.message, error);
+                Util.logger(error, Product.class);
             }
         } catch (Exception e) {
             String error = "Elasticsearch veri tabanına ekleme yapılırken bir hata oluştu!" + e;
-            map.put(Check.status,false);
-            map.put(Check.message,error);
-            Util.logger(error,Product.class);
+            map.put(Check.status, false);
+            map.put(Check.message, error);
+            Util.logger(error, Product.class);
         }
         return map;
     }

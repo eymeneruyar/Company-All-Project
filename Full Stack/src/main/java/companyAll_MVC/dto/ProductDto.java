@@ -70,7 +70,9 @@ public class ProductDto {
         Map<Check,Object> map = new LinkedHashMap<>();
         map.put(Check.status,true);
         map.put(Check.message,"Last added 10 products listing operation success!");
-        map.put(Check.result,elasticProductRepository.findElasticProductsBySizeBetween());
+        Pageable pageable = PageRequest.of(0,10);
+        Page<ElasticProduct> elasticProductPage = elasticProductRepository.findByOrderByProductIdDesc(pageable);
+        map.put(Check.result,elasticProductPage.getContent());
         return map;
     }
 

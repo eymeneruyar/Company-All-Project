@@ -165,8 +165,8 @@ function lastSixOrder(){
         dataType: "json",
         contentType : 'application/json; charset=utf-8',
         success: function (data) {
-            //console.log(data)
-            //createTableLastSixOrder(data)
+            console.log(data)
+            createTableLastSixOrder(data.lastSixOrder)
         },
         error: function (err) {
             Swal.fire({
@@ -184,9 +184,104 @@ function lastSixOrder(){
 
 }
 
-function createTableLastSixOrder(){
+function createTableLastSixOrder(data){
+
+    let html = ``
+    for (let i = 0; i < data.length; i++){
+        const itm = data[i]
+        var product = productDetail(itm.pid,false)
+        let price = priceFormatter(product.price)
+
+        html += `<tr>
+                    <td>
+                        <div className="d-flex align-items-center">
+                            <div>
+                                <div className="font-weight-bolder">${itm.no}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div className="d-flex align-items-center">
+                            <span>${itm.cname}</span>
+                        </div>
+                    </td>
+                    <td className="text-nowrap">
+                        <div className="d-flex flex-column">
+                            <span className="font-weight-bolder mb-25">${product.name} ${product.description}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <a class="dropdown-item" href="javascript:productDetail(${itm.pid},true);">
+                                         <i class="far fa-file-alt"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <div className="d-flex align-items-center">
+                            <span className="font-weight-bolder mr-1">${price} TL</span>
+                        </div>
+                    </td>
+                </tr>`
+
+    }
+    $("#lastOrderTable").html(html)
 
 }
+
+function productDetail(id,status){
+
+    var returnData
+
+    $.ajax({
+        url: './dashboard/chosenProductDetail/' + id,
+        type: 'get',
+        dataType: "json",
+        async: false,
+        contentType : 'application/json; charset=utf-8',
+        success: function (data) {
+            console.log(data)
+            returnData = data.result
+            if(status === true){
+                createProductDetailModal(data)
+            }
+
+        },
+        error: function (err) {
+            Swal.fire({
+                title: "Error!",
+                text: "An error occurred during the last six order listing operation!",
+                icon: "error",
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            });
+            console.log(err)
+        }
+    })
+    return returnData
+
+}
+
+function createProductDetailModal(data) {
+    let html = ``;
+    const product = data.result;
+    const imageArr = product.fileName;
+    for (let i = 0; i < imageArr.length; i++) {
+        const image = imageArr[i];
+        html += ` <div class="swiper-slide">
+                    <img src="/productDetail/get_image/id=${product.productId}name=${image}" class="img-fluid" alt="banner" />
+                    </div>`;
+    }
+
+    const buttonHtml = `<button onclick='window.location.href="/productDetail/${product.productId}"' class="btn btn-outline-primary">Details</button>`;
+    $('#order_product_image_slider').html(html);
+    $('#order_product_button_div').html(buttonHtml);
+    $('#order_product_modal_title').text("Product No : " + product.no);
+    $('#order_product_title').text(product.name + " " + product.description);
+    $('#order_product_detail').text(product.details);
+    $('#order_product_modal').modal('toggle');
+}
+
 lastSixOrder()
 //--------------------------------------- Last Six Order - End ---------------------------------------------//
 
@@ -204,7 +299,6 @@ function categoryInfo(id){
         success: function (data) {
             //console.log(data)
             returnData = data.result
-            //createTableLastSixOrder(data)
         },
         error: function (err) {
             Swal.fire({

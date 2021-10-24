@@ -34,5 +34,8 @@ public class ElasticIndent {
     private String cname;
 
     @Field(type = FieldType.Text)
+    private String date;
+
+    @Field(type = FieldType.Text)
     private String status;
 }

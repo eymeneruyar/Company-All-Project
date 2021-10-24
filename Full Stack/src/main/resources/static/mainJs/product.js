@@ -22,7 +22,7 @@ $('#productCategoryAdd_modalForm').submit( ( event ) => {
     }
     //console.log("obj -> " + JSON.stringify(obj))
 
-    if (select_id != 0) {
+    if (select_id !== 0) {
         // update
         obj["id"] = select_id;
     }
@@ -34,7 +34,7 @@ $('#productCategoryAdd_modalForm').submit( ( event ) => {
         dataType: 'json',
         contentType: 'application/json; charset=utf-8',
         success: function (data) {
-            if (data.status == true && data.result != null) {
+            if (data.status === true && data.result != null) {
                 Swal.fire({
                     title: 'Success!',
                     text: data.message,
@@ -48,7 +48,7 @@ $('#productCategoryAdd_modalForm').submit( ( event ) => {
                     $("#categoryAdd_modal").modal('hide');
                 }, 2000);
                 resetFormCategory()
-            } else if (data.status == true && data.result == null) {
+            } else if (data.status === true && data.result == null) {
                 Swal.fire({
                     title: "Warning!",
                     text: "Returned Data is Empty!",
@@ -862,11 +862,11 @@ function productDetail(i){
                 dataType: "json",
                 contentType : 'application/json; charset=utf-8',
                 success: function (data){
-                    console.log(data.result)
                     for (let j = 0; j < data.result.fileName.length; j++) {
                         fileName = data.result.fileName[j]
                         html += `<div class="swiper-slide">
-                             <img class="img-fluid" src="/uploadImages/_products/${itm.productId}/${fileName}" alt="banner"/>
+                             <img src="/productDetail/get_image/id=${itm.productId}name=${fileName}" class="img-fluid" alt="banner" />
+
                          </div>`
 
                         $('#imagesChose').append('<option value="' + fileName + '">Image -  ' + j + '</option>'); //Ürüne ait image'leri silme aksiyonu select2 bölümüne eklenmesi
@@ -929,7 +929,6 @@ function productDetail(i){
 function deleteImage(){
 
     const chosenImages = $("#imagesChose").val()
-    console.log(chosenImages)
 
     Swal.fire({
         title: 'Are you sure?',
@@ -945,7 +944,7 @@ function deleteImage(){
     }).then(function (result) {
         if (result.value) {
             $.ajax({
-                url: './product/chosenImages/delete/' + chosenImages,
+                url: '/product/chosenImages/delete/images=' + chosenImages,
                 type: 'DELETE',
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',

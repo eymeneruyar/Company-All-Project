@@ -24,18 +24,15 @@ public class Indent extends AuditEntity<String>{
     private String no;
 
     @OneToOne
-    //@Valid
     private Customer customer;
 
     @OneToOne
-    //@Valid
     private Product product;
 
     @NotNull(message = "Invalid indent date! (null)")
     @NotEmpty(message = "Invalid indent date! (empty)")
     private String date;
 
-    @Positive(message = "Address index should be positive number!")
     @NotNull(message = "Invalid address index! (null)")
     private int adressIndex;
 

@@ -133,6 +133,7 @@ function deleteAnnouncement(aid) {
                                 confirmButton: 'btn btn-success'
                             }
                         });
+                        $('#announcement_pagination').twbsPagination('destroy');
                         getAllAnnouncementsByPage(0, $('#announcement_pagesize').val());
                     }else{
                         Swal.fire({
@@ -205,7 +206,7 @@ function dynamicPagination(totalPage, size) {
             if($('#announcement_search').val() === ""){
                 getAllAnnouncementsByPage(page-1, size);
             }else{
-                searchAnnouncementByKey($('#advertisement_search').val(), page-1, $('#advertisement_pagesize').val());
+                searchAnnouncementByKey($('#announcement_search').val(), page-1, $('#announcement_pagesize').val());
             }
 
             //$('#firstLast1-content').text('You are on Page ' + page);
@@ -328,5 +329,6 @@ editor.on('text-change', function() {
 let selectedAnnouncement = {};
 let selectedAnnouncementStatus = "Active";
 let editorText = "";
+$('#announcement_pagination').twbsPagination('destroy');
 getAllAnnouncementsByPage(0, 10);
 

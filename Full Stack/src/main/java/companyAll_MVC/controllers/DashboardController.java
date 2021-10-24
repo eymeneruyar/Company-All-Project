@@ -4,6 +4,8 @@ import companyAll_MVC.documents.ElasticIndent;
 import companyAll_MVC.documents.ElasticProduct;
 import companyAll_MVC.documents.ElasticProductCategory;
 import companyAll_MVC.entities.Announcement;
+import companyAll_MVC.entities.Product;
+import companyAll_MVC.entities.ProductCategory;
 import companyAll_MVC.repositories._elastic.*;
 import companyAll_MVC.repositories._jpa.AnnouncementRepository;
 import companyAll_MVC.utils.Check;
@@ -69,7 +71,7 @@ public class DashboardController {
     @GetMapping("/lastAddSixProduct")
     public Map<Statics,Object> lastAddSixProduct(){
         Map<Statics,Object> map = new LinkedHashMap<>();
-        Pageable pageable = PageRequest.of(0,6);
+        Pageable pageable = PageRequest.of(0,8);
         Page<ElasticProduct> elasticProductPage = elasticProductRepository.findByOrderByProductIdDesc(pageable);
         map.put(Statics.status,true);
         map.put(Statics.message,"Last added 6 product information listing operation success!");
@@ -82,11 +84,37 @@ public class DashboardController {
     @GetMapping("/lastSixOrder")
     public Map<Statics,Object> lastSixOrder(){
         Map<Statics,Object> map = new LinkedHashMap<>();
-        Pageable pageable = PageRequest.of(0,6);
+        Pageable pageable = PageRequest.of(0,8);
         Page<ElasticIndent> elasticIndentPage = elasticIndentRepository.findAllByOrderByIidDesc(pageable);
         map.put(Statics.status,true);
         map.put(Statics.message,"Last 6 order information listing operation success!");
         map.put(Statics.lastSixOrder,elasticIndentPage.getContent());
+        return map;
+    }
+
+    //Chosen Product Detail
+    @ResponseBody
+    @GetMapping("/chosenProductDetail/{stId}")
+    public Map<Check,Object> chosenProductDetail(@PathVariable String stId){
+        Map<Check,Object> map = new LinkedHashMap<>();
+        try {
+            int id = Integer.parseInt(stId);
+            Optional<ElasticProduct> elasticProductOptional = elasticProductRepository.findById(id);
+            if(elasticProductOptional.isPresent()){
+                map.put(Check.status,true);
+                map.put(Check.message,"Product listing operation is success!");
+                map.put(Check.result,elasticProductOptional.get());
+            }else{
+                map.put(Check.status,false);
+                map.put(Check.message,"Product is not found!");
+            }
+        } catch (NumberFormatException e) {
+            String error = "An error occurred during the operation!";
+            map.put(Check.status, false);
+            map.put(Check.message, error);
+            Util.logger(error, Product.class);
+            System.err.println(e);
+        }
         return map;
     }
 

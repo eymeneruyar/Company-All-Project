@@ -47,4 +47,11 @@ public class DashboardRestController {
         return dashboardDto.totalProductByCategoryId(stId);
     }
 
+    //Daily Announcment
+    @ResponseBody
+    @GetMapping("/dailyAnnouncment/{stPageNo}")
+    public Map<Check,Object> dailyAnnouncment(@PathVariable String stPageNo){
+        return dashboardDto.dailyAnnouncment(stPageNo);
+    }
+
 }

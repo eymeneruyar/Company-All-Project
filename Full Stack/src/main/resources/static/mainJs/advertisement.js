@@ -223,6 +223,7 @@ function deleteAdvertisement(aid) {
                                 confirmButton: 'btn btn-success'
                             }
                         });
+                        $('#advertisement_pagination').twbsPagination('destroy');
                         getAllAdvertisementsByPage(0, $('#advertisement_pagesize').val());
                     }else{
                         Swal.fire({
@@ -367,7 +368,7 @@ function createAdvertisementEditModal() {
 }
 
 function createImageModal(bytes) {
-    $("#advertisement_image").attr("src", "data:image/jpg;base64," + bytes);
+    $("#advertisement_image").attr("src", "data:image/*;base64," + bytes);
     $("#advertisement_image_modal_title").text(selectedAdvertisement.name);
     $('#advertisement_image_modal').modal('toggle');
 }
@@ -435,4 +436,5 @@ $( "#advertisement_form_modal_button" ).click(function() {
 
 let selectedAdvertisement = {};
 let selectedAdvertisementStatus = "Active";
+$('#advertisement_pagination').twbsPagination('destroy');
 getAllAdvertisementsByPage(0, 10);

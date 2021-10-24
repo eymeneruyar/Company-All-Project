@@ -8,15 +8,22 @@ import companyAll_MVC.repositories._jpa.UserRepository;
 import companyAll_MVC.services.UserService;
 import companyAll_MVC.utils.Check;
 import companyAll_MVC.utils.Util;
+import org.apache.commons.io.FileUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.jws.soap.SOAPBinding;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -168,5 +175,71 @@ public class SettingsController {
         }
         return map;
     }
+
+    @PostMapping("/profile_image_upload")
+    @ResponseBody
+    public Map<Check, Object> uploadImage(@RequestParam("image") MultipartFile file) {
+        Map<Check, Object> resultMap = new LinkedHashMap<>();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> userOptional = userRepository.findByEmailIgnoreCase(auth.getName());
+        if(userOptional.isPresent()){
+            User user = userOptional.get();
+            File folderProfile = new File(Util.UPLOAD_DIR_PROFILE_IMAGES + user.getId());
+            if(folderProfile.exists()){
+                File fileOld = new File(Util.UPLOAD_DIR_PROFILE_IMAGES +user.getId() + "/" + user.getProfileImage());
+                if(fileOld.delete()){
+                    resultMap = Util.imageUpload(file, Util.UPLOAD_DIR_PROFILE_IMAGES + user.getId() + "/");
+                }else{
+                    resultMap.put(Check.status, false);
+                    resultMap.put(Check.message, "Old image couldn't be deleted!");
+                }
+            }else{
+                boolean status = folderProfile.mkdir();
+                resultMap = Util.imageUpload(file, Util.UPLOAD_DIR_PROFILE_IMAGES + user.getId() + "/");
+            }
+            if((Boolean) resultMap.get(Check.status)){
+                try{
+                    user.setProfileImage(resultMap.get(Check.result).toString());
+                    userRepository.saveAndFlush(user);
+                    resultMap.put(Check.status, true);
+                    resultMap.put(Check.message, "Profile Image successfully saved!");
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        return resultMap;
+    }
+
+    @GetMapping("/get_profile_image")
+    @ResponseBody
+    public Map<Check, Object> getImage() throws IOException {
+        Map<Check, Object> resultMap = new LinkedHashMap<>();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> userOptional = userRepository.findByEmailIgnoreCase(auth.getName());
+        if(userOptional.isPresent()){
+            User user = userOptional.get();
+            String path = "";
+            String profile_image = user.getProfileImage();
+            if(!profile_image.equals("")){
+                path = Util.UPLOAD_DIR_PROFILE_IMAGES + user.getId() + "/" + profile_image;
+            }else{
+                path = Util.UPLOAD_DIR_PROFILE_IMAGES + "default_profile_image.jpg";
+            }
+            byte[] fileContent = FileUtils.readFileToByteArray(new File(path));
+            String encodedString = Base64.getEncoder().encodeToString(fileContent);
+            if(encodedString != null){
+                resultMap.put(Check.status, true);
+                resultMap.put(Check.result, encodedString);
+            }else{
+                resultMap.put(Check.status, false);
+            }
+
+        }
+        return resultMap;
+    }
+
+
+
 
 }

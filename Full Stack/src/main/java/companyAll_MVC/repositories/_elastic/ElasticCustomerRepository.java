@@ -20,25 +20,24 @@ public interface ElasticCustomerRepository extends ElasticsearchRepository<Elast
     @Query("{\"bool\":{\"must\":[{\"term\":{\"cid\":\"?0\"}}],\"must_not\":[],\"should\":[]}}")
     Optional<ElasticCustomer> findByCid(Integer cid);
 
-    @Query("{\"bool\":{\"should\":[{\"match\":{\"no\":\"?0\"}},{\"term\":{\"name\":\"?0\"}}, " +
-            "{\"term\":{\"surname\":\"?0\"}}," +
-            "{\"term\":{\"phone1\":\"?0\"}}," +
-            "{\"term\":{\"mail\":\"?0\"}}," +
-            "{\"term\":{\"taxno\":\"?0\"}}," +
-            "{\"term\":{\"country\":\"?0\"}}," +
-            "{\"term\":{\"city\":\"?0\"}},"+
-            "{\"term\":{\"status\":\"?1\"}}"+
+    @Query("{\"bool\":{\"should\":[{\"prefix\":{\"no\":\"?0\"}},{\"prefix\":{\"name\":\"?0\"}}, " +
+            "{\"prefix\":{\"surname\":\"?0\"}}," +
+            "{\"prefix\":{\"phone1\":\"?0\"}}," +
+            "{\"prefix\":{\"mail\":\"?0\"}}," +
+            "{\"prefix\":{\"taxno\":\"?0\"}}," +
+            "{\"prefix\":{\"country\":\"?0\"}}," +
+            "{\"prefix\":{\"city\":\"?0\"}}," +
+            "{\"prefix\":{\"status\":\"?1\"}}" +
             "],\"must_not\":[]}}")
     List<ElasticCustomer> searchByKeyAndStatus(String key, String status);
-
-    @Query("{\"bool\":{\"should\":[{\"match\":{\"no\":\"?0\"}},{\"term\":{\"name\":\"?0\"}}, " +
-            "{\"term\":{\"surname\":\"?0\"}}," +
-            "{\"term\":{\"phone1\":\"?0\"}}," +
-            "{\"term\":{\"mail\":\"?0\"}}," +
-            "{\"term\":{\"taxno\":\"?0\"}}," +
-            "{\"term\":{\"country\":\"?0\"}}," +
-            "{\"term\":{\"city\":\"?0\"}}," +
-            "{\"term\":{\"status\":\"?1\"}}" +
+    @Query("{\"bool\":{\"should\":[{\"prefix\":{\"no\":\"?0\"}},{\"prefix\":{\"name\":\"?0\"}}, " +
+            "{\"prefix\":{\"surname\":\"?0\"}}," +
+            "{\"prefix\":{\"phone1\":\"?0\"}}," +
+            "{\"prefix\":{\"mail\":\"?0\"}}," +
+            "{\"prefix\":{\"taxno\":\"?0\"}}," +
+            "{\"prefix\":{\"country\":\"?0\"}}," +
+            "{\"prefix\":{\"city\":\"?0\"}}," +
+            "{\"prefix\":{\"status\":\"?1\"}}" +
             "],\"must_not\":[]}}")
     Page<ElasticCustomer> searchByKeyAndStatus(String key, String status, Pageable pageable);
 

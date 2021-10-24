@@ -36,7 +36,7 @@ $("#companyInfo_form").submit( (event) => {
                 contentType : 'application/json; charset=utf-8',
                 success: function (data){
                     //console.log(data)
-                    if(data.status == true && data.result != null){
+                    if(data.status === true && data.result != null){
                         Swal.fire({
                             title: 'Success!',
                             text: data.message,
@@ -312,9 +312,107 @@ $("#userInfo_form").submit( (event) => {
 })
 //------------------------------ User Information Form - End ------------------------------------//
 
+function getProfileImage() {
+    $.ajax({
+        url: '/settings/get_profile_image',
+        type: 'GET',
+        dataType: 'Json',
+        success: function (data) {
+            setProfileImage(data.result);
+        },
+        error: function (err) {
+            console.log(err)
+        }
+    })
+}
 
+function imageUpload(formData) {
+    $.ajax({
+        url: '/settings/profile_image_upload',
+        type: "POST",
+        headers: {'IsAjax': 'true'},
+        dataType: "json",
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: function (data) {
+            if (data.status === true) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: data.message,
+                    icon: "success",
+                    customClass: {
+                        confirmButton: 'btn btn-primary'
+                    },
+                    buttonsStyling: false
+                });
+                $('#image_upload_form').trigger("reset");
+                getProfileImage(data.result);
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: data.message,
+                    icon: "error",
+                    customClass: {
+                        confirmButton: 'btn btn-primary'
+                    },
+                    buttonsStyling: false
+                });
 
+            }
+        },
+        error: function () {
+            Swal.fire({
+                title: "Error!",
+                text: "An error occurred during the operation!",
+                icon: "error",
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            });
+        }
+    });
+}
 
+File.prototype.convertToBase64 = function(callback){
+
+    var FR= new FileReader();
+    FR.onload = function(e) {
+        callback(e.target.result)
+    };
+    FR.readAsDataURL(this);
+}
+
+function setProfileImage(bytes) {
+    $("#profile_image").attr("src", "data:image/*;base64," + bytes);
+}
+
+$('#image_upload_form').submit((event) => {
+    event.preventDefault();
+    let formData = new FormData();
+    let image = document.getElementById("profile_image_input");
+    if(image.files[0] !== undefined){
+        formData.append("image", image.files[0]);
+        imageUpload(formData);
+        $("#profile_image_warning").text("");
+    }
+});
+
+$('#profile_image_input').change((event) => {
+    event.preventDefault();
+    let image_input = document.getElementById("profile_image_input");
+    const image = image_input.files[0];
+    if(image !== undefined){
+        image.convertToBase64(function (base64){
+            $("#profile_image").attr("src", base64);
+            $("#profile_image_warning").text("*");
+
+        })
+    }
+});
+
+getProfileImage();
 
 
 

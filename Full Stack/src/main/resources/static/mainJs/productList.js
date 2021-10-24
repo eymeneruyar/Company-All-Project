@@ -86,7 +86,6 @@ function getAllProductsByCategoryAndPage(page,showNumber,categoryId){
 }
 
 function createProductCard(data){
-    console.log(data)
     let html = ``;
     for (let i = 0; i < data.result.length; i++){
         globalProductArr = data.result
@@ -96,7 +95,8 @@ function createProductCard(data){
         html += `<div class="card ecommerce-card">
                      <div class="item-img text-center">
                          <a href="/productDetail/${itm.productId}">
-                             <img class="img-fluid card-img-top" src="/uploadImages/_products/${itm.productId}/${itm.fileName[0]}" alt="img-placeholder" /></a>
+                             <img class="img-fluid card-img-top" src="productDetail/get_image/id=${itm.productId}name=${itm.fileName[0]}" alt="img-placeholder" />
+                         </a>
                      </div>
                      <div class="card-body">
                          <div class="item-wrapper">

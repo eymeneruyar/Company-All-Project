@@ -1,3 +1,5 @@
+$('#survey_pagination').twbsPagination('destroy');
+getAllSurveysByPage(1, $("#survey_pagesize").val());
 // Functions - Start
 function noGenerator() {
     const date = new Date();

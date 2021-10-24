@@ -120,6 +120,7 @@ function deleteCustomer(cid) {
                             }
                         });
                         addressesTabCount = 0;
+                        $('#customer_pagination').twbsPagination('destroy');
                         getAllCustomersByPage(0, $('#customer_pagesize').val());
                     }else{
                         Swal.fire({
@@ -197,6 +198,7 @@ function changeCustomerStatus(cid, statusInt) {
                             }
                         });
                         addressesTabCount = 0;
+                        $('#customer_pagination').twbsPagination('destroy');
                         getAllCustomersByPage(0, $('#customer_pagesize').val());
                     }else{
                         Swal.fire({
@@ -477,7 +479,7 @@ function createCustomerTable(customers) {
         if(status === "Passive"){
             statusInt = 0;
             statusHtml = `<i class="fas fa-ban"></i>`;
-            statusDropdownHtml = `<i class="fas fa-check-circle"></i>
+            statusDropdownHtml = `<i class="mr-50 fas fa-check-circle"></i>
                                   <span>Unban</span>`;
         }
         html += `<tr role="row" class="odd">
@@ -669,7 +671,7 @@ $('#customer_form').submit( ( event ) => {
         customerObj["no"] = selectedCustomer.no;
         customerObj["addresses"] = selectedCustomer.addresses;
     }
-    saveCustomer(customerObj);
+    saveCustomer(customerObj, 0);
 })
 
 $('#address_form').submit( ( event ) => {
@@ -680,14 +682,13 @@ $('#address_form').submit( ( event ) => {
         type: type,
         detail: detail
     }
-    $("#tBodyAddresses > tr").remove();
     if(selectedAddressId !== 0){
         addressObj["id"] = selectedAddressId;
         updateAddress(addressObj);
     }else{
         addressList.push(addressObj);
         selectedCustomer["addresses"] = addressList;
-        saveCustomer(selectedCustomer);
+        saveCustomer(selectedCustomer, 1);
     }
 });
 
@@ -778,6 +779,7 @@ let selectedCustomerStatus = "Active";
 let addressesTabCount = 0;
 let addressList = [];
 let selectedAddressId = 0;
+$('#customer_pagination').twbsPagination('destroy');
 getAllCustomersByPage(0, 10);
 
 //getAllCustomers("Active");
