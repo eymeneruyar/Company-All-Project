@@ -586,7 +586,7 @@ function dynamicPaginationProduct(totalPage, size) {
             if($('#searchProduct').val() === ""){
                 getAllProductsByPage(page, size);
             }else{
-                searchProduct(page,size,$('#searchProduct').val())
+                searchProduct(page,$('#showProductTableRow').val(),$('#searchProduct').val())
             }
             //$('#firstLast1-content').text('You are on Page ' + page);
             $('.pagination').find('li').addClass('page-item');
@@ -630,6 +630,7 @@ function createRowDataProduct(data){
         const itm = data.result[i]
         let status = itm.status;
         let price = priceFormatter(itm.price)
+        let productCategory = productCategoryDetail(itm.productCategoryId[0])
         if(status === "Available"){
             statusInt = 1;
             statusHtml = `<i class="fas fa-check-circle"></i>`;
@@ -646,7 +647,7 @@ function createRowDataProduct(data){
                      <td>${itm.no}</td>
                      <td>${itm.name}</td>
                      <td>${itm.description}</td>
-                     <td>${itm.no}</td>
+                     <td>${productCategory.name}</td>
                      <td>${price}</td>
                      <td>${itm.date}</td>
                      <td>${itm.status}</td>
@@ -684,9 +685,37 @@ function createRowDataProduct(data){
     $("#productTable").html(html)
 }
 
+function productCategoryDetail(id){
+
+    var returnData
+
+    $.ajax({
+        url: './product/categoryDetail/' + id,
+        type: 'get',
+        dataType: "json",
+        async: false,
+        contentType : 'application/json; charset=utf-8',
+        success: function (data) {
+            //console.log(data)
+            returnData = data.result
+        },
+        error: function (err) {
+            console.log(err)
+        }
+    })
+    return returnData
+
+}
+
 $('#showProductTableRow').change(function(){
-    $('#pagination_product').twbsPagination('destroy');
-    getAllProductsByPage(1, parseInt($(this).val()));
+    if($('#searchProduct').val() === ""){
+        $('#pagination_product').twbsPagination('destroy');
+        getAllProductsByPage(1, parseInt($(this).val()));
+    }else{
+        //$('#pagination_product').twbsPagination('destroy');
+        searchProduct(page,parseInt($(this).val()),$('#searchProduct').val())
+    }
+
     //console.log("Show number Change " + parseInt($(this).val()));
 });
 getAllProductsByPage(1, 10);
@@ -848,6 +877,9 @@ function productDetail(i){
     $('#imagesChose').empty()
     const itm = globalProductArr[i]
     let html = ``
+    let campaign1
+    let campaign2
+    let campaign3
     var fileName
     $.ajax({
         url: './product/chosenId/' + itm.productId,
@@ -855,13 +887,14 @@ function productDetail(i){
         dataType: "json",
         contentType : 'application/json; charset=utf-8',
         success: function (data) {
-            console.log(data)
+            //console.log(data)
             $.ajax({
                 url:"./product/detail/" + itm.productId,
                 type: "get",
                 dataType: "json",
                 contentType : 'application/json; charset=utf-8',
                 success: function (data){
+                    console.log(data)
                     for (let j = 0; j < data.result.fileName.length; j++) {
                         fileName = data.result.fileName[j]
                         html += `<div class="swiper-slide">
@@ -878,19 +911,15 @@ function productDetail(i){
                     $("#statusDetail").text(itm.status)
                     $("#details").text(data.result.details)
                     if(data.result.campaignStatus === "Yes"){
-                        let campaign1 = `<label style="color: black" class="form-label">Campaign Status</label>
-                                <div   id="campaignStatusDetail" class="form-text"></div>`
-                        let campaign2 = `<label style="color: black" class="form-label">Campaign Name</label>
-                            <div   id="campaignNameDetail" class="form-text"></div>`
-                        let campaign3 = `<label style="color: black" class="form-label mt-1" >Campaign Details</label>
-                                <div   id="campaignDetailsInfo" class="form-text"></div>`
+
                         $('#campaignStatusDetail').text(data.result.campaignStatus)
                         $('#campaignNameDetail').text(data.result.campaignName)
                         $('#campaignDetailsInfo').text(data.result.campaignDetails)
 
-                        $("#campaign-1").html(campaign1)
-                        $("#campaign-2").html(campaign2)
-                        $("#campaign-3").html(campaign3)
+                    }else{
+                        $("#campaign-1").remove();
+                        $("#campaign-2").remove();
+                        $("#campaign-3").remove();
                     }
 
                 },
@@ -1023,7 +1052,7 @@ $('#searchProduct').keyup( function (event) {
     const searchData = $(this).val()
     if(searchData !== ""){
         $("#productTable > tr" ).remove()
-        //$('#content_pagination').twbsPagination('destroy');
+        $('#pagination_product').twbsPagination('destroy');
         searchProduct(1,$("#showProductTableRow").val(),searchData)
     }else{
         $('#pagination_product').twbsPagination('destroy');

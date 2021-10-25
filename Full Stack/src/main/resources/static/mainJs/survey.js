@@ -115,6 +115,7 @@ if (success.length) {
     /*------------------------------ Survey Data To Table - Start ------------------------------*/
     function createRowToTable(data) {
         let html = ``
+        console.log("createRowToTable")
         console.log(data)
         data.forEach((row) => {
             html += `<tr role="row" class="odd">
@@ -209,6 +210,7 @@ function surveyDelete(id) {
                                 confirmButton: 'btn btn-success'
                             }
                         });
+                        getAllSurveysByPage(0, 10);
                     } else {
                         Swal.fire({
                             icon: 'error',
@@ -219,7 +221,7 @@ function surveyDelete(id) {
                             }
                         });
                     }
-                    getAllSurveysByPage(0, 10);
+
 
                 },
                 error: function (err) {
@@ -271,8 +273,12 @@ function dynamicPagination(totalPage, size) {
         last: 'Last',
         startPage: 1,
         onPageClick: function (event, page) {
-            console.log("Page click");
-            getAllSurveysByPage(page - 1, size);
+            //console.log("Page click");
+            if($('#searchSurvey').val() === ""){
+                getAllSurveysByPage(page - 1, size);
+            }else{
+                search(page,size,$('#searchSurvey').val())
+            }
             //$('#firstLast1-content').text('You are on Page ' + page);
             $('.pagination').find('li').addClass('page-item');
             $('.pagination').find('a').addClass('page-link');
@@ -281,9 +287,13 @@ function dynamicPagination(totalPage, size) {
 }
 
 $('#survey_pagesize').change(function () {
-    $('#survey_pagination').twbsPagination('destroy');
-    getAllSurveysByPage(0, parseInt($(this).val()));
-    console.log("Show number Change " + parseInt($(this).val()));
+    if($('#searchSurvey').val() === ""){
+        $('#survey_pagination').twbsPagination('destroy');
+        getAllSurveysByPage(0, parseInt($(this).val()));
+    }else{
+        search( page, $('#survey_pagesize').val(),$('#searchSurvey').val());
+    }
+    //console.log("Show number Change " + parseInt($(this).val()));
 });
 getAllSurveysByPage(0, 10);
 /*------------------------------ Survey List Pagination - End ------------------------------*/
@@ -445,7 +455,7 @@ if (success1.length) {
                            <i class="fas fa-ellipsis-v"></i>
                         </button>
                         <div class="dropdown-menu">
-                           <a class="dropdown-item"  type="button"  href="javascript:surveyDelete(${row.id})" >
+                           <a class="dropdown-item"  type="button"  href="javascript:surveyOptionDelete(${row.id})" >
                                <i class="mr-50 far fa-trash-alt"></i>
                                <span>Delete</span>
                            </a>
@@ -490,6 +500,7 @@ if (success1.length) {
                                     confirmButton: 'btn btn-success'
                                 }
                             });
+                            updateModal(globalOptionId)
                         } else {
                             Swal.fire({
                                 icon: 'error',
@@ -500,7 +511,7 @@ if (success1.length) {
                                 }
                             });
                         }
-                        updateModal(globalOptionId)
+
                     },
                     error: function (err) {
                         Swal.fire({
@@ -527,7 +538,7 @@ if (success1.length) {
 
 function search(page, showPageSize, searchData) {
 
-    console.log(searchData)
+    //console.log(searchData)
 
     $.ajax({
         url: './surveys/search/' + searchData + "/" + (page - 1) + "/" + showPageSize,
@@ -560,7 +571,7 @@ $('#searchSurvey').keyup(function (event) {
     console.log("Key " + searchData)
     if (searchData !== "") {
         $("#surveyTableBody > tr").remove()
-        //$('#content_pagination').twbsPagination('destroy');
+        $('#survey_pagination').twbsPagination('destroy');
         search(1, $("#survey_pagesize").val(), searchData)
     } else {
         $('#survey_pagination').twbsPagination('destroy');
@@ -573,7 +584,8 @@ $('#searchSurvey').keyup(function (event) {
 //-------------------------------------- Survey Create Row - Start ------------------------------------------//
 function createRowData(data) {
     let html = ``
-    console.log(data)
+    //console.log("createRowData")
+    //console.log(data)
     for (let i = 0; i < data.result.length; i++) {
         globalArr = data.result
         const itm = data.result[i]
@@ -590,15 +602,15 @@ function createRowData(data) {
                            <i class="fas fa-ellipsis-v"></i>
                         </button>
                         <div class="dropdown-menu">
-                           <a class="dropdown-item" type="button" href="javascript:surveyUpdate(${i})   ">
+                           <a class="dropdown-item" type="button" href="javascript:surveyUpdate(${itm.id})   ">
                                <i class="mr-50 fas fa-pen"></i>
                                <span>Edit</span>
                            </a>
-                           <a class="dropdown-item" href="javascript:surveyOption(${i})">
+                           <a class="dropdown-item" href="javascript:surveyOption(${itm.id})">
                                <i class="mr-50 fas fa-plus"></i>
                                <span>Add Option</span>
                            </a>
-                           <a class="dropdown-item"  type="button"  href="javascript:surveyDelete(${i})" >
+                           <a class="dropdown-item"  type="button"  href="javascript:surveyDelete(${itm.id})" >
                                <i class="mr-50 far fa-trash-alt"></i>
                                <span>Delete</span>
                            </a>

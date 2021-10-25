@@ -45,7 +45,7 @@ public class SpringFoxConfig {
     private ApiInfo apiInfo() {
         return new ApiInfo(
                 "Company All - Rest Api",
-                "Company All REST API Project : Sekreter -> veli@mail.com, Password -> 12345 " + " ---- " +  "Admin -> eruyar123@gmail.com, Password -> 12345",
+                "REST API for Company All Project  : Customer -> veli@mail.com, Password -> 12345 " + " ---- " +  "Admin -> eruyar123@gmail.com, Password -> 12345",
                 "API 1.0",
                 "Terms of service",
                 new Contact("Company All", "https://www.linkedin.com/in/eymeneruyar/", "eruyareymen@gmail.com"),

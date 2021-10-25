@@ -7,6 +7,143 @@ const months = ['January', 'February', 'March', 'April', 'May', 'June',
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 //--------------------------------------- Definition of Days and Months - End -----------------------------------------//
 
+//--------------------------------------- News Chart - Start -----------------------------------------//
+var $earningsStrokeColor2 = '#28c76f66';
+var $earningsStrokeColor3 = '#28c76f33';
+var $earningsChart = document.querySelector('#earnings-chart');
+var earningsChartOptions;
+var earningsChart;
+
+function getNewsInfo(){
+
+    var returnData
+
+    $.ajax({
+        url: './dashboard/newsChart',
+        type: 'get',
+        dataType: "json",
+        async: false,
+        contentType : 'application/json; charset=utf-8',
+        success: function (data) {
+            //console.log(data)
+            returnData = data
+        },
+        error: function (err) {
+            Swal.fire({
+                title: "Error!",
+                text: "An error occurred during the news information listing operation!",
+                icon: "error",
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            });
+            console.log(err)
+        }
+    })
+    return returnData
+
+}
+
+function createNewsChart(){
+
+    var newsInfoData = getNewsInfo()
+
+    //console.log(newsInfoData)
+
+    earningsChartOptions = {
+        chart: {
+            type: 'donut',
+            height: 120,
+            toolbar: {
+                show: false
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        series: [newsInfoData.activeNews, newsInfoData.passiveNews, newsInfoData.totalNews],
+        legend: { show: false },
+        comparedResult: [2, -3, 8],
+        labels: ['Active News', 'Passive News', 'Total News'],
+        stroke: { width: 0 },
+        colors: [$earningsStrokeColor2, $earningsStrokeColor3, window.colors.solid.success],
+        grid: {
+            padding: {
+                right: -20,
+                bottom: -8,
+                left: -20
+            }
+        },
+        plotOptions: {
+            pie: {
+                startAngle: -10,
+                donut: {
+                    labels: {
+                        show: true,
+                        name: {
+                            offsetY: 15
+                        },
+                        value: {
+                            offsetY: -15,
+                            formatter: function (val) {
+                                return parseInt(val);
+                            }
+                        },
+                        total: {
+                            show: true,
+                            offsetY: 15,
+                            label: 'Total News',
+                            formatter: function (w) {
+                                return newsInfoData.totalNews;
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        responsive: [
+            {
+                breakpoint: 1325,
+                options: {
+                    chart: {
+                        height: 100
+                    }
+                }
+            },
+            {
+                breakpoint: 1200,
+                options: {
+                    chart: {
+                        height: 120
+                    }
+                }
+            },
+            {
+                breakpoint: 1045,
+                options: {
+                    chart: {
+                        height: 100
+                    }
+                }
+            },
+            {
+                breakpoint: 992,
+                options: {
+                    chart: {
+                        height: 120
+                    }
+                }
+            }
+        ]
+    };
+    earningsChart = new ApexCharts($earningsChart, earningsChartOptions);
+    earningsChart.render();
+
+}
+createNewsChart()
+//--------------------------------------- News Chart - End -------------------------------------------//
+
 //--------------------------------------- General Statics - Start ---------------------------------------//
 function generalStatics(){
 
@@ -165,7 +302,7 @@ function lastSixOrder(){
         dataType: "json",
         contentType : 'application/json; charset=utf-8',
         success: function (data) {
-            console.log(data)
+            //console.log(data)
             createTableLastSixOrder(data.lastSixOrder)
         },
         error: function (err) {
@@ -238,7 +375,7 @@ function productDetail(id,status){
         async: false,
         contentType : 'application/json; charset=utf-8',
         success: function (data) {
-            console.log(data)
+            //console.log(data)
             returnData = data.result
             if(status === true){
                 createProductDetailModal(data)
@@ -595,7 +732,7 @@ dailyAnnouncment(0)
 function createDailyAnnouncmentCard(data){
 
     const d = new Date()
-    console.log(data)
+    //console.log(data)
     let date = data[0].date.split(" ")
 
     let html = ``

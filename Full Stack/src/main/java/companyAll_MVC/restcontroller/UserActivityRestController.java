@@ -22,7 +22,7 @@ public class UserActivityRestController {
     }
 
     @GetMapping("/api/userActivity")
-    @ApiOperation(value = "Sistemde olan kullanıcının bilgilerini getirir.")
+    @ApiOperation(value = "Retrieves the information of the user in the system.")
     public Map<Check,Object> list(HttpServletRequest req, HttpServletResponse res, UserActivity userActivity) throws IOException {
         Map<Check,Object> hm = new LinkedHashMap<>();
         hm.put(Check.status,true);

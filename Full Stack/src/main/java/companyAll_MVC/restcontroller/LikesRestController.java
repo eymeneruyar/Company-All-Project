@@ -8,6 +8,7 @@ import companyAll_MVC.entities.Product;
 import companyAll_MVC.repositories._jpa.IndentRepository;
 import companyAll_MVC.repositories._jpa.LikesProductRepository;
 import companyAll_MVC.utils.Check;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -39,6 +40,7 @@ public class LikesRestController {
     }
 
     @PostMapping("/addlike")
+    @ApiOperation(value = "Products is added like by indent id and customer id.")
     public Map<Check,Object> add(@RequestBody Likes likes) {
         return likesDto.add(likes);
     }

@@ -288,8 +288,12 @@ $('#announcement_add_form').submit((event) => {
 });
 
 $('#announcement_pagesize').change(function () {
-    $('#announcement_pagination').twbsPagination('destroy');
-    getAllAnnouncementsByPage(0, parseInt($(this).val()));
+    if($('#announcement_search').val() === ""){
+        $('#announcement_pagination').twbsPagination('destroy');
+        getAllAnnouncementsByPage(0, parseInt($(this).val()));
+    }else{
+        searchAnnouncementByKey($('#announcement_search').val(), page-1, $('#announcement_pagesize').val());
+    }
 });
 
 $('#announcement_status').change(function(){

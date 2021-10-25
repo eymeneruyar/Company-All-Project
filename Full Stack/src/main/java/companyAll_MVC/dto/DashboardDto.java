@@ -12,9 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -31,7 +28,8 @@ public class DashboardDto {
     final ElasticAnnouncementRepository elasticAnnouncementRepository;
     final ElasticProductCategoryRepository elasticProductCategoryRepository;
     final AnnouncementRepository announcementRepository;
-    public DashboardDto(ElasticLikesRepository elasticLikesRepository, ElasticCustomerRepository elasticCustomerRepository, ElasticIndentRepository elasticIndentRepository, ElasticContentsRepository elasticContentsRepository, ElasticProductRepository elasticProductRepository, ElasticAnnouncementRepository elasticAnnouncementRepository, ElasticProductCategoryRepository elasticProductCategoryRepository, AnnouncementRepository announcementRepository) {
+    final ElasticNewsRepository elasticNewsRepository;
+    public DashboardDto(ElasticLikesRepository elasticLikesRepository, ElasticCustomerRepository elasticCustomerRepository, ElasticIndentRepository elasticIndentRepository, ElasticContentsRepository elasticContentsRepository, ElasticProductRepository elasticProductRepository, ElasticAnnouncementRepository elasticAnnouncementRepository, ElasticProductCategoryRepository elasticProductCategoryRepository, AnnouncementRepository announcementRepository, ElasticNewsRepository elasticNewsRepository) {
         this.elasticLikesRepository = elasticLikesRepository;
         this.elasticCustomerRepository = elasticCustomerRepository;
         this.elasticIndentRepository = elasticIndentRepository;
@@ -40,6 +38,18 @@ public class DashboardDto {
         this.elasticAnnouncementRepository = elasticAnnouncementRepository;
         this.elasticProductCategoryRepository = elasticProductCategoryRepository;
         this.announcementRepository = announcementRepository;
+        this.elasticNewsRepository = elasticNewsRepository;
+    }
+
+    //News Chart
+    public Map<Statics,Object> newsChart(){
+        Map<Statics,Object> map = new LinkedHashMap<>();
+        map.put(Statics.status,true);
+        map.put(Statics.message,"News statics information listing operation success!");
+        map.put(Statics.activeNews,elasticNewsRepository.countByStatusAllIgnoreCase("Active"));
+        map.put(Statics.passiveNews,elasticNewsRepository.countByStatusAllIgnoreCase("Passive"));
+        map.put(Statics.totalNews,elasticNewsRepository.allNews().size());
+        return map;
     }
 
     //General Statics Information

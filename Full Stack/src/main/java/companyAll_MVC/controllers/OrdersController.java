@@ -209,5 +209,29 @@ public class OrdersController {
         return resultMap;
     }
 
+    @GetMapping("/change-status/id={id}status={status}")
+    @ResponseBody
+    public Map<Check, Object> changeStatus(@PathVariable Integer id, @PathVariable String status) {
+        Map<Check, Object> resultMap = new LinkedHashMap<>();
+        Optional<Indent> indentOptional = indentRepository.findById(id);
+        Optional<ElasticIndent> elasticIndentOptional = elasticIndentRepository.findByIid(id);
+        if(indentOptional.isPresent() && elasticIndentOptional.isPresent()){
+            try{
+                Indent indent = indentOptional.get();
+                ElasticIndent elasticIndent = elasticIndentOptional.get();
+                indent.setStatus(status);
+                elasticIndent.setStatus(status);
+                indentRepository.save(indent);
+                elasticIndentRepository.save(elasticIndent);
+                resultMap.put(Check.status, true);
+                resultMap.put(Check.result, 1);
+            }catch (Exception e){
+                resultMap.put(Check.status, false);
+                resultMap.put(Check.message, "An error occurred during the operation.");
+            }
+        }
+        return resultMap;
+    }
+
 
 }

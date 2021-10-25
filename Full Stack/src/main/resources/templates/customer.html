@@ -6,9 +6,10 @@
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
+
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
     <title>Customer</title>
-
+    <link rel="shortcut icon" type="image/x-icon" href="/app-assets/images/ico/favicon.png">
 
     <!------------------------------------------------------ Valdiation CSS - Start ------------------------------------------------------>
     <link rel="stylesheet" th:href="@{/app-assets/css/plugins/forms/form-validation.css}" type="text/css">
@@ -265,9 +266,6 @@
                                                         <select class="select2 form-control form-control-lg"
                                                                 id="country" required>
                                                             <option value="">Select Country</option>
-                                                            <option value="AK">Alaska</option>
-                                                            <option value="HI">Hawaii</option>
-                                                            <option value="CA">California</option>
                                                         </select>
                                                         <div class="valid-feedback">Looks good!</div>
                                                         <div class="invalid-feedback">Please select your country.</div>
@@ -279,9 +277,6 @@
                                                         <select class="select2 form-control form-control-lg" id="city"
                                                                 required>
                                                             <option value="">Select City</option>
-                                                            <option value="AK">Alaska</option>
-                                                            <option value="HI">Hawaii</option>
-                                                            <option value="CA">California</option>
                                                         </select>
                                                         <div class="valid-feedback">Looks good!</div>
                                                         <div class="invalid-feedback">Please select your city.</div>

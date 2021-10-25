@@ -19,18 +19,10 @@ public interface ElasticAdvertisementRepository extends ElasticsearchRepository<
     Page<ElasticAdvertisement> findAllByStatus(String status, Pageable pageable);
 
     @Query("{\"bool\":{\"should\":[{\"prefix\":{\"no\":\"?0\"}},{\"prefix\":{\"name\":\"?0\"}}, " +
-            "{\"prefix\":{\"view\":\"?0\"}}," +
-            "{\"prefix\":{\"width\":\"?0\"}}," +
-            "{\"prefix\":{\"height\":\"?0\"}}," +
-            "{\"prefix\":{\"click\":\"?0\"}}," +
             "{\"prefix\":{\"status\":\"?1\"}}" +
             "],\"must_not\":[]}}")
     List<ElasticAdvertisement> searchByKeyAndStatus(String key, String status);
     @Query("{\"bool\":{\"should\":[{\"prefix\":{\"no\":\"?0\"}},{\"prefix\":{\"name\":\"?0\"}}, " +
-            "{\"prefix\":{\"view\":\"?0\"}}," +
-            "{\"prefix\":{\"width\":\"?0\"}}," +
-            "{\"prefix\":{\"height\":\"?0\"}}," +
-            "{\"prefix\":{\"click\":\"?0\"}}," +
             "{\"prefix\":{\"status\":\"?1\"}}" +
             "],\"must_not\":[]}}")
     Page<ElasticAdvertisement> searchByKeyAndStatus(String key, String status, Pageable pageable);

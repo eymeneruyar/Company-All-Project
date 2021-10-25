@@ -46,20 +46,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/surveys/**").hasRole("ADMIN")
                 .antMatchers("/orders/**").hasRole("ADMIN")
                 .antMatchers("/settings/**").hasRole("ADMIN")
+                .antMatchers("/redis/**").hasRole("ADMIN")
                 .antMatchers("/home/**").permitAll()
                 .antMatchers("/register/**").permitAll()
                 .antMatchers("/forgotPassword/**").permitAll()
+                .antMatchers("/newPassword/**").permitAll()
 
                 //Rest Api Configuration
                 .antMatchers("/api/product/**").hasRole("ADMIN")
                 .antMatchers("/api/likes/**").hasRole("ADMIN")
                 .antMatchers("/api/dashboard/**").hasRole("ADMIN")
+                .antMatchers("/api/advertisement/**").hasRole("ADMIN")
+                .antMatchers("/api/customer/**").hasAnyRole("ADMIN","CUSTOMER")
+                .antMatchers("/api/order/**").hasAnyRole("ADMIN","CUSTOMER")
 
                 .antMatchers("/static/**").permitAll()
                 .antMatchers("/images/**").permitAll()
                 .antMatchers("/templates/**").permitAll()
                 .antMatchers("/app-assets/**").permitAll()
                 .antMatchers("/assets/**").permitAll()
+                .antMatchers("/errorPage/**").permitAll()
                 .antMatchers("/homePage/**").permitAll()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/mainJs/**").permitAll()
@@ -96,32 +102,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //Iframe showing options
         http.headers().frameOptions().disable();
 
-        //Rest Api Configuration
-        /*http
-                .httpBasic()
-                .and()
-                .authorizeRequests()
-                //.antMatchers("/dashboard/**").hasRole("ADMIN")
-                //.antMatchers("/advertisement/**").hasRole("ADMIN")
-                //.antMatchers("/contents/**").hasRole("ADMIN")
-                //.antMatchers("/customer/**").hasRole("ADMIN")
-
-                //.antMatchers("/galleries/**").hasRole("ADMIN")
-                //.antMatchers("/newsAdd/**").hasRole("ADMIN")
-                //.antMatchers("/newsList/**").hasRole("ADMIN")
-                //.antMatchers("/newsDetail/**").hasRole("ADMIN")
-                //.antMatchers("/announcements/**").hasRole("ADMIN")
-
-                //.antMatchers("/surveys/**").hasRole("ADMIN")
-                //.antMatchers("/orders/**").hasRole("ADMIN")
-                //.antMatchers("/settings/**").hasRole("ADMIN")
-                //.antMatchers("/register/**").permitAll()
-                .antMatchers("/admin/**").permitAll()
-                .and()
-                .csrf().disable()
-                .formLogin().disable()
-                .logout().logoutSuccessUrl("/admin/logout").invalidateHttpSession(true);*/
-
     }
 
     @Override
@@ -133,6 +113,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/swagger-resources/**",
                 "/configuration/security",
                 "/swagger-ui.html",
+                "/swagger-ui/**",
                 "/webjars/**");
 
     }

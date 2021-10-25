@@ -406,8 +406,12 @@ $('#advertisement_add_form').submit((event) => {
 });
 
 $('#advertisement_pagesize').change(function () {
-    $('#advertisement_pagination').twbsPagination('destroy');
-    getAllAdvertisementsByPage(0, parseInt($(this).val()));
+    if($('#advertisement_search').val() === ""){
+        $('#advertisement_pagination').twbsPagination('destroy');
+        getAllAdvertisementsByPage(0, parseInt($(this).val()));
+    }else{
+        searchAdvertisementByKey($('#advertisement_search').val(), page-1, $('#advertisement_pagesize').val());
+    }
 });
 
 $('#advertisement_status').change(function(){

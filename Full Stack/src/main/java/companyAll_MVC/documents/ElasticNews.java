@@ -15,6 +15,8 @@ public class ElasticNews {
     @Id
     private String id;
 
+    private String categoryId;
+
     @Field(type = FieldType.Text)
     private String no;
 

@@ -333,6 +333,32 @@ public class ProductAddController {
         return map;
     }
 
+    @ResponseBody
+    @GetMapping("/categoryDetail/{stId}")
+    public Map<Check, Object> categoryDetail(@PathVariable String stId) {
+        Map<Check, Object> map = new LinkedHashMap<>();
+        try {
+            int id = Integer.parseInt(stId);
+            Optional<ElasticProductCategory> productCategoryOptional = elasticProductCategoryRepository.findById(id);
+            if(productCategoryOptional.isPresent()){
+                ElasticProductCategory elasticProductCategory = productCategoryOptional.get();
+                map.put(Check.status, true);
+                map.put(Check.message, "Category detail list operations success!");
+                map.put(Check.result,elasticProductCategory);
+            }else{
+                map.put(Check.status,false);
+                map.put(Check.message,"Product category is not found!");
+            }
+        } catch (Exception e) {
+            String error = "An error occurred during the product category detail operation";
+            map.put(Check.status, false);
+            map.put(Check.message, error);
+            Util.logger(error, ProductCategory.class);
+            System.err.println(e);
+        }
+        return map;
+    }
+
     //====================================== Category Section - End ========================================//
 
     //====================================== Product Section - Start ========================================//

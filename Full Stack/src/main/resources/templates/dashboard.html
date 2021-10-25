@@ -5,8 +5,10 @@
       class="loading semi-dark-layout" lang="en" data-layout="semi-dark-layout" data-textdirection="ltr">
 
 <head>
+
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Dashboard</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/app-assets/images/ico/favicon.png">
 
 <!------------------------------------------------------ Dashboards Charts CSS - Start -------------------------------------------------------->
     
@@ -42,11 +44,8 @@
                             <div class="row">
                                 <div class="col-6">
                                     <h4 class="card-title mb-1">News </h4>
-                                    <div class="font-small-2">This Month</div>
-                                    <h5 class="mb-1">$4055.56</h5>
-                                    <p class="card-text text-muted font-small-2">
-                                        <span class="font-weight-bolder">68.2%</span><span> more earnings than last month.</span>
-                                    </p>
+                                    <div class="font-small-2">Total News</div>
+                                    <h5 class="mb-1" th:text="${totalNews}"></h5>
                                 </div>
                                 <div class="col-6">
                                     <div id="earnings-chart"></div>
@@ -89,7 +88,7 @@
                 <div class="col-lg-8 col-12">
                     <div class="card card-company-table">
                         <div class="card-body p-0">
-                            <h4 class="card-title mt-1 ml-1">Last Added 8 Product</h4>
+                            <h4 class="card-title mt-1 ml-1">Last Added 6 Product</h4>
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
@@ -135,7 +134,7 @@
                 <div class="col-lg-8 col-12">
                     <div class="card card-company-table">
                         <div class="card-body p-0">
-                            <h4 class="card-title mt-1 ml-1">Last 8 Order</h4>
+                            <h4 class="card-title mt-1 ml-1">Last 6 Order</h4>
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
@@ -213,7 +212,7 @@
 <th:block layout:fragment="contentJs">
     <!------------------------------------------------------ Dashboards Charts Js - Start -------------------------------------------------------->
 
-        <script th:src="@{/app-assets/js/scripts/pages/dashboard-ecommerce.js}"></script>
+        <!-- <script th:src="@{/app-assets/js/scripts/pages/dashboard-ecommerce.js}"></script> -->
         <script th:src="@{/app-assets/vendors/js/charts/apexcharts.min.js}"></script>
         <script th:src="@{/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js}"></script>
     <!------------------------------------------------------ Dashboards Charts Js - End   -------------------------------------------------------->

@@ -17,9 +17,10 @@ import java.util.*;
 public class Util {
 
     public static final String UPLOAD_DIR_PRODUCTS =  "src/main/resources/images/product_images/";
-    public static final String UPLOAD_DIR_NEWS =  "src/main/resources/static/uploadImages/_news/";
+    public static final String UPLOAD_DIR_NEWS =  "src/main/resources/images/news_images/";
     public static final String UPLOAD_DIR_PROFILE_IMAGES  = "src/main/resources/images/profile_images/";
     public static final String UPLOAD_DIR_ADVERTISEMENT = "src/main/resources/images/ad_images/";
+    public static final String UPLOAD_DIR_GALLERY =  "src/main/resources/images/gallery_images/";
 
     public static long maxFileUploadSize = 5120;
 

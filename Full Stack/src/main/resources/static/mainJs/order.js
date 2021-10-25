@@ -137,10 +137,101 @@ function deleteOrder(iid) {
     });
 }
 
+function changeOrderStatus(iid, statusInt) {
+    let url;
+    let text;
+    let confirmButtonText;
+    let successTitle;
+    if(statusInt === 1){ //Deliver
+        url = '/order/change-status/id=' + iid + 'status=Delivered';
+        text = "This order will be set as delivered.!";
+        confirmButtonText = "Deliver";
+        successTitle = "Delivered!"
+    }else if(statusInt === 0){ //Undeliver
+        url = '/order/change-status/id=' + iid + 'status=Active';
+        text = "This order will be set as active.!";
+        confirmButtonText = "Undeliver";
+        successTitle = "Undelivered!"
+    }else{
+        return;
+    }
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: text,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: confirmButtonText,
+        customClass: {
+            confirmButton: 'btn btn-primary',
+            cancelButton: 'btn btn-outline-danger ml-1'
+        },
+        buttonsStyling: false
+    }).then(function (result) {
+        if (result.value) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if( data.status === true){
+                        Swal.fire({
+                            icon: 'success',
+                            title: successTitle,
+                            text: data.message,
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                        selectedOrder = {};
+                        $('#order_pagination').twbsPagination('destroy');
+                        getAllOrdersByPage(0, $('#order_pagesize').val());
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: "Error",
+                            text: data.message,
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                    }
+                },
+                error: function (err) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: "Error",
+                        text: "An error occurred during the operation",
+                        customClass: {
+                            confirmButton: 'btn btn-success'
+                        }
+                    });
+                    console.log(err)
+                }
+            })
+        }
+    });
+}
+
 function createOrderTable(orders) {
     let html = ``;
+    let statusHtml = ``;
+    let statusInt;
     for (let i = 0; i < orders.length; i++) {
         const order = orders[i];
+        let status = order.status;
+        if(status === "Active"){
+            statusInt = 1;
+            statusHtml = `<button type="button" class="btn btn-sm btn-outline-success" onclick="changeOrderStatus(` + order.iid + `, `+statusInt+`)">
+                                <i class="fas fa-check-circle" style="font-size: 20px;"></i>
+                           </button>`;
+        }
+        if(status === "Delivered"){
+            statusInt = 0;
+            statusHtml = `<button type="button" class="btn btn-sm btn-outline-danger" onclick="changeOrderStatus(` + order.iid + `, `+statusInt+`)">
+                                <i class="fas fa-ban" style="font-size: 20px;"></i>
+                           </button>`;
+        }
         html += `                <tr>
                                     <td>` + order.no + `</td>
                                     <td>` + order.cno + `</td>
@@ -155,12 +246,15 @@ function createOrderTable(orders) {
                                     <td>
                                         <button type="button" class="btn btn-sm" onClick="getOrder(` + order.iid + `, ` + 2 + `)">
                                             <i class="far fa-file-alt" style="font-size: 20px;"></i>
-                                        </button>
+                                        </button>   
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteOrder(` + order.iid + `)">
                                             <i class="far fa-trash-alt" style="font-size: 20px; width: 13px;"></i>
                                         </button>
+                                    </td>
+                                    <td>
+                                        `+statusHtml+`
                                     </td>
                                 </tr>`;
     }
@@ -196,8 +290,12 @@ function createAddressModal() {
 }
 
 $('#order_pagesize').change(function () {
-    $('#order_pagination').twbsPagination('destroy');
-    getAllOrdersByPage(0, parseInt($(this).val()));
+    if($('#order_search').val() === ""){
+        $('#order_pagination').twbsPagination('destroy');
+        getAllOrdersByPage(0, parseInt($(this).val()));
+    }else{
+        searchOrderByKey($('#order_search').val(), page-1, $('#order_pagesize').val());
+    }
 });
 
 $('#order_status').change(function () {

@@ -5,15 +5,16 @@ getAllNewsByPage(1, $("#showNewsSize").val());
 $('#pagination_category').twbsPagination('destroy');
 getAllNewsCategoryByPage(1, $("#showCategorySize").val());
 
-$('#pagination_news').change(function (){
+$('#pagination_news').change(function () {
     $('#pagination_news').twbsPagination('destroy');
     getAllNewsByPage(1, $("#showNewsSize").val());
 });
-$('#pagination_category').change(function (){
+$('#pagination_category').change(function () {
     console.log("değişti")
     $('#pagination_category').twbsPagination('destroy');
     getAllNewsCategoryByPage(1, $("#showCategorySize").val());
 });
+
 // <------------------------------------------------FUNCTIONS - START-------------------------------------------------->
 
 function noGenerator() {
@@ -330,8 +331,12 @@ function createRowData(data) {
 }
 
 $('#showCategorySize').change(function () {
-   $('#pagination_category').twbsPagination('destroy');
-    getAllNewsCategoryByPage(1, parseInt($(this).val()));
+    if($('#searchCategory').val() === ""){
+        $('#pagination_category').twbsPagination('destroy');
+        getAllNewsCategoryByPage(1, parseInt($(this).val()));
+    }else{
+        searchNewsCategory( page, $('#showCategorySize').val(),$('#searchCategory').val());
+    }
 });
 getAllNewsCategoryByPage(1, 10);
 
@@ -629,8 +634,12 @@ function createRowDataNews(data) {
 }
 
 $('#showNewsTableRow').change(function () {
-    $('#pagination_news').twbsPagination('destroy');
-    getAllNewsByPage(1, parseInt($(this).val()));
+    if($('#searchNewsData').val() === ""){
+        $('#pagination_news').twbsPagination('destroy');
+        getAllNewsByPage(1, parseInt($(this).val()));
+    }else{
+        searchNews( page, $('#showNewsTableRow').val(),$('#searchNewsData').val());
+    }
 });
 getAllNewsByPage(1, 10);
 
@@ -769,7 +778,9 @@ function newsDetail(i) {
                     for (let j = 0; j < data.result.fileName.length; j++) {
                         fileName = data.result.fileName[j]
                         html += `<div class="swiper-slide">
-                             <img class="img-fluid" src="/uploadImages/_news/${itm.id}/${fileName}" alt="banner"/>
+<!--                             <img class="img-fluid" src="/uploadImages/_news/${itm.id}/${fileName}" alt="banner"/>-->
+                             <img src="/news/newsDetail/get_image/id=${itm.id}name=${fileName}" class="img-fluid" alt="banner" />
+
                          </div>`
 
                         $('#imagesChose').append('<option value="' + fileName + '">Image -  ' + j + '</option>');
@@ -904,7 +915,7 @@ function newsUpdate(i) {
 
 // <------------------------------------------------NEWS IMAGE DELETE - START------------------------------------------->
 
-function deleteImage(){
+function deleteImage() {
 
     const chosenImages = $("#imagesChose").val()
     console.log(chosenImages)
@@ -928,7 +939,7 @@ function deleteImage(){
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
-                    if( chosenImages.length > 0){
+                    if (chosenImages.length > 0) {
                         Swal.fire({
                             icon: 'success',
                             title: "Deleted!",
@@ -938,10 +949,10 @@ function deleteImage(){
                             }
                         });
                         $('#imagesChose').empty()
-                        setTimeout(function(){
+                        setTimeout(function () {
                             $("#newsDetail").modal('hide');
                         }, 2000);
-                    }else{
+                    } else {
                         Swal.fire({
                             icon: 'warning',
                             title: "Warning",
@@ -968,8 +979,8 @@ function deleteImage(){
     });
 
 }
-// <------------------------------------------------NEWS IMAGE DELETE - END-------------------------------------------->
 
+// <------------------------------------------------NEWS IMAGE DELETE - END-------------------------------------------->
 
 
 // ================================================NEWS ACTIONS - END===================================================

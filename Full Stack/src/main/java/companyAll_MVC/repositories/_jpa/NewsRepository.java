@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface NewsRepository extends JpaRepository<News,Integer > {
 
-    @Procedure(procedureName = "NewsDeleteChoseImage")
+    @Procedure(procedureName = "ProcNewsDeleteChoseImage")
     void deleteImageByFileName(@Param("filename") String filename);
 
     Page<News> findByNewsCategory_Id(Integer id, Pageable pageable);

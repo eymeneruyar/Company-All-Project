@@ -5,18 +5,17 @@
       class="loading semi-dark-layout" lang="en" data-layout="semi-dark-layout" data-textdirection="ltr">
 
 <head>
+
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Gallery</title>
-
-<!------------------------------------------------------ Editor Js - Start ------------------------------------------------------>
-    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/katex.min.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/monokai-sublime.min.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/quill.snow.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/quill.bubble.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/form-quill-editor.css}">
-<!------------------------------------------------------ Editor Js - End -------------------------------------------------------->
+    <title>Gallery Add</title>
 
 
+
+    <!--------------------------------------------- Swiper CSS - Start --------------------------------------------->
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/extensions/swiper.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/extensions/ext-component-swiper.css}">
+
+    <!--------------------------------------------- Swiper CSS - End ----------------------------------------------->
 
 </head>
 
@@ -28,107 +27,422 @@
     <div class="app-content content ">
         <div class="content-overlay"></div>
         <div class="header-navbar-shadow"></div>
-        <!-- Basic Inputs start -->
-        <section id="basic-input">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Gallery Actions</h4>
-                        </div>
-                        <div class="card-body">
-                            <form action="">
-                                <div class="row">
-                                    <div class="col-xl-4 col-md-6 col-12 mb-1">
-                                        <div class="form-group col-12">
-                                            <button type="button" style="width: 50%;" data-toggle="modal" data-target="#inlineForm" class="btn btn-primary">Add Gallery</button>
+        <div class="row">
+            <!-- Centered Aligned Tabs starts -->
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                    </div>
+                    <div class="card-body">
+                        <ul class="nav nav-tabs justify-content-center" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab-center" data-toggle="tab" href="#gallery"
+                                   aria-controls="home-center" role="tab" aria-selected="true">Gallery</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="service-tab-center" data-toggle="tab" href="#category"
+                                   aria-controls="service-center" role="tab" aria-selected="false">Category</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="gallery" aria-labelledby="home-tab-center" role="tabpanel">
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-9">
+                                                <div class="buttons">
+                                                    <label>
+                                                        Show
+                                                        <select class="custom-select form-control"
+                                                                id="showGalleryTableRow">
+                                                            <option value="10">10</option>
+                                                            <option value="25">25</option>
+                                                            <option value="50">50</option>
+                                                            <option value="100">100</option>
+                                                        </select>
+                                                    </label>
+                                                    <button class="dt-button btn btn-primary ml-2" tabindex="0"
+                                                            type="button" data-toggle="modal"
+                                                            data-target="#galleryAdd_modal">
+                                                        <span><i class="fas fa-plus"></i> Add Gallery</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="buttons">
+                                                    <input type="text" class="form-control" id="searchGalleryData"
+                                                           placeholder="Search Gallery">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Title</th>
+                                                <th>Detail</th>
+                                                <th>Status</th>
+                                                <th>Date</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody style="font-size: 14px;" id="galleryTable">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div >
+                                <div id="newsPage">
+                                    <ul class="paginationGallery firstLast1-links justify-content-end " id="pagination_gallery"></ul>
                                 </div>
-                            </form>
+
+                            </div>
+                            <div class="tab-pane " id="category" aria-labelledby="service-tab-center" role="tabpanel">
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-9">
+                                                <div class="buttons">
+                                                    <label>
+                                                        Show
+                                                        <select class="custom-select form-control"
+                                                                id="showCategorySize">
+                                                            <option value="10">10</option>
+                                                            <option value="25">25</option>
+                                                            <option value="50">50</option>
+                                                            <option value="100">100</option>
+                                                        </select>
+                                                    </label>
+                                                    <button class="dt-button btn btn-primary ml-2" tabindex="0"
+                                                            type="button" data-toggle="modal"
+                                                            data-target="#categoryAdd_modal">
+                                                        <span><i class="fas fa-plus"></i> Add Category</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="buttons">
+                                                    <input type="text" class="form-control" id="searchCategory"
+                                                           placeholder="Search Category">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Name</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody style="font-size: 14px;" id="categoryTable">
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div id="categoryPage">
+                                    <ul class="paginationCategory firstLast1-links justify-content-end "
+                                        id="pagination_category"></ul>
+                                </div>
+
+
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-        <!-- Basic Inputs end -->
-        
-        <!-- Modal -->
-       <div class="modal fade text-left" id="inlineForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+            <!-- Centered Aligned Tabs ends -->
+        </div>
+    </div>
+    <!-- END: Content-->
+
+    <!-- Modal Gallery -->
+    <div class="modal fade text-left" id="galleryAdd_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16"
+         aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel33">Add New Gallery</h4>
+                    <h4 class="modal-title" id="newsModal">Add Gallery</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="#">
-                    <div class="modal-body">
-                        <label>Name: </label>
-                        <div class="form-group">
-                            <input type="text" placeholder="Gallery Name" class="form-control" />
-                        </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section id="multiple-column-form-news">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form class="needs-validation invalid" novalidate id="galleryAdd_modalForm">
+                                            <div class="row">
+                                                <div class="col-md-12 col-12">
+                                                    <div class="form-group">
+                                                        <label for="title">Title</label>
+                                                        <input type="text" id="name" class="form-control"
+                                                               placeholder="Gallery Title" required>
+                                                        <div class="valid-feedback">Looks good!</div>
+                                                        <div class="invalid-feedback">Please enter title.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                    <div class="form-group">
+                                                        <label for="detail">Detail</label>
+                                                        <input type="text" id="detail" class="form-control"
+                                                               placeholder="Detail" name="lastname" required/>
+                                                        <div class="valid-feedback">Looks good!</div>
+                                                        <div class="invalid-feedback">Please enter detail.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                    <div class="form-group">
+                                                        <label for="status">Status</label>
+                                                        <select class="form-control" id="status">
+                                                            <option value="1">Active</option>
+                                                            <option value="2">Passive</option>
+                                                        </select>
+                                                        <div class="valid-feedback">Looks good!</div>
+                                                        <div class="invalid-feedback">Please enter product details.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                    <div class="form-group">
+                                                        <label>Categories</label>
+                                                        <select class="select2 form-control" id="galleryCategories">
+                                                            <!--                                                            <option value="">Choose Categories</option>-->
+                                                        </select>
+                                                        <div class="invalid-feedback">Please choice categories.</div>
+                                                    </div>
+                                                </div>
 
-                        <label>Detail: </label>
-                        <div class="form-group">
-                            <input type="text" placeholder="Gallery Detail" class="form-control" />
+                                                <div class="col-md-8"></div>
+                                                <div class="col-md-4">
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-2"></div>
+                                                        <div class="col-md-10">
+                                                            <button type="reset"
+                                                                    class="btn btn-outline-secondary">Reset
+                                                            </button>
+                                                            <button type="submit"
+                                                                    class="btn btn-primary">Submit
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <label>Status: </label>
-                        <div class="form-group">
-                            <select class="form-control mb-1" id="selectStatus">
-                                <option selected>Click to select status</option>
-                                <option value="1">Active</option>
-                                <option value="2">Passive</option>
+                    </section>
+                    <!-- Basic Floating Label Form section end -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Image -->
+    <div class="modal fade text-left" id="galleryImage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel18"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalTitle">Default Modal</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/gallery/imageUpload}" method="post" enctype="multipart/form-data">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="formFile">Gallery Image Upload</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="formFile" name="imageName"
+                                           accept="image/*" multiple="multiple"/>
+                                    <label class="custom-file-label" for="formFile">Choose file</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8"></div>
+                        <div class="col-sm-4">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Gallery Detail -->
+    <div class="modal fade text-left" id="galleryDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel17"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="title">Gallery Preview</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="swiper-navigations swiper-container col-12 mb-2">
+                            <div class="swiper-wrapper" id="imageSlide">
+
+                            </div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                        </div>
+                        <div class="col-sm-4 col-12 mb-2">
+                            <label style="color: black" class="form-label">Delete Image</label>
+                            <select class="select2 form-control" multiple="multiple" id="imagesChose" style="">
+
                             </select>
                         </div>
+                        <div class="col-sm-4 col-12 mt-2">
+                            <button onclick="deleteImage()" type="button" class="btn btn-icon btn-outline-danger"><i
+                                    class="far fa-trash-alt"></i></button>
+                        </div>
+                        <div class="col-sm-4 col-12 mb-2"></div>
+                        <hr>
+                        <div class="col-md-4 col-12">
+                            <label style="color: black" class="form-label"><strong>Title</strong></label>
+                            <div id="titleDetail" class="form-text"></div>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <label style="color: black" class="form-label"><strong>Saved Date</strong></label>
+                            <div id="dateDetail" class="form-text"></div>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <label style="color: black" class="form-label"><strong>Status</strong></label>
+                            <div id="statusDetail" class="form-text"></div>
+                        </div>
+                        <div class="col-md-6 col-12 mt-2" id="campaign-1">
+
+                        </div>
+                        <div class="col-md-6 col-12 mt-2" id="campaign-2">
+
+                        </div>
+                        <div class="col-12 mb-2" id="campaign-3">
+
+                        </div>
+                        <hr>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Add</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Accept</button>
                     </div>
-                </form>
-            </div>
-        </div>
-
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Card title</h4>
-                    <h6 class="card-subtitle text-muted">Support card subtitle</h6>
-                </div>
-                <img class="img-fluid" src="../../../app-assets/images/slider/03.jpg" alt="Card image cap" />
-                <div class="card-body">
-                    <p class="card-text">Bear claw sesame snaps gummies chocolate.</p>
-                    <a href="javascript:void(0);" class="card-link">Edit</a>
-                    <a href="javascript:void(0);" class="card-link">Delete</a>
                 </div>
             </div>
         </div>
-        
-
     </div>
-    <!-- END: Content-->
+    <!-- Modal Category -->
+    <div class="modal fade text-left" id="categoryAdd_modal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel16" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel4">New Category</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section id="multiple-column-form">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form class="needs-validation invalid" novalidate
+                                              id="galleryCategoryAdd_modalForm">
+                                            <div class="row">
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="categoryName">Category Name</label>
+                                                        <input type="text" id="categoryName" class="form-control"
+                                                               placeholder="Category Name"/>
+                                                        <div class="valid-feedback">Looks good!</div>
+                                                        <div class="invalid-feedback">Please enter your category name.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="categoryStatus">Category Status</label>
+                                                        <select class="form-control" id="categoryStatus">
+                                                            <option selected>Please make a choice</option>
+                                                            <option value=1>Active</option>
+                                                            <option value=2>Passive</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-8"></div>
+                                                <div class="col-md-4">
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-2"></div>
+                                                        <div class="col-md-10">
+                                                            <button type="reset"
+                                                                    class="btn btn-outline-secondary">Reset
+                                                            </button>
+                                                            <button type="submit"
+                                                                    class="btn btn-primary">Submit
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Basic Floating Label Form section end -->
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
 
 </th:block>
 
+
 <th:block layout:fragment="contentJs">
-    <!------------------------------------------------------ Editor Js - Start ------------------------------------------------------>
-        <script th:src="@{/app-assets/vendors/js/editors/quill/katex.min.js}"></script>
-        <script th:src="@{/app-assets/vendors/js/editors/quill/highlight.min.js}"></script>
-        <script th:src="@{/app-assets/vendors/js/editors/quill/quill.min.js}"></script>
-        <script th:src="@{/app-assets/js/scripts/forms/form-quill-editor.js}"></script>
-    <!------------------------------------------------------ Editor Js - End -------------------------------------------------------->
+
+    <!------------------------------------------------------ Select2 Js - Start -------------------------------------------------------->
+    <script th:src="@{/app-assets/vendors/js/forms/select/select2.full.min.js}"></script>
+    <script th:src="@{/app-assets/js/scripts/forms/form-select2.js}"></script>
+    <!------------------------------------------------------ Select2 Js - End   -------------------------------------------------------->
 
     <!------------------------------------------------------ Pagination Js - Start -------------------------------------------------------->
-        <script th:src="@{/app-assets/vendors/js/pagination/jquery.bootpag.min.js}"></script>
-        <script th:src="@{/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js}"></script>
-        <script th:src="@{/app-assets/js/scripts/pagination/components-pagination.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/pagination/jquery.bootpag.min.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js}"></script>
+    <script th:src="@{/app-assets/js/scripts/pagination/components-pagination.js}"></script>
     <!------------------------------------------------------ Pagination Js - End ---------------------------------------------------------->
+
+    <!---------------------------------------------------------- Swiper JS - Start ---------------------------------------------------------->
+    <!--    <script th:src="@{/app-assets/vendors/js/extensions/swiper.min.js}"></script>-->
+    <script th:src="@{/app-assets/vendors/js/extensions/swiper-bundle.min.js}"></script>
+    <!--    <script th:src="@{/app-assets/js/scripts/extensions/ext-component-swiper.js}"></script>-->
+    <!---------------------------------------------------------- Swiper JS - End ------------------------------------------------------------>
+
+    <script th:src="@{/mainJs/gallery.js}"></script>
+
 </th:block>
 
 </body>

@@ -1,3 +1,18 @@
+function getCountries() {
+    $.ajax({
+        url: '/redis/get_countries',
+        type: 'GET',
+        dataType: 'Json',
+        success: function (data) {
+            countries = data.result;
+            createCountrySelect(countries);
+        },
+        error: function (err) {
+            console.log(err)
+        }
+    })
+}
+
 function getAllCustomers(status) {
 
     $.ajax({
@@ -443,7 +458,7 @@ function deleteAddress(aid, cid) {
     });
 }
 
- function getAddress(aid) {
+function getAddress(aid) {
     let address;
     let addressTemp;
     for(let i = 0; i < addressList.length; i++){
@@ -454,6 +469,32 @@ function deleteAddress(aid, cid) {
     }
     selectedAddressId = aid;
     createAddressEditModal(address);
+}
+
+function createCountrySelect(countries) {
+    let html = ``;
+    for(let i = 0; i < countries.length; i++){
+        const country = countries[i];
+        html += `<option value=`+country.name+`>`+country.name+`</option>`;
+    }
+    $('#country').append(html);
+}
+
+function createCitySelect(countryName) {
+    let cities = [];
+    for(let i = 0 ; i < countries.length; i++){
+        const country = countries[i];
+        if(countryName === country.name){
+            cities = country.cities;
+            let html = ``;
+            for(let k = 0; k < cities.length; k++){
+                const city = cities[k];
+                html += `<option value=`+city+`>`+city+`</option>`;
+            }
+            $('#city').html(html);
+            return
+        }
+    }
 }
 
 function createAddressEditModal(address) {
@@ -589,9 +630,11 @@ function createCustomerEditModal() {
     $("#phone2").val( selectedCustomer.phone2);
     $("#mail").val( selectedCustomer.mail);
     $("#tax_no").val( selectedCustomer.taxno);
-    $("#country select").val( selectedCustomer.country).change();
-    $("#city select").val( selectedCustomer.city).change();
-    $("#customer_form_col").remove();
+    $("#country").val( selectedCustomer.country).trigger('change');
+    $("#city").val( selectedCustomer.city).trigger('change');
+
+
+    $("#customer_form_col").empty();
     $("#customer_form_modal_title").text( "Edit Customer - No : " + selectedCustomer.no);
     $('#customer_form_modal').modal('toggle');
 }
@@ -693,8 +736,12 @@ $('#address_form').submit( ( event ) => {
 });
 
 $('#customer_pagesize').change(function(){
-    $('#customer_pagination').twbsPagination('destroy');
-    getAllCustomersByPage(0, parseInt($(this).val()));
+    if($('#customer_search').val() === ""){
+        $('#customer_pagination').twbsPagination('destroy');
+        getAllCustomersByPage(0, parseInt($(this).val()));
+    }else{
+        searchCustomerByKey($('#customer_search').val(), page-1, $('#customer_pagesize').val());
+    }
 });
 
 $('#customer_status').change(function(){
@@ -772,14 +819,21 @@ $( "#customer_form_modal_button" ).click(function() {
                                                     </div>`;
 
 
-    $("#customer_form_col").append(html);
+    $("#customer_form_col").html(html);
 });
+
+$('#country').change(function(){
+    createCitySelect($(this).val());
+});
+
 let selectedCustomer = {};
 let selectedCustomerStatus = "Active";
 let addressesTabCount = 0;
 let addressList = [];
 let selectedAddressId = 0;
+let countries = [];
 $('#customer_pagination').twbsPagination('destroy');
 getAllCustomersByPage(0, 10);
+getCountries();
 
 //getAllCustomers("Active");

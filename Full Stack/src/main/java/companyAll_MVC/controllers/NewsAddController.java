@@ -10,6 +10,7 @@ import companyAll_MVC.repositories._jpa.NewsCategoryRepository;
 import companyAll_MVC.repositories._jpa.NewsRepository;
 import companyAll_MVC.utils.Check;
 import companyAll_MVC.utils.Util;
+import org.apache.commons.io.FileUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
@@ -235,7 +238,7 @@ public class NewsAddController {
                 if (optionalNews.isPresent()) {
                     try {
                         News news1 = newsRepository.saveAndFlush(news);
-                        System.out.println("news1: "  + news1);
+                        System.out.println("news1: " + news1);
                         ElasticNews elasticNews = new ElasticNews();
                         elasticNews.setId(Integer.toString(news1.getId()));
                         elasticNews.setNo(Long.toString(news1.getNo()));
@@ -245,12 +248,13 @@ public class NewsAddController {
                         elasticNews.setStatus(news1.getStatus());
                         elasticNews.setDate(news1.getDate());
                         elasticNews.setCategoryName(news1.getNewsCategory().getName());
+                        elasticNews.setCategoryId(Integer.toString(news1.getNewsCategory().getId()));
                         elasticNewsRepository.save(elasticNews);
 
                         map.put(Check.status, true);
                         map.put(Check.message, "Updated operations success!");
                         map.put(Check.result, news);
-                    }catch (Exception ex){
+                    } catch (Exception ex) {
                         System.err.println("elastic news update : " + ex);
                     }
                 }
@@ -270,6 +274,7 @@ public class NewsAddController {
                     elasticNews.setStatus(news1.getStatus());
                     elasticNews.setDate(news1.getDate());
                     elasticNews.setCategoryName(newsCategory.getName());
+                    elasticNews.setCategoryId(Integer.toString(news1.getNewsCategory().getId()));
                     elasticNewsRepository.save(elasticNews);
                 } catch (Exception ex) {
                     map.put(Check.status, false);
@@ -290,24 +295,24 @@ public class NewsAddController {
     //List of News with pagination
     @ResponseBody
     @GetMapping("/newslist/{stShowNumber}/{stPageNo}")
-    public Map<Check,Object> listNews(@PathVariable String stShowNumber,@PathVariable String stPageNo){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> listNews(@PathVariable String stShowNumber, @PathVariable String stPageNo) {
+        Map<Check, Object> map = new LinkedHashMap<>();
         //System.out.println(stShowNumber + " " + stPageNo);
         try {
             int pageNo = Integer.parseInt(stPageNo); // .th number of page
             int showNumber = Integer.parseInt(stShowNumber); // Get the show number value
-            Pageable pageable = PageRequest.of(pageNo,showNumber);
+            Pageable pageable = PageRequest.of(pageNo, showNumber);
             Page<ElasticNews> newsPage = elasticNewsRepository.findByOrderByIdAsc(pageable);
-            map.put(Check.status,true);
-            map.put(Check.totalPage,newsPage.getTotalPages());
+            map.put(Check.status, true);
+            map.put(Check.totalPage, newsPage.getTotalPages());
             map.put(Check.message, "News listing on page " + (pageNo + 1) + " is successful");
-            map.put(Check.result,newsPage.getContent());
+            map.put(Check.result, newsPage.getContent());
         } catch (Exception e) {
-            map.put(Check.status,false);
+            map.put(Check.status, false);
             String error = "An error occurred during the operation!";
             System.err.println(e);
             Util.logger(error, News.class);
-            map.put(Check.message,error);
+            map.put(Check.message, error);
         }
         return map;
     }
@@ -336,7 +341,7 @@ public class NewsAddController {
         Optional<News> optionalNews = newsRepository.findById(chosenId);
         List<String> imageNameList = new ArrayList<>();
         File f = new File(Util.UPLOAD_DIR_NEWS + ("" + chosenId));
-        f.delete(); //Varsa önce sil
+        boolean isDeleted = f.delete();
         if (optionalNews.isPresent()) {
             News news = optionalNews.get();
             if (files != null && files.length != 0) {
@@ -345,67 +350,47 @@ public class NewsAddController {
                 File folderNews = new File(Util.UPLOAD_DIR_NEWS + idFolder);
                 boolean status = folderNews.mkdir();
                 for (MultipartFile file : files) {
-                    long fileSizeMB = file.getSize() / 1024;
-                    if (fileSizeMB > Util.maxFileUploadSize) {
-                        System.err.println("Dosya boyutu çok büyük Max 5MB");
-                        errorMessage = "Dosya boyutu çok büyük Max " + (Util.maxFileUploadSize / 1024) + "MB olmalıdır";
-                        System.err.println(errorMessage);
-                    } else {
-                        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-                        String ext = fileName.substring(fileName.length() - 5, fileName.length());
-                        String uui = UUID.randomUUID().toString();
-                        fileName = uui + ext;
-                        try {
-                            if (status) {
-                                Path path = Paths.get(Util.UPLOAD_DIR_NEWS + idFolder + fileName);
-                                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                                sendSuccessCount += 1;
-                            } else {
-                                errorMessage = "Id numarasına ait haber dosyası bulunamadı!";
-                                System.err.println(errorMessage);
-                            }
-                            // add database
-                            imageNameList.add(fileName);
-
-                        } catch (IOException e) {
-                            System.err.println(e);
-                        }
-                    }
+                    Map<Check, Object> imgResult = Util.imageUpload(file, Util.UPLOAD_DIR_NEWS + idFolder);
+                    imageNameList.add(imgResult.get(Check.message).toString());
                 }
                 news.setFileName(imageNameList);
                 newsRepository.saveAndFlush(news);
-                //Elasticsearch save Images - Start
-                ElasticNews elasticNews = elasticNewsRepository.findById(Integer.toString(news.getId())).get();
-                elasticNews.setFileName(imageNameList);
-                elasticNewsRepository.save(elasticNews);
-                //Elasticsearch save Images - End
+                Optional<ElasticNews> elasticNewsOptional = elasticNewsRepository.findById(Integer.toString(news.getId()));
+                if (elasticNewsOptional.isPresent()) {
+                    ElasticNews elasticNews = elasticNewsOptional.get();
+                    elasticNews.setFileName(imageNameList);
+                    elasticNewsRepository.save(elasticNews);
+                } else {
+                    errorMessage = "Elastic News is not found";
+                }
             } else {
-                errorMessage = "Lütfen resim seçiniz!";
+                errorMessage = "Please choose an image";
                 System.err.println(errorMessage);
             }
         } else {
-            errorMessage = "News is not found!";
+            errorMessage = "News is not found";
             System.err.println(errorMessage);
         }
         return "redirect:/news";
     }
 
+
     //Detail of news
     @ResponseBody
     @GetMapping("/detail/{stId}")
-    public Map<Check,Object> detailNews(@PathVariable String stId){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> detailNews(@PathVariable String stId) {
+        Map<Check, Object> map = new LinkedHashMap<>();
         try {
             int id = Integer.parseInt(stId);
-            map.put(Check.status,true);
+            map.put(Check.status, true);
             map.put(Check.message, "News detail operation is successful!");
-            map.put(Check.result,newsRepository.findById(id).get());
+            map.put(Check.result, newsRepository.findById(id).get());
         } catch (Exception e) {
-            map.put(Check.status,false);
+            map.put(Check.status, false);
             String error = "An error occurred during the operation!";
             System.err.println(e);
             Util.logger(error, News.class);
-            map.put(Check.message,error);
+            map.put(Check.message, error);
         }
         return map;
     }
@@ -413,40 +398,40 @@ public class NewsAddController {
     //Delete news
     @ResponseBody
     @DeleteMapping("/delete/{stId}")
-    public Map<Check,Object> deleteNews(@PathVariable String stId){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> deleteNews(@PathVariable String stId) {
+        Map<Check, Object> map = new LinkedHashMap<>();
         try {
             int id = Integer.parseInt(stId);
             Optional<News> optionalNews = newsRepository.findById(id);
-            if(optionalNews.isPresent()){
+            if (optionalNews.isPresent()) {
                 //Images Delete
                 News news = optionalNews.get();
                 news.getFileName().forEach(item -> {
                     File file = new File(Util.UPLOAD_DIR_NEWS + stId + "/" + item);
                     file.delete();
                 });
-                File file = new File(Util.UPLOAD_DIR_NEWS + stId );
-                if(file.exists()){
+                File file = new File(Util.UPLOAD_DIR_NEWS + stId);
+                if (file.exists()) {
                     file.delete();
                 }
                 //Images Delete
                 ElasticNews elasticNews = elasticNewsRepository.findById(Integer.toString(id)).get();
                 newsRepository.deleteById(id);
                 elasticNewsRepository.deleteById(elasticNews.getId());
-                map.put(Check.status,true);
-                map.put(Check.message,"Data has been deleted!");
-                map.put(Check.result,optionalNews.get());
-            }else{
+                map.put(Check.status, true);
+                map.put(Check.message, "Data has been deleted!");
+                map.put(Check.result, optionalNews.get());
+            } else {
                 String error = "NEws is not found";
-                map.put(Check.status,false);
-                map.put(Check.message,error);
-                Util.logger(error,News.class);
+                map.put(Check.status, false);
+                map.put(Check.message, error);
+                Util.logger(error, News.class);
             }
         } catch (Exception e) {
             String error = "An error occurred during the delete operation";
-            map.put(Check.status,false);
-            map.put(Check.message,error);
-            Util.logger(error,News.class);
+            map.put(Check.status, false);
+            map.put(Check.message, error);
+            Util.logger(error, News.class);
             System.err.println(e);
         }
         return map;
@@ -455,30 +440,31 @@ public class NewsAddController {
     //Elasticsearch for News
     @ResponseBody
     @GetMapping("/search/{data}/{stPageNo}/{stShowNumber}")
-    public Map<Check,Object> searchNews(@PathVariable String data,@PathVariable String stPageNo,@PathVariable String stShowNumber){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> searchNews(@PathVariable String data, @PathVariable String
+            stPageNo, @PathVariable String stShowNumber) {
+        Map<Check, Object> map = new LinkedHashMap<>();
         try {
             int pageNo = Integer.parseInt(stPageNo); // .th number of page
             int showNumber = Integer.parseInt(stShowNumber); // Get the show number value
-            Pageable pageable = PageRequest.of(pageNo,showNumber);
-            Page<ElasticNews> searchPage = elasticNewsRepository.findBySearchData(data,pageable);
+            Pageable pageable = PageRequest.of(pageNo, showNumber);
+            Page<ElasticNews> searchPage = elasticNewsRepository.findBySearchData(data, pageable);
             List<ElasticNews> elasticNewsList = searchPage.getContent();
-            int totalData =  elasticNewsList.size(); //for total data in table
-            if(totalData > 0 ){
-                map.put(Check.status,true);
-                map.put(Check.totalPage,searchPage.getTotalPages());
-                map.put(Check.message,"Search operation success!");
-                map.put(Check.result,elasticNewsList);
-            }else{
-                map.put(Check.status,false);
-                map.put(Check.message,"Could not find a result for your search!");
+            int totalData = elasticNewsList.size(); //for total data in table
+            if (totalData > 0) {
+                map.put(Check.status, true);
+                map.put(Check.totalPage, searchPage.getTotalPages());
+                map.put(Check.message, "Search operation success!");
+                map.put(Check.result, elasticNewsList);
+            } else {
+                map.put(Check.status, false);
+                map.put(Check.message, "Could not find a result for your search!");
             }
         } catch (NumberFormatException e) {
-            map.put(Check.status,false);
+            map.put(Check.status, false);
             String error = "An error occurred during the search operation!";
             System.err.println(e);
             Util.logger(error, News.class);
-            map.put(Check.message,error);
+            map.put(Check.message, error);
         }
         return map;
     }
@@ -486,11 +472,11 @@ public class NewsAddController {
     //Chosen image delete
     @ResponseBody
     @DeleteMapping("/chosenImages/delete/{images}")
-    public Map<Check,Object> deleteChosenImage(@PathVariable List<String> images){
-        Map<Check,Object> map = new LinkedHashMap<>();
+    public Map<Check, Object> deleteChosenImage(@PathVariable List<String> images) {
+        Map<Check, Object> map = new LinkedHashMap<>();
         try {
-            if(images.size() > 0){
-                for (int i = 0; i < images.size() ; i++) {
+            if (images.size() > 0) {
+                for (int i = 0; i < images.size(); i++) {
                     System.out.println("Silinmek istenen dosya: " + images.get(i));
                     newsRepository.deleteImageByFileName(images.get(i));
                     File file = new File(Util.UPLOAD_DIR_NEWS + chosenId + "/" + images.get(i));
@@ -503,23 +489,39 @@ public class NewsAddController {
                 elasticNews.setFileName(news.getFileName());
                 elasticNewsRepository.save(elasticNews);
                 //Elasticsearch update images - End
-                map.put(Check.status,true);
-                map.put(Check.message,"The selected pictures have been deleted!");
-            }else{
-                map.put(Check.status,false);
-                map.put(Check.message,"Please select a picture!");
+                map.put(Check.status, true);
+                map.put(Check.message, "The selected pictures have been deleted!");
+            } else {
+                map.put(Check.status, false);
+                map.put(Check.message, "Please select a picture!");
             }
         } catch (Exception e) {
             String error = "An error occurred during the image delete operation";
-            map.put(Check.status,false);
-            map.put(Check.message,error);
-            Util.logger(error,News.class);
+            map.put(Check.status, false);
+            map.put(Check.message, error);
+            Util.logger(error, News.class);
             System.err.println(e);
         }
         return map;
     }
 
     // ===========================================News Operations - END=================================================
+    @GetMapping("/newsDetail/get_image/id={id}name={name}")
+    public void getImage(@PathVariable Integer id, @PathVariable String name, HttpServletResponse response)
+            throws ServletException, IOException {
 
+        response.setContentType("image/jpeg; image/jpg; image/png");
+        File file = new File(Util.UPLOAD_DIR_NEWS + id + "/" + name);
+        if(file.exists()){
+            System.out.println(file.exists());
+            byte[] fileContent = FileUtils.readFileToByteArray(file);
+            response.getOutputStream().write(fileContent);
+        }else{
+            File defaultFile = new File(Util.UPLOAD_DIR_NEWS + "default_image.jpg");
+            byte[] defaultFileContent = FileUtils.readFileToByteArray(defaultFile);
+            response.getOutputStream().write(defaultFileContent);
+        }
+        response.getOutputStream().close();
+    }
 
 }

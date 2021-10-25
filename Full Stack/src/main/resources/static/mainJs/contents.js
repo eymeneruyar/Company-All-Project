@@ -136,7 +136,6 @@ function dynamicPagination(totalPage, size) {
                 getAllContentsByPage(page, size);
             }else{
                 search(page,size,$('#searchContent').val())
-
             }
 
             //$('#firstLast1-content').text('You are on Page ' + page);
@@ -423,7 +422,7 @@ $('#searchContent').keyup( function (event) {
     console.log("Key " + searchData)
     if(searchData !== ""){
         $("#contentTable > tr" ).remove()
-        //$('#content_pagination').twbsPagination('destroy');
+        $('#content_pagination').twbsPagination('destroy');
         search(1,$("#showTableRow").val(),searchData)
     }else{
         $('#content_pagination').twbsPagination('destroy');
@@ -434,9 +433,13 @@ $('#searchContent').keyup( function (event) {
 //-------------------------------------- Contents Search - End ----------------------------------------------//
 
 $('#showTableRow').change(function(){
-    $('#content_pagination').twbsPagination('destroy');
-    getAllContentsByPage(1, parseInt($(this).val()));
-    //console.log("Show number Change " + parseInt($(this).val()));
+
+    if($('#searchContent').val() === ""){
+        $('#content_pagination').twbsPagination('destroy');
+        getAllContentsByPage(1, parseInt($(this).val()));
+    }else{
+        search(page,parseInt($(this).val()),$('#searchContent').val())
+    }
 });
 getAllContentsByPage(1, 10);
 

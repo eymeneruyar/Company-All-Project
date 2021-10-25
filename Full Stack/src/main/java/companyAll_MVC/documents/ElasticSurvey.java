@@ -14,6 +14,7 @@ public class ElasticSurvey {
     @Id
     private String id;
 
+    @Field(type = FieldType.Auto)
     private Integer surveyId;
 
     @Field(type = FieldType.Text)

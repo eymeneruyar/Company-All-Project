@@ -154,7 +154,7 @@ function priceFormatter(price){
 $('#categoryFilter').change(function(){
     $('#pagination_productList').twbsPagination('destroy');
     getAllProductsByCategoryAndPage(1, 9,parseInt($(this).val()));
-    console.log("Category change Id " + parseInt($(this).val()));
+    //console.log("Category change Id " + parseInt($(this).val()));
 });
 getAllProductsByCategoryAndPage(1,9, 1)
 //------------------------------------ Product List Pagination - End ----------------------------------------//
@@ -168,6 +168,7 @@ function searchProduct(page,showPageSize,searchData){
         dataType: "json",
         contentType : 'application/json; charset=utf-8',
         success: function (data) {
+            //console.log(data)
             createProductCard(data)
             dynamicPaginationProductList(data.totalPage,showPageSize)
         },
@@ -190,8 +191,7 @@ $('#searchProductList').keyup( function (event) {
     event.preventDefault();
     const searchData = $(this).val()
     if(searchData !== ""){
-        //$("#productTable > tr" ).remove()
-        //$('#content_pagination').twbsPagination('destroy');
+        //$('#pagination_productList').twbsPagination('destroy');
         searchProduct(1,9,searchData)
     }else{
         $('#pagination_productList').twbsPagination('destroy');

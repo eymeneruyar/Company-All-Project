@@ -1,26 +1,68 @@
-// Listing the number of likes by products
-function list_likesByProduct() {
+$('#pagination_likesCustomer').twbsPagination('destroy');
+getLikesListByCustomer(1, $("#showLikesCustomerSize").val());
+
+//-------------------------------------- LikesProduct List - Start ----------------------------------------//
+let globalArrProduct = []
+function dynamicPaginationProduct(totalPage, size) {
+    $('#pagination_likesProduct').twbsPagination({
+        totalPages: totalPage,
+        visiblePages: 5,
+        prev: 'Prev',
+        first: 'First',
+        last: 'Last',
+        startPage: 1,
+        onPageClick: function (event, page) {
+            if($('#searchLikesProduct').val() === ""){
+                getLikesListByProduct(page, size);
+            }else{
+                searchLikesProductCategory(page,size,$('#searchLikesProduct').val())
+            }
+
+            //$('#firstLast1-content').text('You are on Page ' + page);
+            $('.pagination').find('li').addClass('page-item');
+            $('.pagination').find('a').addClass('page-link');
+        }
+    });
+}
+
+function getLikesListByProduct(page,showNumber){
     $.ajax({
-        url:"./likes/list/likesByProduct",
+        url:"./likes/likesListByProduct/" + showNumber + "/" + (page-1),
         type: "get",
-        dataType:"json",
-        contentType:'application/json; charset=utf-8',
-        success:function (data) {
-            createRowDataProductLikes(data);
+        dataType: "json",
+        contentType : 'application/json; charset=utf-8',
+        success: function (data){
+            console.log("hey")
+            console.log(data)
+            createRowDataProduct(data)
+            dynamicPaginationProduct(data.totalPage,showNumber)
+        },
+        error: function (err){
+            Swal.fire({
+                title: "Error!",
+                text: "An error occurred during the LikesWithProduct list operation!",
+                icon: "error",
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            });
+            console.log(err)
         }
     })
 }
-list_likesByProduct();
 
-// total likes of the products are printed on the screen
-let globalProductLikesArray = []
-function createRowDataProductLikes(data) {
+function createRowDataProduct(data) {
+    console.log("looo")
+    console.log(data)
 
     let html = ``
-    for (let i = 0; i < data.length; i++) {
-        globalProductLikesArray = data
-        const itm = data[i]
-        console.log("productLikes : " + itm.name + "--" + itm.totalLike);
+    for (let i = 0; i < data.result.length; i++) {
+        globalArrProduct = data.result
+        console.log("geldim")
+        console.log("globalArrProduct: " + globalArrProduct)
+        const itm = data.result[i]
+        console.log("productLikes : " + itm.name + "--" + itm.totalRating);
         html += `<tr>
                      <td>${itm.id}</td>
                      <td>${itm.name}</td>
@@ -31,19 +73,72 @@ function createRowDataProductLikes(data) {
     }
     $("#productLikeTableBody").html(html)
 
-    // Ratings To ProductId
-    data.forEach(itm => {
+    // Ratings To Product
+    data.result.forEach(itm => {
         var isRtl = $('html').attr("data-textdirection") === 'rtl',
             readOnlyRatings = $(`.read-only-ratings-${itm.id}`)
 
         if (readOnlyRatings.length) {
             readOnlyRatings.rateYo({
-                rating: itm.totalLike,
+                rating: itm.totalRating,
                 rtl: isRtl
             });
         }
     })
 }
+
+$('#showLikesProductSize').change(function(){
+    if($('#searchLikesProduct').val() === ""){
+        $('#pagination_likesProduct').twbsPagination('destroy');
+        getLikesListByProduct(1, parseInt($(this).val()));
+    }else{
+        searchLikesProductCategory( page, $('#showLikesProductSize').val(),$('#searchLikesProduct').val());
+    }
+});
+getLikesListByProduct(1, 5);
+//-------------------------------------- LikesProduct List - End ------------------------------------------//
+//-------------------------------------- LikesProduct Search - Start ------------------------------------------------//
+function searchLikesProductCategory(page,showPageSize,searchData){
+    console.log("test")
+    console.log(searchData)
+    $.ajax({
+        url: './likes/searchLikesProduct/' + searchData + "/" + (page-1) + "/" + showPageSize,
+        type: 'get',
+        dataType: "json",
+        contentType : 'application/json; charset=utf-8',
+        success: function (data) {
+            //console.log("Data result " + JSON.stringify(data))
+            createRowDataProduct(data)
+            dynamicPaginationProduct(data.totalPage,showPageSize)
+        },
+        error: function (err) {
+            Swal.fire({
+                title: "Error!",
+                text: "An error occurred during the operation!",
+                icon: "error",
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                buttonsStyling: false
+            });
+            console.log(err)
+        }
+    })
+}
+
+$('#searchLikesProduct').keyup( function (event) {
+    event.preventDefault();
+    const searchData = $(this).val()
+    if(searchData !== ""){
+        $("#productLikeTableBody > tr" ).remove()
+        searchLikesProductCategory(1,$("#showLikesProductSize").val(),searchData)
+    }else{
+        $('#pagination_likesProduct').twbsPagination('destroy');
+        getLikesListByProduct(1, $("#showLikesProductSize").val());
+    }
+})
+//-------------------------------------- LikesProduct Search - End --------------------------------------------------//
+
 
 //-------------------------------------- LikesCustomer List - Start ----------------------------------------//
 let globalArr2 = []
@@ -100,6 +195,7 @@ function createRowData(data) {
 
     let html = ``
     for (let i = 0; i < data.result.length; i++) {
+        console.log("gelemedim")
         globalArr = data.result
         const itm = data.result[i]
         console.log(globalArr)
@@ -135,8 +231,12 @@ function createRowData(data) {
 }
 
 $('#showLikesCustomerSize').change(function(){
-    $('#pagination_likesCustomer').twbsPagination('destroy');
-    getLikesListByCustomer(1, parseInt($(this).val()));
+    if($('#searchLikesCustomer').val() === ""){
+        $('#pagination_likesCustomer').twbsPagination('destroy');
+        getLikesListByCustomer(1, parseInt($(this).val()));
+    }else{
+        searchLikesCustomerCategory( page, $('#showLikesCustomerSize').val(),$('#searchLikesCustomer').val());
+    }
 });
 getLikesListByCustomer(1, 5);
 //-------------------------------------- LikesCustomer List - End ------------------------------------------//

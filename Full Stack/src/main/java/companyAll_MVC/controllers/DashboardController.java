@@ -5,7 +5,6 @@ import companyAll_MVC.documents.ElasticProduct;
 import companyAll_MVC.documents.ElasticProductCategory;
 import companyAll_MVC.entities.Announcement;
 import companyAll_MVC.entities.Product;
-import companyAll_MVC.entities.ProductCategory;
 import companyAll_MVC.repositories._elastic.*;
 import companyAll_MVC.repositories._jpa.AnnouncementRepository;
 import companyAll_MVC.utils.Check;
@@ -15,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,8 +33,9 @@ public class DashboardController {
     final ElasticProductRepository elasticProductRepository;
     final ElasticAnnouncementRepository elasticAnnouncementRepository;
     final ElasticProductCategoryRepository elasticProductCategoryRepository;
+    final ElasticNewsRepository elasticNewsRepository;
     final AnnouncementRepository announcementRepository;
-    public DashboardController(ElasticLikesRepository elasticLikesRepository, ElasticCustomerRepository elasticCustomerRepository, ElasticIndentRepository elasticIndentRepository, ElasticContentsRepository elasticContentsRepository, ElasticProductRepository elasticProductRepository, ElasticAnnouncementRepository elasticAnnouncementRepository, ElasticProductCategoryRepository elasticProductCategoryRepository, AnnouncementRepository announcementRepository) {
+    public DashboardController(ElasticLikesRepository elasticLikesRepository, ElasticCustomerRepository elasticCustomerRepository, ElasticIndentRepository elasticIndentRepository, ElasticContentsRepository elasticContentsRepository, ElasticProductRepository elasticProductRepository, ElasticAnnouncementRepository elasticAnnouncementRepository, ElasticProductCategoryRepository elasticProductCategoryRepository, ElasticNewsRepository elasticNewsRepository, AnnouncementRepository announcementRepository) {
         this.elasticLikesRepository = elasticLikesRepository;
         this.elasticCustomerRepository = elasticCustomerRepository;
         this.elasticIndentRepository = elasticIndentRepository;
@@ -42,15 +43,32 @@ public class DashboardController {
         this.elasticProductRepository = elasticProductRepository;
         this.elasticAnnouncementRepository = elasticAnnouncementRepository;
         this.elasticProductCategoryRepository = elasticProductCategoryRepository;
+        this.elasticNewsRepository = elasticNewsRepository;
         this.announcementRepository = announcementRepository;
     }
 
     @GetMapping("")
-    public String dashboard(){
+    public String dashboard(Model model){
+
+        model.addAttribute("activeNews",elasticNewsRepository.countByStatusAllIgnoreCase("Active"));
+        model.addAttribute("passiveNews",elasticNewsRepository.countByStatusAllIgnoreCase("Passive"));
+        model.addAttribute("totalNews",elasticNewsRepository.allNews().size());
+
         return "dashboard";
     }
 
-    //News
+    //News Chart
+    @ResponseBody
+    @GetMapping("/newsChart")
+    public Map<Statics,Object> newsChart(){
+        Map<Statics,Object> map = new LinkedHashMap<>();
+        map.put(Statics.status,true);
+        map.put(Statics.message,"News statics information listing operation success!");
+        map.put(Statics.activeNews,elasticNewsRepository.countByStatusAllIgnoreCase("Active"));
+        map.put(Statics.passiveNews,elasticNewsRepository.countByStatusAllIgnoreCase("Passive"));
+        map.put(Statics.totalNews,elasticNewsRepository.allNews().size());
+        return map;
+    }
 
     //General Statics
     @ResponseBody
@@ -71,7 +89,7 @@ public class DashboardController {
     @GetMapping("/lastAddSixProduct")
     public Map<Statics,Object> lastAddSixProduct(){
         Map<Statics,Object> map = new LinkedHashMap<>();
-        Pageable pageable = PageRequest.of(0,8);
+        Pageable pageable = PageRequest.of(0,6);
         Page<ElasticProduct> elasticProductPage = elasticProductRepository.findByOrderByProductIdDesc(pageable);
         map.put(Statics.status,true);
         map.put(Statics.message,"Last added 6 product information listing operation success!");
@@ -84,7 +102,7 @@ public class DashboardController {
     @GetMapping("/lastSixOrder")
     public Map<Statics,Object> lastSixOrder(){
         Map<Statics,Object> map = new LinkedHashMap<>();
-        Pageable pageable = PageRequest.of(0,8);
+        Pageable pageable = PageRequest.of(0,6);
         Page<ElasticIndent> elasticIndentPage = elasticIndentRepository.findAllByOrderByIidDesc(pageable);
         map.put(Statics.status,true);
         map.put(Statics.message,"Last 6 order information listing operation success!");

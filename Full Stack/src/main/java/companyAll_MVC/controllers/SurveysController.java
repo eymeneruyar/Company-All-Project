@@ -49,6 +49,7 @@ public class SurveysController {
                 map.put(Check.result,survey1);
 
                 ElasticSurvey elasticSurvey = new ElasticSurvey();
+                elasticSurvey.setSurveyId(survey1.getId());
                 elasticSurvey.setId(Integer.toString(survey1.getId()));
                 elasticSurvey.setNo(Long.toString(survey1.getNo()));
                 elasticSurvey.setTitle(survey1.getTitle());
