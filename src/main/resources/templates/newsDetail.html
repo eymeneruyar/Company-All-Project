@@ -1,0 +1,139 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="inc/layout"
+      class="loading semi-dark-layout" lang="en" data-layout="semi-dark-layout" data-textdirection="ltr">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title th:text="${detail.title} + ' ' + ${detail.description}"></title>
+    <link rel="shortcut icon" type="image/x-icon" href="/app-assets/images/ico/favicon.png">
+
+
+    <!------------------------------------------------------ Products Details CSS - Start -------------------------------------------------------->
+
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/forms/spinner/jquery.bootstrap-touchspin.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/extensions/swiper.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/extensions/toastr.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/core/menu/menu-types/vertical-menu.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/pages/app-ecommerce-details.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/form-number-input.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/extensions/ext-component-toastr.css}">
+
+    <!------------------------------------------------------ Products Details CSS - End   -------------------------------------------------------->
+
+    <!--------------------------------------------- Swiper CSS - Start --------------------------------------------->
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/extensions/swiper.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/extensions/ext-component-swiper.css}">
+    <!--------------------------------------------- Swiper CSS - End ----------------------------------------------->
+
+
+
+
+</head>
+
+<!-- BEGIN: Body-->
+<body>
+
+<th:block layout:fragment="content">
+    <!-- BEGIN: Content-->
+    <div class="app-content content ecommerce-application">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper">
+            <div class="content-body">
+                <!-- app e-commerce details start -->
+                <section class="app-ecommerce-details">
+                    <div class="card">
+                        <!-- Product Details starts -->
+                        <div class="card-body">
+                            <div class="row my-2">
+                                <div class="col-12 col-md-5">
+                                    <div class="swiper-autoplay swiper-container" >
+                                        <div class="swiper-wrapper" th:if="${detail.fileName.size() > 0 && detail.fileName != null }">
+                                            <div class="swiper-slide" th:each="item : ${detail.fileName}" >
+                                                <img class="img-fluid" th:src="@{'get_image/id=' + ${detail.id} + 'name=' + ${item}}" alt="banner" />
+                                            </div>
+                                        </div>
+                                        <!-- Add Pagination -->
+                                        <div class="swiper-pagination"></div>
+                                        <!-- Add Arrows -->
+                                        <div class="swiper-button-next"></div>
+                                        <div class="swiper-button-prev"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-7">
+
+                                    <h4 th:text="${detail.title} + ' ' + ${detail.summary}"></h4>
+                                    <hr>
+                                    <p class="card-text" th:text="${detail.description}"></p>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Product Details ends -->
+
+
+
+                        <!-- Related Products starts -->
+                        <div class="card-body">
+
+                            <div class="swiper-responsive-breakpoints swiper-container px-4 py-2" >
+                                <div class="swiper-wrapper" id="mostPopularFiveProduct">
+
+                                </div>
+                                <!-- Add Arrows -->
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
+                            </div>
+                        </div>
+                        <!-- Related Products ends -->
+                    </div>
+                </section>
+                <!-- app e-commerce details end -->
+
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->
+
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+
+</th:block>
+
+<script>
+    function priceFormatter(price){
+        var formattedPrice = (price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+        return formattedPrice
+    }
+</script>
+
+<th:block layout:fragment="contentJs">
+    <!------------------------------------------------------ Products Details Js - Start -------------------------------------------------------->
+
+    <script th:src="@{/app-assets/vendors/js/forms/spinner/jquery.bootstrap-touchspin.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/extensions/swiper.min.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/extensions/toastr.min.js}"></script>
+    <script th:src="@{/app-assets/js/scripts/pages/app-ecommerce-details.js}"></script>
+    <script th:src="@{/app-assets/js/scripts/forms/form-number-input.js}"></script>
+
+    <!------------------------------------------------------ Products Details Js - End   -------------------------------------------------------->
+
+    <!---------------------------------------------------------- Swiper JS - Start ---------------------------------------------------------->
+    <script th:src="@{/app-assets/vendors/js/extensions/swiper-bundle.min.js}"></script>
+    <script th:src="@{/app-assets/js/scripts/extensions/ext-component-swiper.js}"></script>
+    <!---------------------------------------------------------- Swiper JS - End ------------------------------------------------------------>
+
+
+
+    <script th:src="@{/mainJs/newsDetails.js}"></script>
+
+</th:block>
+
+</body>
+<!-- END: Body-->
+</html>

@@ -1,0 +1,213 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="inc/layout"
+      class="loading semi-dark-layout" lang="en" data-layout="semi-dark-layout" data-textdirection="ltr">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Surveys</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/app-assets/images/ico/favicon.png">
+
+    <!------------------------------------------------------ Editor Js - Start ------------------------------------------------------>
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/katex.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/monokai-sublime.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/quill.snow.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/editors/quill/quill.bubble.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/form-quill-editor.css}">
+    <!------------------------------------------------------ Editor Js - End -------------------------------------------------------->
+
+</head>
+
+<!-- BEGIN: Body-->
+
+<body>
+
+<th:block layout:fragment="content">
+    <!-- BEGIN: Content-->
+    <div class="app-content content ">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <!-- Modal -->
+        <div class="modal fade text-left" id="surveyAdd_modal" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel33"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel33">Add New Survey</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="surveyForm">
+                        <div class="modal-body">
+                            <label>Title: </label>
+                            <div class="form-group">
+                                <input id="title" name="title" type="text" placeholder="Survey Title"
+                                       class="form-control"/>
+                            </div>
+
+                            <label>Detail: </label>
+                            <div class="form-group">
+                                <input id="detail" name="detail" type="text" placeholder="Survey Detail"
+                                       class="form-control"/>
+                            </div>
+
+                            <label>Status: </label>
+                            <div class="form-group">
+                                <select id="status" name="status" class="form-control mb-1">
+                                    <option selected>Click to select status</option>
+                                    <option value=1>Active</option>
+                                    <option value=2>Passive</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                            <button type="submit" class="btn btn-primary mr-1" id="type-success">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ModalOption -->
+        <div class="modal fade text-left" id="surveyOptionAdd_modal" tabindex="-1" role="dialog "
+             aria-labelledby="optionAdd"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="optionAdd">Option Add</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="surveyOptionAddForm">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="form-group col-6">
+                                    <input id="titleOption" name="titleOption" type="text" placeholder="Option Title"
+                                           class="form-control"/>
+                                </div>
+                                <div class="form-group col-6">
+                                    <button type="submit" class="btn btn-primary mr-1" id="type-success1">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+
+                </form>
+                <!-- Basic Tables start -->
+                <div class="row" id="basic-table1">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="table-responsive">
+                                <table class="table" ref="table1">
+                                    <thead>
+                                    <tr>
+                                        <th>Survey Title</th>
+                                        <th>Option</th>
+                                        <th>Vote</th>
+                                        <th>Actions</th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody style="font-size: 14px;" id="surveyOptionTableBody">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Basic Tables start -->
+    <div class="row" id="basic-table">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-9">
+                            <div class="buttons">
+                                <label>
+                                    Show
+                                    <select class="custom-select form-control" id="survey_pagesize">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                </label>
+                                <button class="dt-button btn btn-primary ml-2" tabindex="0" type="button"
+                                        data-toggle="modal" data-target="#surveyAdd_modal">
+                                    <span><i class="fas fa-plus"></i> Add Survey</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="buttons">
+                                <input type="text" class="form-control" id="searchSurvey" placeholder="Search">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table" ref="table">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Title</th>
+                            <th>Detail</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+
+                        </tr>
+                        </thead>
+                        <tbody style="font-size: 14px;" id="surveyTableBody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <ul id="survey_pagination" class="pagination firstLast1-links justify-content-end "></ul>
+        </div>
+    </div>
+    </div>
+    <!-- END: Content-->
+
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+</th:block>
+
+
+<th:block layout:fragment="contentJs">
+    <!------------------------------------------------------ Editor Js - Start ------------------------------------------------------>
+    <script th:src="@{/app-assets/vendors/js/editors/quill/katex.min.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/editors/quill/highlight.min.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/editors/quill/quill.min.js}"></script>
+    <script th:src="@{/app-assets/js/scripts/forms/form-quill-editor.js}"></script>
+    <!------------------------------------------------------ Editor Js - End -------------------------------------------------------->
+
+    <!------------------------------------------------------ Sweet Alerts Js - Start ------------------------------------------------------>
+    <script th:src="@{/app-assets/vendors/js/extensions/sweetalert2.all.min.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/extensions/polyfill.min.js}"></script>
+    <!------------------------------------------------------ Sweet Alerts - End -------------------------------------------------------->
+
+    <!------------------------------------------------------ Pagination Js - Start -------------------------------------------------------->
+    <script th:src="@{/app-assets/vendors/js/pagination/jquery.bootpag.min.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js}"></script>
+    <script th:src="@{/app-assets/js/scripts/pagination/components-pagination.js}"></script>
+    <script th:src="@{/mainJs/survey.js}"></script>
+    <!------------------------------------------------------ Pagination Js - End ---------------------------------------------------------->
+</th:block>
+
+</body>
+<!-- END: Body-->
+</html>

@@ -1,0 +1,238 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="inc/layout"
+      class="loading semi-dark-layout" lang="en" data-layout="semi-dark-layout" data-textdirection="ltr">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Dashboard</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/app-assets/images/ico/favicon.png">
+
+<!------------------------------------------------------ Dashboards Charts CSS - Start -------------------------------------------------------->
+    
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/pages/dashboard-ecommerce.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/charts/apexcharts.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/pickers/form-flat-pickr.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/charts/chart-apex.css}">
+
+<!------------------------------------------------------ Dashboards Charts CSS - End   -------------------------------------------------------->
+
+<!--------------------------------------------- Swiper CSS - Start --------------------------------------------->
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/extensions/swiper.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/extensions/ext-component-swiper.css}">
+<!--------------------------------------------- Swiper CSS - End ----------------------------------------------->
+
+</head>
+
+<!-- BEGIN: Body-->
+<body>
+
+<th:block layout:fragment="content">
+    <!-- BEGIN: Content-->
+    <div class="app-content content ">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-body">
+            <div class="row">
+                <!-- Earnings Card -->
+                <div class="col-xl-4 col-md-6 col-12">
+                    <div class="card earnings-card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h4 class="card-title mb-1">News </h4>
+                                    <div class="font-small-2">Total News</div>
+                                    <h5 class="mb-1" th:text="${totalNews}"></h5>
+                                </div>
+                                <div class="col-6">
+                                    <div id="earnings-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/ Earnings Card -->
+
+                <!-- Statistics Card -->
+                <div class="col-xl-8 col-md-6 col-12">
+                    <div class="card card-statistics">
+                        <div class="card-header">
+                            <h4 class="card-title">General Statistics</h4>
+                        </div>
+                        <div class="card-body statistics-body" id="generalStatics">
+
+                        </div>
+                    </div>
+                </div>
+                <!--/ Statistics Card -->
+            </div>
+            <div class="row">
+                <!-- Donut Chart Starts-->
+                <div class="col-lg-4 col-12">
+                    <div class="card">
+                        <div class="card-header flex-column align-items-start">
+                            <h4 class="card-title mb-75">Products</h4>
+                            <span class="card-subtitle text-muted">Spending on various categories </span>
+                        </div>
+                        <div class="card-body">
+                            <div id="donut-chart"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Donut Chart Ends-->
+
+                <!-- Company Table Card -->
+                <div class="col-lg-8 col-12">
+                    <div class="card card-company-table">
+                        <div class="card-body p-0">
+                            <h4 class="card-title mt-1 ml-1">Last Added 6 Product</h4>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Description</th>
+                                            <th>Category</th>
+                                            <th>Price</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lastAddSixProduct">
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/ Company Table Card -->
+            </div>
+            <div class="row">
+                <!-- Developer Meetup Card -->
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div class="card card-developer-meetup">
+                        <div class="meetup-img-wrapper rounded-top text-center">
+                            <img src="../../../app-assets/images/illustration/email.svg" alt="Meeting Pic" height="170" />
+                        </div>
+                        <div class="card-body">
+                            <div class="col-lg-12 col-md-12"  id="dailyAnnouncment">
+
+                            </div>
+                        </div>
+                        <!-- Dynamic Default Pagination starts -->
+                        <ul class="pagination-sm page1-links justify-content-end mr-2" id="pagination_announcment"></ul>
+                        <!-- Dynamic Default Pagination ends -->
+                    </div>
+                </div>
+                <!--/ Developer Meetup Card -->
+
+                <!-- Company Table Card -->
+                <div class="col-lg-8 col-12">
+                    <div class="card card-company-table">
+                        <div class="card-body p-0">
+                            <h4 class="card-title mt-1 ml-1">Last 6 Order</h4>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order No</th>
+                                            <th>Customer</th>
+                                            <th>Product</th>
+                                            <th>Detail</th>
+                                            <th>Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lastOrderTable">
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/ Company Table Card -->
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->
+
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+
+    <!-- Product Detail Modal Start-->
+    <div class="modal fade text-left" id="order_product_modal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel16" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="order_product_modal_title"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card" >
+                                    <div class="card-body" id="order_product_card_body">
+                                        <div class="swiper-autoplay swiper-container" >
+                                            <div class="swiper-wrapper" id="order_product_image_slider">
+                                            </div>
+                                            <div class="swiper-pagination"></div>
+                                            <div class="swiper-button-next"></div>
+                                            <div class="swiper-button-prev"></div>
+                                        </div>
+                                        <h4 class="card-title mt-3" id="order_product_title"></h4>
+                                        <p class="card-text" id="order_product_detail"></p>
+                                        <div id="order_product_button_div"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Basic Floating Label Form section end -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Product Detail Modal End-->
+
+</th:block>
+
+
+<th:block layout:fragment="contentJs">
+    <!------------------------------------------------------ Dashboards Charts Js - Start -------------------------------------------------------->
+
+        <!-- <script th:src="@{/app-assets/js/scripts/pages/dashboard-ecommerce.js}"></script> -->
+        <script th:src="@{/app-assets/vendors/js/charts/apexcharts.min.js}"></script>
+        <script th:src="@{/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js}"></script>
+    <!------------------------------------------------------ Dashboards Charts Js - End   -------------------------------------------------------->
+
+    <!------------------------------------------------------ Pagination Js - Start -------------------------------------------------------->
+        <script th:src="@{/app-assets/vendors/js/pagination/jquery.bootpag.min.js}"></script>
+        <script th:src="@{/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js}"></script>
+    <!------------------------------------------------------ Pagination Js - End ---------------------------------------------------------->
+
+    <!---------------------------------------------------------- Swiper JS - Start ---------------------------------------------------------->
+        <script th:src="@{/app-assets/vendors/js/extensions/swiper-bundle.min.js}"></script>
+        <script th:src="@{/app-assets/js/scripts/extensions/ext-component-swiper.js}"></script>
+    <!---------------------------------------------------------- Swiper JS - End ------------------------------------------------------------>
+
+
+    <script th:src="@{/mainJs/dashboard.js}"></script>
+
+</th:block>
+
+
+</body>
+<!-- END: Body-->
+</html>

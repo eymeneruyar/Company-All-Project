@@ -1,0 +1,210 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="inc/layout"
+      class="loading semi-dark-layout" lang="en" data-layout="semi-dark-layout" data-textdirection="ltr">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Orders</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/app-assets/images/ico/favicon.png">
+
+    <!------------------------------------------------------ CSS - Start ------------------------------------------------------>
+    @
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/pickers/form-flat-pickr.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/pickers/form-pickadate.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/form-validation.css}">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/extensions/swiper.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/extensions/ext-component-swiper.css}">
+    <!------------------------------------------------------ CSS - End ------------------------------------------------------>
+
+</head>
+
+
+<body>
+
+<th:block layout:fragment="content">
+    <!-- BEGIN: Content-->
+    <div class="app-content content ">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <!-- Basic Tables start -->
+        <div class="row" id="basic-table">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <label class="ml-1">
+                                        Show
+                                        <select class="custom-select form-control" id="order_pagesize">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select>
+                                    </label>                                    
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>
+                                            Status
+                                            <select class="custom-select form-control" id="order_status">
+                                                <option value="Active">Active</option>
+                                                <option value="Delivered">Delivered</option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8 mt-1">
+                                        <input type="text" class="form-control" id="order_search" placeholder="Search">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Customer No</th>
+                                    <th>Customer Name</th>
+                                    <th>Product No</th>
+                                    <th>Product Detail</th>
+                                    <th>Date</th>
+                                    <th>Address</th>
+                                    <th>Delete</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 14px;" id="tBodyOrders">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <ul class="pagination firstLast1-links justify-content-end " id="order_pagination"></ul>
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->
+
+    <!-- Product Detail Modal Start-->
+    <div class="modal fade text-left" id="order_product_modal" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel16" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="order_product_modal_title"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card" >
+                                    <div class="card-body" id="order_product_card_body">
+                                        <div class="swiper-autoplay swiper-container" >
+                                                <div class="swiper-wrapper" id="order_product_image_slider">
+                                                </div>
+                                            <div class="swiper-pagination"></div>
+                                            <div class="swiper-button-next"></div>
+                                            <div class="swiper-button-prev"></div>
+                                        </div>
+                                        <h4 class="card-title mt-3" id="order_product_title"></h4>
+                                        <p class="card-text" id="order_product_detail"></p>
+                                        <div id="order_product_button_div"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Basic Floating Label Form section end -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Product Detail Modal End-->
+
+    <!-- Indent Address Modal Start-->
+    <div class="modal fade text-left" id="order_address_modal" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel16" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="order_address_modal_title">Address</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section id="multiple-column-form">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3 id="order_address_type"></h3>
+                                        <p id="order_address_detail" class="mt-3"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Basic Floating Label Form section end -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Indent Address Modal End-->
+</th:block>
+
+
+<th:block layout:fragment="contentJs">
+
+    <!------------------------------------------------------ Pagination Js - Start -------------------------------------------------------->
+    <script th:src="@{/app-assets/vendors/js/pagination/jquery.bootpag.min.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js}"></script>
+    <script th:src="@{/app-assets/js/scripts/pagination/components-pagination.js}"></script>
+    <!------------------------------------------------------ Pagination Js - End ---------------------------------------------------------->
+
+    <!------------------------------------------------------ Date - Time Picker Js - Start ---------------------------------------------------------->
+
+    <script th:src="@{/app-assets/vendors/js/pickers/pickadate/picker.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/pickers/pickadate/picker.date.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/pickers/pickadate/picker.time.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/pickers/pickadate/legacy.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js}"></script>
+    <script th:src="@{/app-assets/js/scripts/forms/pickers/form-pickers.js}"></script>
+
+    <!------------------------------------------------------ Date - Time Picker Js - Start ---------------------------------------------------------->
+
+    <!------------------------------------------------------ Valdiation Js - Start -------------------------------------------------------->
+
+    <script th:src="@{/app-assets/vendors/js/forms/validation/jquery.validate.min.js}"></script>
+    <script th:src="@{/app-assets/js/scripts/forms/form-validation.js}"></script>
+
+    <!------------------------------------------------------ Valdiation Js - End -------------------------------------------------------->
+
+    <script th:src="@{/app-assets/vendors/js/extensions/swiper-bundle.min.js}"></script>
+    <script th:src="@{/app-assets/js/scripts/extensions/ext-component-swiper.js}"></script>
+
+    <script th:src="@{/mainJs/order.js}"></script>
+
+
+</th:block>
+
+
+</body>
+</html>

@@ -1,0 +1,371 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="inc/layout"
+      class="loading semi-dark-layout" lang="en" data-layout="semi-dark-layout" data-textdirection="ltr">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Advertisement</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/app-assets/images/ico/favicon.png">
+
+    <!------------------------------------------------------ CSS - Start ------------------------------------------------------>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/pickers/form-flat-pickr.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/pickers/form-pickadate.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/forms/form-validation.css}">
+
+    <!------------------------------------------------------ CSS - End ------------------------------------------------------>
+
+</head>
+
+
+<body>
+
+<th:block layout:fragment="content">
+    <!-- BEGIN: Content-->
+    <div class="app-content content ">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <!-- Basic Tables start -->
+        <div class="row" id="basic-table">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="buttons">
+                                    <label>
+                                        Show
+                                        <select class="custom-select form-control" id="advertisement_pagesize">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select>
+                                    </label>
+                                    <button class="dt-button btn btn-primary ml-2" tabindex="0" type="button"
+                                        data-toggle="modal" data-target="#advertisement_form_modal" id="advertisement_form_modal_button">
+                                        <span><i class="fas fa-plus"></i> Add New</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>
+                                            Status
+                                            <select class="custom-select form-control"
+                                                    id="advertisement_status">
+                                                <option value="Active">Active</option>
+                                                <option value="Passive">Passive</option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8 mt-1">
+                                        <input class="form-control" id="advertisement_search" placeholder="Search" type="text">
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Name</th>
+                                    <th>Views</th>
+                                    <th>Click</th>
+                                    <th>Image</th>
+                                    <th>Width</th>
+                                    <th>Height</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 14px;" id="tBodyAdvertisement">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <ul class="pagination firstLast1-links justify-content-end " id="advertisement_pagination"></ul>
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->
+
+    <!-- Modal -->
+    <div class="modal fade text-left" id="advertisement_form_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel16"
+        aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="advertisement_form_modal_title">New Advertisement</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section id="multiple-column-form">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <form class="needs-validation invalid" id="advertisement_add_form" novalidate>
+                                        <div class="row">
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="name">Name</label>
+                                                    <input type="text" id="name" class="form-control"
+                                                        placeholder="Name" name="name" required />
+                                                    <div class="valid-feedback">Looks good!</div>
+                                                    <div class="invalid-feedback">Please enter ads name.</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="view">Number of View</label>
+                                                    <input type="number" id="view" class="form-control"
+                                                        placeholder="View" name="view" required />
+                                                    <div class="valid-feedback">Looks good!</div>
+                                                    <div class="invalid-feedback">Please enter staging.</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="startDate">Start Date</label>
+                                                <input type="text" id="startDate"
+                                                    class="form-control flatpickr-date-time"
+                                                    placeholder="YYYY-MM-DD HH:MM" required/>
+                                                <div class="valid-feedback">Looks good!</div>
+                                                <div class="invalid-feedback">Please enter a start date.</div>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="finishDate">Finish Date</label>
+                                                <input type="text" id="finishDate"
+                                                    class="form-control flatpickr-date-time"
+                                                    placeholder="YYYY-MM-DD HH:MM" required/>
+                                                <div class="valid-feedback">Looks good!</div>
+                                                <div class="invalid-feedback">Please enter a finish date.</div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="width">Width</label>
+                                                    <input type="number" id="width" class="form-control"
+                                                        placeholder="Width" name="width" required />
+                                                    <div class="valid-feedback">Looks good!</div>
+                                                    <div class="invalid-feedback">Please enter ads width.</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="height">Height</label>
+                                                    <input type="number" id="height" class="form-control"
+                                                        placeholder="Height" name="height" required />
+                                                    <div class="valid-feedback">Looks good!</div>
+                                                    <div class="invalid-feedback">Please enter ads height.</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 form-group" id="advertisement_edit_image_col">
+                                                <label for="image">Image</label>
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" name="image" id="image" accept="image/*" required/>
+                                                    <label class="custom-file-label" for="image">Choose file</label>
+                                                    <div class="valid-feedback">Looks good!</div>
+                                                    <div class="invalid-feedback">Please choose an image.</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="link">Link</label>
+                                                    <input type="text" id="link" class="form-control"
+                                                        placeholder="Link" name="link" required />
+                                                    <div class="valid-feedback">Looks good!</div>
+                                                    <div class="invalid-feedback">Please enter ads link.</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8"></div>
+                                            <div class="col-md-4">
+                                                <div class="row mt-2">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-10">
+                                                        <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                                    </div>     
+                                                </div>                                                                                           
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <!-- Basic Floating Label Form section end -->
+            </div>
+        </div>
+    </div>
+
+    <div aria-hidden="true" aria-labelledby="myModalLabel16" class="modal fade text-left" data-backdrop="static"
+         id="advertisement_detail_modal" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="advertisement_detail_modal_title"></h4>
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12 col-12">
+                                                <div class="form-group">
+                                                    <span>Name</span>
+                                                    <h3 id="detail_name"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>View</span>
+                                                    <h3 id="detail_view"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Start Date</span>
+                                                    <h3 id="detail_startdate"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Finish Date</span>
+                                                    <h3 id="detail_finishdate"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Width</span>
+                                                    <h3 id="detail_width"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Height</span>
+                                                    <h3 id="detail_height"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Link</span>
+                                                    <h3 id="detail_link"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Click</span>
+                                                    <h3 id="detail_click"></h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <span>Status</span>
+                                                    <h3 id="detail_status"></h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Basic Floating Label Form section end -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div aria-hidden="true" aria-labelledby="myModalLabel16" class="modal fade text-left" data-backdrop="static"
+         id="advertisement_image_modal" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="advertisement_image_modal_title"></h4>
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Basic multiple Column Form section start -->
+                    <section>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row" id="image_modal_row">
+                                            <img id="advertisement_image"/>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Basic Floating Label Form section end -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</th:block>
+
+<th:block layout:fragment="contentJs">
+    <!------------------------------------------------------ Pagination Js - Start -------------------------------------------------------->
+        <script th:src="@{/app-assets/vendors/js/pagination/jquery.bootpag.min.js}"></script>
+        <script th:src="@{/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js}"></script>
+        <script th:src="@{/app-assets/js/scripts/pagination/components-pagination.js}"></script>
+    <!------------------------------------------------------ Pagination Js - End ---------------------------------------------------------->
+
+    <!------------------------------------------------------ Date - Time Picker Js - Start ---------------------------------------------------------->
+
+        <script th:src="@{/app-assets/vendors/js/pickers/pickadate/picker.js}"></script>
+        <script th:src="@{/app-assets/vendors/js/pickers/pickadate/picker.date.js}"></script>
+        <script th:src="@{/app-assets/vendors/js/pickers/pickadate/picker.time.js}"></script>
+        <script th:src="@{/app-assets/vendors/js/pickers/pickadate/legacy.js}"></script>
+        <script th:src="@{/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js}"></script>
+        <script th:src="@{/app-assets/js/scripts/forms/pickers/form-pickers.js}"></script>
+
+    <!------------------------------------------------------ Date - Time Picker Js - Start ---------------------------------------------------------->
+
+    <!------------------------------------------------------ Valdiation Js - Start -------------------------------------------------------->
+
+        <script th:src="@{/app-assets/vendors/js/forms/validation/jquery.validate.min.js}"></script>
+        <script th:src="@{/app-assets/js/scripts/forms/form-validation.js}"></script>
+
+    <!------------------------------------------------------ Valdiation Js - End -------------------------------------------------------->
+
+        <script th:src="@{/mainJs/advertisement.js}"></script>
+
+
+</th:block>
+
+
+</body>
+
+</html>

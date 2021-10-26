@@ -1,0 +1,254 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="inc/layout"
+      class="loading semi-dark-layout" lang="en" data-layout="semi-dark-layout" data-textdirection="ltr">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Product Lists</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/app-assets/images/ico/favicon.png">
+
+<!------------------------------------------------------ Products List CSS - Start -------------------------------------------------------->
+
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/extensions/nouislider.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/extensions/toastr.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/extensions/ext-component-sliders.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/pages/app-ecommerce.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/extensions/ext-component-toastr.css}">
+
+<!------------------------------------------------------ Products List CSS - End   -------------------------------------------------------->
+
+<!------------------------------------------------------ Ratings Star CSS - Start   -------------------------------------------------------->
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/vendors/css/extensions/jquery.rateyo.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/app-assets/css/plugins/extensions/ext-component-ratings.css}">
+<!------------------------------------------------------ Ratings Star CSS - End   ---------------------------------------------------------->
+
+</head>
+
+<!-- BEGIN: Body-->
+<body>
+
+<th:block layout:fragment="content">
+    <!-- BEGIN: Content-->
+    <div class="app-content content ecommerce-application">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper">
+
+            <div class="content-detached content-right">
+                <div class="content-body">
+                    <!-- E-commerce Content Section Starts -->
+                    <section id="ecommerce-header">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="ecommerce-header-items">
+                                    <div class="result-toggler">
+                                        <button class="navbar-toggler shop-sidebar-toggler" type="button" data-toggle="collapse">
+                                            <span class="navbar-toggler-icon d-block d-lg-none"><i data-feather="menu"></i></span>
+                                        </button>
+                                    </div>
+                                    <div class="view-options d-flex">
+                                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                            <label class="btn btn-icon btn-outline-primary view-btn grid-view-btn">
+                                                <input type="radio" name="radio_options" id="radio_option1" checked />
+                                                <i data-feather="grid" class="font-medium-3"></i>
+                                            </label>
+                                            <label class="btn btn-icon btn-outline-primary view-btn list-view-btn">
+                                                <input type="radio" name="radio_options" id="radio_option2" />
+                                                <i data-feather="list" class="font-medium-3"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- E-commerce Content Section Starts -->
+
+                    <!-- background Overlay when sidebar is shown  starts-->
+                    <div class="body-content-overlay"></div>
+                    <!-- background Overlay when sidebar is shown  ends-->
+
+                    <!-- E-commerce Search Bar Starts -->
+                    <section id="ecommerce-searchbar" class="ecommerce-searchbar">
+                        <div class="row mt-1">
+                            <div class="col-sm-12">
+                                <div class="input-group input-group-merge">
+                                    <input type="text" class="form-control search-product" id="searchProductList" placeholder="Search Product" aria-label="Search..." aria-describedby="shop-search" />
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i data-feather="search" class="text-muted"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- E-commerce Search Bar Ends -->
+
+                    <!-- E-commerce Products Starts -->
+                    <section id="products" class="grid-view">
+
+                    </section>
+                    <!-- E-commerce Products Ends -->
+
+                    <!-- E-commerce Pagination Starts -->
+                    <ul class="pagination firstLast1-links justify-content-center mt-2" id="pagination_productList"></ul>
+                    <!-- E-commerce Pagination Ends -->
+
+                </div>
+            </div>
+
+            <div class="sidebar-detached sidebar-left">
+                <div class="sidebar">
+                    <!-- Ecommerce Sidebar Starts -->
+                    <div class="sidebar-shop">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h6 class="filter-heading d-none d-lg-block">Filters</h6>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <!-- Categories Starts -->
+                                <div id="product-categories">
+                                    <h6 class="filter-title">Categories</h6>
+                                    <select class="select2 form-control form-control-lg" id="categoryFilter">
+
+                                    </select>
+                                </div>
+                                <!-- Categories Ends -->
+
+                                <!-- Rating starts -->
+                                <div id="ratings">
+                                    <h6 class="filter-title">Ratings</h6>
+                                    <div class="ratings-list">
+                                        <a href="javascript:void(0)">
+                                            <ul class="unstyled-list list-inline">
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li>& up</li>
+                                            </ul>
+                                        </a>
+                                        <div class="stars-received" th:text="${totalProduct_FiveToFive}"></div>
+                                    </div>
+                                    <div class="ratings-list">
+                                        <a href="javascript:void(0)">
+                                            <ul class="unstyled-list list-inline">
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li>& up</li>
+                                            </ul>
+                                        </a>
+                                        <div class="stars-received" th:text="${totalProduct_FourToFive}"></div>
+                                    </div>
+                                    <div class="ratings-list">
+                                        <a href="javascript:void(0)">
+                                            <ul class="unstyled-list list-inline">
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li>& up</li>
+                                            </ul>
+                                        </a>
+                                        <div class="stars-received" th:text="${totalProduct_ThreeToFour}"></div>
+                                    </div>
+                                    <div class="ratings-list">
+                                        <a href="javascript:void(0)">
+                                            <ul class="unstyled-list list-inline">
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li>& up</li>
+                                            </ul>
+                                        </a>
+                                        <div class="stars-received" th:text="${totalProduct_TwoToThree}"></div>
+                                    </div>
+                                    <div class="ratings-list">
+                                        <a href="javascript:void(0)">
+                                            <ul class="unstyled-list list-inline">
+                                                <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li>& up</li>
+                                            </ul>
+                                        </a>
+                                        <div class="stars-received" th:text="${totalProduct_OneToTwo}"></div>
+                                    </div>
+                                    <div class="ratings-list">
+                                        <a href="javascript:void(0)">
+                                            <ul class="unstyled-list list-inline">
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
+                                                <li>& up</li>
+                                            </ul>
+                                        </a>
+                                        <div class="stars-received" th:text="${totalProduct_ZeroToOne}"></div>
+                                    </div>
+                                </div>
+                                <!-- Rating ends -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ecommerce Sidebar Ends -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->
+
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+
+</th:block>
+
+
+<th:block layout:fragment="contentJs">
+
+    <!------------------------------------------------------ Select2 Js - Start -------------------------------------------------------->
+        <script th:src="@{/app-assets/vendors/js/forms/select/select2.full.min.js}"></script>
+        <script th:src="@{/app-assets/js/scripts/forms/form-select2.js}"></script>
+    <!------------------------------------------------------ Select2 Js - End   -------------------------------------------------------->
+
+    <!------------------------------------------------------ Products List Js - Start -------------------------------------------------------->
+
+        <script th:src="@{/app-assets/vendors/js/extensions/wNumb.min.js}"></script>
+        <script th:src="@{/app-assets/vendors/js/extensions/nouislider.min.js}"></script>
+        <script th:src="@{/app-assets/vendors/js/extensions/toastr.min.js}"></script>
+        <script th:src="@{/app-assets/js/scripts/pages/app-ecommerce.js}"></script>
+
+    <!------------------------------------------------------ Products List Js - End   -------------------------------------------------------->
+
+    <!------------------------------------------------------ Pagination Js - Start -------------------------------------------------------->
+        <script th:src="@{/app-assets/vendors/js/pagination/jquery.bootpag.min.js}"></script>
+        <script th:src="@{/app-assets/vendors/js/pagination/jquery.twbsPagination.min.js}"></script>
+    <!------------------------------------------------------ Pagination Js - End ---------------------------------------------------------->
+
+    <!------------------------------------------------------ Ratings Star CSS - Start   -------------------------------------------------------->
+        <script th:src="@{/app-assets/vendors/js/extensions/jquery.rateyo.min.js}"></script>
+    <!------------------------------------------------------ Ratings Star CSS - End   ---------------------------------------------------------->
+
+
+    <script th:src="@{/mainJs/productList.js}"></script>
+
+</th:block>
+
+</body>
+<!-- END: Body-->
+</html>
