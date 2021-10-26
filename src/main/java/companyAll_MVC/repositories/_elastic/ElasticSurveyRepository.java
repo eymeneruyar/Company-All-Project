@@ -20,7 +20,10 @@ public interface ElasticSurveyRepository extends ElasticsearchRepository<Elastic
     @Query("{\"bool\":{\"must\":[],\"must_not\":[],\"should\":[{\"prefix\":{\"detail\":\"?0\"}},{\"prefix\":{\"date\":\"?0\"}},{\"prefix\":{\"no\":\"?0\"}},{\"prefix\":{\"status\":\"?0\"}},{\"prefix\":{\"title\":\"?0\"}}]}}")
     Page<ElasticSurvey> findBySearchData(String data, Pageable pageable);
 
-    @Query("{\"bool\":{\"must\":[{\"term\":{\"surveyId\":\"?0\"}}],\"must_not\":[],\"should\":[]}}")
-    Optional<ElasticSurvey> findById(Integer surveyId);
+    @Query("{\"bool\":{\"must\":[],\"must_not\":[],\"should\":[{\"match\":{\"status\":\"?0\"}},{\"match\":{\"no\":\"?0\"}},{\"match\":{\"title\":\"?0\"}},{\"match\":{\"detail\":\"?0\"}}]}}")
+    Page<ElasticSurvey> findBySearchDataRest(String data, Pageable pageable);
+
+    @Query("{\"bool\":{\"must\":[{\"match_all\":{}}],\"must_not\":[],\"should\":[]}}")
+    Page<ElasticSurvey> findByOrderByIdAscPage(Pageable pageable);
 
 }
