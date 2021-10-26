@@ -82,6 +82,8 @@ public class LikesDto {
                 elasticLikes.setCustomerName(indent.getCustomer().getName());
                 elasticLikes.setProductName(indent.getProduct().getName());
                 elasticLikes.setProductRating(likes1.getRating());
+                elasticLikes.setProductDetail(indent.getProduct().getDetails());
+                elasticLikes.setProductNo(indent.getProduct().getNo());
                 System.out.println("elasticLikes: " + elasticLikes);
 
 

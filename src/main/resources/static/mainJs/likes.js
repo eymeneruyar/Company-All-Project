@@ -203,6 +203,8 @@ function createRowData(data) {
                      <td>${itm.id}</td>
                      <td>${itm.customerName}</td>
                      <td>${itm.productName}</td>
+                     <td>${itm.productDetail}</td>
+                     <td>${itm.productNo}</td>
                      <td>
                         <div id="${itm.id}"  class="read-only-ratings-${itm.id}" data-rateyo-read-only="true"> </div>
                      </td>

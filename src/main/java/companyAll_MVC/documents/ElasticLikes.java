@@ -25,5 +25,13 @@ public class ElasticLikes {
     @Field(type = FieldType.Text)
     private Integer productRating;
 
+    @Field(type = FieldType.Text)
+    private String productDetail;
+
+    @Field(type = FieldType.Text)
+    private String productNo;
+
+
+
 
 }
