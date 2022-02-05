@@ -31,7 +31,6 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contributors">Contributors</a></li>
     <li><a href="#contact-me">Contact Me</a></li>
@@ -58,6 +57,8 @@ The following technologies were used while developing the Company All project.
    ```sh
    git clone https://github.com/eymeneruyar/Company-All-Project.git
    ```
+   
+You must don't forget these while run the project. NoSQL Technologies such as Elasticsearch and Redis have used in this project so before run the project redis and elasticsearch NoSQL database should run with Docker.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
